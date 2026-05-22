@@ -4,7 +4,7 @@ import { useState } from "react";
    AFFILIATE STORES
 ══════════════════════════════════════════════ */
 const STORES_DEFAULT = {
-  amazon:  { name:"Amazon",      emoji:"📦", color:"#FF9900", active:true,  tag:"YOUR_AMAZON_TAG-20",  buildUrl:(q,t)=>`https://www.amazon.com/s?k=${encodeURIComponent(q)}&tag=${t}` },
+  amazon:  { name:"Amazon",      emoji:"📦", color:"#FF9900", active:true,  tag:"lumanehair-21",  buildUrl:(q,t)=>`https://www.amazon.com/s?k=${encodeURIComponent(q)}&tag=${t}` },
   sephora: { name:"Sephora",     emoji:"🖤", color:"#E75480", active:true,  tag:"YOUR_SEPHORA_TAG",    buildUrl:(q)  =>`https://www.sephora.com/search?keyword=${encodeURIComponent(q)}` },
   iherb:   { name:"iHerb",       emoji:"🌿", color:"#5AAA46", active:true,  tag:"YOUR_IHERB_TAG",      buildUrl:(q,t)=>`https://www.iherb.com/search?kw=${encodeURIComponent(q)}&rcode=${t}` },
   walmart: { name:"Walmart",     emoji:"🛒", color:"#0071CE", active:false, tag:"YOUR_WALMART_TAG",    buildUrl:(q)  =>`https://www.walmart.com/search?q=${encodeURIComponent(q)}` },
