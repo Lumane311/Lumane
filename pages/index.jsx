@@ -578,7 +578,7 @@ export default function LuMane(){
                   </div>
                 ))}
               </div>
-              <button onClick={()=>setSubStep(2)}
+              <button onClick={async()=>{const r=await fetch('/api/checkout',{method:'POST'});const d=await r.json();window.location.href=d.url;}}
                 style={{width:"100%",background:"linear-gradient(135deg,#C4687A,#D4849A)",color:"#fff",border:"none",padding:"1rem",borderRadius:"3rem",fontSize:"1rem",fontWeight:700,cursor:"pointer",fontFamily:"'Outfit',sans-serif",boxShadow:"0 8px 25px rgba(196,104,122,.35)",marginBottom:"0.8rem"}}>
                 Comenzar 7 días gratis →
               </button>
