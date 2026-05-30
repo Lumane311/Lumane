@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 /* ══════════════════════════════════════════════
    AFFILIATE STORES
@@ -484,9 +484,9 @@ export default function LuMane(){
     monthly: { id:"monthly", label:"Mensual",  price:"$9.99",  period:"/mes", savings:null,                      priceNum:9.99 },
     annual:  { id:"annual",  label:"Anual",    price:"$59.99", period:"/año", savings:"Ahorra 50% · $4.99/mes",  priceNum:59.99 },
   };
-  const [selectedPlan, setSelectedPlan] = React.useState("monthly");
-  const [countdown, setCountdown] = React.useState(15*60);
-  React.useEffect(()=>{
+  const [selectedPlan, setSelectedPlan] = useState("monthly");
+  const [countdown, setCountdown] = useState(15*60);
+  useEffect(()=>{
     const t = setInterval(()=>setCountdown(c=>c>0?c-1:0),1000);
     return ()=>clearInterval(t);
   },[]);
