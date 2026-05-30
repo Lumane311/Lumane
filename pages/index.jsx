@@ -479,7 +479,18 @@ export default function LuMane(){
   const [subLoading,setSubLoading] = useState(false);
 
   const TRIAL_DAYS = 7;
-  const PRICE = "$7.99";
+  const PLANS = {
+    weekly:  { id:"weekly",  label:"Semanal",  price:"$2.99",  period:"/sem", savings:null,                      priceNum:2.99 },
+    monthly: { id:"monthly", label:"Mensual",  price:"$9.99",  period:"/mes", savings:null,                      priceNum:9.99 },
+    annual:  { id:"annual",  label:"Anual",    price:"$59.99", period:"/año", savings:"Ahorra 50% · $4.99/mes",  priceNum:59.99 },
+  };
+  const [selectedPlan, setSelectedPlan] = React.useState("monthly");
+  const [countdown, setCountdown] = React.useState(15*60);
+  React.useEffect(()=>{
+    const t = setInterval(()=>setCountdown(c=>c>0?c-1:0),1000);
+    return ()=>clearInterval(t);
+  },[]);
+  function fmtCountdown(s){ return String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0"); }
 
   function trialDaysLeft(){
     if(!trialStart) return TRIAL_DAYS;
@@ -537,53 +548,59 @@ export default function LuMane(){
         {/* STEP 1 — PLAN */}
         {subStep===1&&(
           <div>
-            <div style={{background:"linear-gradient(135deg,#2A1018,#6B2838)",padding:"2.5rem 2rem",textAlign:"center",position:"relative",overflow:"hidden"}}>
+            <div style={{background:"linear-gradient(135deg,#2A1018,#6B2838)",padding:"2rem",textAlign:"center",position:"relative",overflow:"hidden"}}>
               <div style={{position:"absolute",width:"300px",height:"300px",borderRadius:"50%",border:"1px solid rgba(196,104,122,.15)",top:"-120px",left:"50%",transform:"translateX(-50%)"}}/>
               <button onClick={()=>{setShowPaywall(false);setSubStep(1);}} style={{position:"absolute",top:"1rem",right:"1rem",background:"rgba(255,255,255,.1)",border:"none",color:"#FDF4F5",width:"30px",height:"30px",borderRadius:"50%",cursor:"pointer",fontSize:"0.9rem"}}>✕</button>
-              <div style={{fontSize:"2.5rem",marginBottom:"0.5rem"}}>✦</div>
-              <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"1.9rem",fontWeight:700,color:"#FDF4F5",marginBottom:"0.4rem"}}>LuMane Premium</h2>
-              <p style={{color:"rgba(251,247,240,.65)",fontSize:"0.88rem",lineHeight:1.6}}>Accede al analizador IA, rutinas personalizadas<br/>y toda la tienda sin límites</p>
-            </div>
-            <div style={{padding:"2rem"}}>
-              {/* TRIAL BANNER */}
-              <div style={{background:"linear-gradient(135deg,rgba(196,104,122,.12),rgba(212,132,154,.18))",border:"1.5px solid rgba(196,104,122,.35)",borderRadius:"1.2rem",padding:"1.4rem",marginBottom:"1.4rem",textAlign:"center",position:"relative",overflow:"hidden"}}>
-                <div style={{position:"absolute",top:"-8px",right:"1rem",fontFamily:"'Cormorant Garamond',serif",fontSize:"4rem",color:"rgba(196,104,122,.07)",lineHeight:1}}>7</div>
-                <div style={{fontSize:"0.68rem",fontWeight:700,color:"#C4687A",letterSpacing:"0.15em",textTransform:"uppercase",marginBottom:"0.4rem"}}>🎁 Oferta de bienvenida</div>
-                <div style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"2rem",fontWeight:700,color:"#2A1018",marginBottom:"0.2rem"}}>7 días <em style={{fontStyle:"italic",color:"#C4687A"}}>completamente gratis</em></div>
-                <div style={{fontSize:"0.82rem",color:"#5A2030",opacity:.7}}>Sin cargos durante los primeros 7 días. Cancela cuando quieras.</div>
+              {/* COUNTDOWN */}
+              <div style={{display:"inline-flex",alignItems:"center",gap:"0.5rem",background:"rgba(196,104,122,.25)",border:"1px solid rgba(196,104,122,.5)",borderRadius:"2rem",padding:"0.35rem 1rem",marginBottom:"0.8rem"}}>
+                <span style={{fontSize:"0.8rem"}}>⏱️</span>
+                <span style={{fontSize:"0.78rem",fontWeight:700,color:"#FFD4E0",letterSpacing:"0.05em"}}>Oferta expira en <strong style={{fontFamily:"monospace",fontSize:"0.9rem",color:"#fff"}}>{fmtCountdown(countdown)}</strong></span>
               </div>
-              {/* PRICE */}
-              <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"1rem 1.2rem",background:"rgba(0,0,0,.03)",borderRadius:"0.9rem",marginBottom:"1.4rem",border:"1px solid rgba(0,0,0,.07)"}}>
-                <div>
-                  <div style={{fontWeight:700,fontSize:"0.95rem"}}>Después del período de prueba</div>
-                  <div style={{fontSize:"0.78rem",opacity:.55,marginTop:"0.15rem"}}>Renovación automática mensual · Cancela cuando quieras</div>
-                </div>
-                <div style={{textAlign:"right"}}>
-                  <div style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"1.8rem",fontWeight:700,color:"#C4687A",lineHeight:1}}>$7.99</div>
-                  <div style={{fontSize:"0.68rem",opacity:.5}}>/mes</div>
-                </div>
+              <div style={{fontSize:"2.2rem",marginBottom:"0.3rem"}}>✦</div>
+              <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"1.8rem",fontWeight:700,color:"#FDF4F5",marginBottom:"0.3rem"}}>LuMane Premium</h2>
+              <p style={{color:"rgba(251,247,240,.65)",fontSize:"0.83rem",lineHeight:1.5}}>Analizador IA · Rutinas personalizadas · Tienda completa</p>
+            </div>
+            <div style={{padding:"1.5rem"}}>
+              {/* TRIAL BANNER */}
+              <div style={{background:"linear-gradient(135deg,rgba(196,104,122,.12),rgba(212,132,154,.18))",border:"1.5px solid rgba(196,104,122,.35)",borderRadius:"1rem",padding:"1rem",marginBottom:"1.2rem",textAlign:"center"}}>
+                <div style={{fontSize:"0.68rem",fontWeight:700,color:"#C4687A",letterSpacing:"0.15em",textTransform:"uppercase",marginBottom:"0.3rem"}}>🎁 7 días completamente gratis</div>
+                <div style={{fontSize:"0.82rem",color:"#5A2030",opacity:.7}}>Sin cargos durante la prueba. Cancela cuando quieras.</div>
+              </div>
+              {/* PLAN SELECTOR */}
+              <div style={{display:"flex",flexDirection:"column",gap:"0.5rem",marginBottom:"1.2rem"}}>
+                {Object.values(PLANS).map(plan=>(
+                  <button key={plan.id} onClick={()=>setSelectedPlan(plan.id)}
+                    style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"0.85rem 1rem",borderRadius:"0.8rem",border:`2px solid ${selectedPlan===plan.id?"#C4687A":"rgba(196,104,122,.2)"}`,background:selectedPlan===plan.id?"rgba(196,104,122,.08)":"#fff",cursor:"pointer",fontFamily:"'Outfit',sans-serif",transition:"all .15s"}}>
+                    <div style={{display:"flex",alignItems:"center",gap:"0.6rem"}}>
+                      <div style={{width:"18px",height:"18px",borderRadius:"50%",border:`2px solid ${selectedPlan===plan.id?"#C4687A":"#ccc"}`,background:selectedPlan===plan.id?"#C4687A":"transparent",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
+                        {selectedPlan===plan.id&&<div style={{width:"7px",height:"7px",borderRadius:"50%",background:"#fff"}}/>}
+                      </div>
+                      <div style={{textAlign:"left"}}>
+                        <div style={{fontWeight:700,fontSize:"0.88rem",color:"#2A1018"}}>{plan.label}</div>
+                        {plan.savings&&<div style={{fontSize:"0.68rem",color:"#5A9A5A",fontWeight:700}}>{plan.savings}</div>}
+                      </div>
+                    </div>
+                    <div style={{textAlign:"right"}}>
+                      <span style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"1.4rem",fontWeight:700,color:selectedPlan===plan.id?"#C4687A":"#2A1018"}}>{plan.price}</span>
+                      <span style={{fontSize:"0.7rem",opacity:.5}}>{plan.period}</span>
+                    </div>
+                  </button>
+                ))}
               </div>
               {/* BENEFITS */}
-              <div style={{display:"flex",flexDirection:"column",gap:"0.5rem",marginBottom:"1.6rem"}}>
-                {[
-                  "🤖 Analizador IA con subtipo exacto 1A–4C",
-                  "📋 Rutina personalizada con instrucciones paso a paso",
-                  "🛍️ Acceso a toda la tienda y enlaces a Amazon, Sephora y más",
-                  "❄️ Guías para caspa, caída, cuero cabelludo y regeneración",
-                  "🔄 Análisis ilimitados — analiza cada vez que quieras",
-                  "✨ Acceso a nuevos tipos y productos cada mes",
-                ].map((b,i)=>(
-                  <div key={i} style={{display:"flex",alignItems:"center",gap:"0.6rem",fontSize:"0.85rem",color:"#3A1020"}}>
+              <div style={{display:"flex",flexDirection:"column",gap:"0.4rem",marginBottom:"1.2rem"}}>
+                {["🤖 Analizador IA subtipo exacto 1A–4C","📋 Rutina personalizada paso a paso","🛍️ Tienda + Amazon, Sephora y más","🔄 Análisis ilimitados","✨ Nuevos productos cada mes"].map((b,i)=>(
+                  <div key={i} style={{display:"flex",alignItems:"center",gap:"0.5rem",fontSize:"0.82rem",color:"#3A1020"}}>
                     <span style={{color:"#5A9A5A",fontWeight:700,flexShrink:0}}>✓</span>{b}
                   </div>
                 ))}
               </div>
-              <button onClick={async()=>{const r=await fetch('/api/checkout',{method:'POST'});const d=await r.json();window.location.href=d.url;}}
-                style={{width:"100%",background:"linear-gradient(135deg,#C4687A,#D4849A)",color:"#fff",border:"none",padding:"1rem",borderRadius:"3rem",fontSize:"1rem",fontWeight:700,cursor:"pointer",fontFamily:"'Outfit',sans-serif",boxShadow:"0 8px 25px rgba(196,104,122,.35)",marginBottom:"0.8rem"}}>
+              <button onClick={()=>setSubStep(2)}
+                style={{width:"100%",background:"linear-gradient(135deg,#C4687A,#D4849A)",color:"#fff",border:"none",padding:"1rem",borderRadius:"3rem",fontSize:"1rem",fontWeight:700,cursor:"pointer",fontFamily:"'Outfit',sans-serif",boxShadow:"0 8px 25px rgba(196,104,122,.35)",marginBottom:"0.6rem"}}>
                 Comenzar 7 días gratis →
               </button>
-              <p style={{textAlign:"center",fontSize:"0.72rem",opacity:.4,lineHeight:1.5}}>
-                Al suscribirte aceptas que tras los 7 días gratuitos se cobrarán $7.99/mes.<br/>Puedes cancelar en cualquier momento desde tu cuenta.
+              <p style={{textAlign:"center",fontSize:"0.7rem",opacity:.4,lineHeight:1.5}}>
+                Sin cargos durante la prueba. Después {PLANS[selectedPlan].price}{PLANS[selectedPlan].period}. Cancela cuando quieras.
               </p>
             </div>
           </div>
@@ -813,6 +830,24 @@ Genera análisis personalizado. SOLO JSON válido sin texto adicional:
     </nav>
   );
 
+
+  // ── COUNTDOWN BANNER ──
+  const CountdownBanner=()=>(
+    <div style={{background:"linear-gradient(135deg,#6B1F8A,#9B1B6E,#C4187A)",padding:"0.7rem 1.2rem",display:"flex",alignItems:"center",justifyContent:"center",gap:"0.8rem",flexWrap:"wrap",position:"sticky",top:"60px",zIndex:99,boxShadow:"0 4px 24px rgba(107,31,138,.5)"}}>
+      <span style={{fontSize:"1rem"}}>🔥</span>
+      <span style={{color:"#fff",fontSize:"0.82rem",fontWeight:600,letterSpacing:"0.03em"}}>
+        Oferta especial de lanzamiento — <strong>7 días GRATIS</strong> · Luego desde <strong>$2.99/sem</strong>
+      </span>
+      <div style={{background:"rgba(255,255,255,.15)",borderRadius:"0.5rem",padding:"0.25rem 0.7rem",display:"flex",alignItems:"center",gap:"0.4rem",border:"1px solid rgba(255,255,255,.3)"}}>
+        <span style={{fontSize:"0.75rem",color:"rgba(255,255,255,.8)"}}>⏱️ Expira en:</span>
+        <span style={{fontFamily:"monospace",fontSize:"1rem",fontWeight:700,color:"#FFD4E0",letterSpacing:"0.08em"}}>{fmtCountdown(countdown)}</span>
+      </div>
+      <button onClick={()=>setShowPaywall(true)} style={{background:"linear-gradient(135deg,#FFD700,#FFA500)",color:"#4A0070",border:"none",padding:"0.3rem 1rem",borderRadius:"2rem",fontSize:"0.78rem",fontWeight:700,cursor:"pointer",fontFamily:"'Outfit',sans-serif",whiteSpace:"nowrap",boxShadow:"0 2px 10px rgba(255,165,0,.4)"}}>
+        Activar ahora →
+      </button>
+    </div>
+  );
+
   // ── HOME ──
   const HomePage=()=>(
     <div>
@@ -951,6 +986,27 @@ Genera análisis personalizado. SOLO JSON válido sin texto adicional:
           <button onClick={goQuiz} style={{background:"linear-gradient(135deg,#C4687A,#E8A0B0)",color:"#2A1018",border:"none",padding:"1rem 2.5rem",borderRadius:"3rem",fontSize:"1rem",fontWeight:700,cursor:"pointer",fontFamily:"'Outfit',sans-serif",boxShadow:"0 10px 35px rgba(196,104,122,.4)"}}>
             Comenzar análisis gratuito ✨
           </button>
+          {!isSubscribed()&&(
+            <div style={{marginTop:"1.5rem",display:"flex",flexDirection:"column",alignItems:"center",gap:"0.5rem"}}>
+              <div style={{display:"flex",alignItems:"center",gap:"0.6rem",background:"rgba(196,104,122,.2)",border:"1px solid rgba(196,104,122,.4)",borderRadius:"2rem",padding:"0.4rem 1.2rem"}}>
+                <span style={{fontSize:"0.85rem"}}>⏱️</span>
+                <span style={{color:"#FFD4E0",fontSize:"0.82rem",fontWeight:600}}>Oferta expira en <strong style={{fontFamily:"monospace",color:"#fff",fontSize:"0.95rem"}}>{fmtCountdown(countdown)}</strong></span>
+              </div>
+              <div style={{display:"flex",gap:"1rem",flexWrap:"wrap",justifyContent:"center",marginTop:"0.3rem"}}>
+                {Object.values(PLANS).map(p=>(
+                  <div key={p.id} style={{textAlign:"center",background:"rgba(255,255,255,.08)",border:`1px solid ${p.id==="annual"?"rgba(255,215,0,.4)":"rgba(255,255,255,.15)"}`,borderRadius:"0.8rem",padding:"0.6rem 1rem",minWidth:"90px"}}>
+                    {p.id==="annual"&&<div style={{fontSize:"0.6rem",fontWeight:700,color:"#FFD700",letterSpacing:"0.1em",textTransform:"uppercase",marginBottom:"0.2rem"}}>⭐ Popular</div>}
+                    <div style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"1.3rem",fontWeight:700,color:"#E8A0B0"}}>{p.price}</div>
+                    <div style={{fontSize:"0.65rem",color:"rgba(255,255,255,.55)"}}>{p.period}</div>
+                    {p.savings&&<div style={{fontSize:"0.6rem",color:"#90D490",fontWeight:700,marginTop:"0.15rem"}}>{p.savings}</div>}
+                  </div>
+                ))}
+              </div>
+              <button onClick={()=>setShowPaywall(true)} style={{marginTop:"0.5rem",background:"linear-gradient(135deg,#fff,#FFD4E0)",color:"#C4687A",border:"none",padding:"0.7rem 2rem",borderRadius:"3rem",fontSize:"0.9rem",fontWeight:700,cursor:"pointer",fontFamily:"'Outfit',sans-serif"}}>
+                🎁 Empezar 7 días gratis
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -1391,6 +1447,7 @@ Genera análisis personalizado. SOLO JSON válido sin texto adicional:
 
       {/* PAGE CONTENT */}
       <div className="page-content">
+        {!isSubscribed()&&<CountdownBanner/>}
         {page==="home"    &&<HomePage/>}
         {page==="quiz"    &&<QuizPage/>}
         {page==="result"  &&<ResultPage/>}
