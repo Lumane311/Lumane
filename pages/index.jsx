@@ -613,7 +613,7 @@ export default function LuMane(){
               <button onClick={()=>setSubStep(1)} style={{background:"rgba(255,255,255,.1)",border:"none",color:"#FDF4F5",width:"30px",height:"30px",borderRadius:"50%",cursor:"pointer",fontSize:"0.85rem",flexShrink:0}}>←</button>
               <div>
                 <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"1.4rem",fontWeight:700,color:"#FDF4F5"}}>Datos de pago</h2>
-                <p style={{color:"rgba(251,247,240,.6)",fontSize:"0.78rem"}}>🎁 7 días gratis · luego $7.99/mes</p>
+                <p style={{color:"rgba(251,247,240,.6)",fontSize:"0.78rem"}}>🎁 7 días gratis · luego $2.99/sem</p>
               </div>
               <button onClick={()=>{setShowPaywall(false);setSubStep(1);}} style={{marginLeft:"auto",background:"rgba(255,255,255,.1)",border:"none",color:"#FDF4F5",width:"30px",height:"30px",borderRadius:"50%",cursor:"pointer",fontSize:"0.9rem"}}>✕</button>
             </div>
