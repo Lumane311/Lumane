@@ -1,3 +1,4 @@
+import Script from 'next/script'
 import React, { useState, useEffect } from "react";
 
 const STORES = {
@@ -1112,6 +1113,18 @@ export default function LuMane(){
   return(
     <div style={{minHeight:"100vh",background:"#FDF4F5"}}>
       <style>{CSS}</style>
+      <Script
+  src="https://www.googletagmanager.com/gtag/js?id=G-JB8S3WTHRB"
+  strategy="afterInteractive"
+/>
+<Script id="google-analytics" strategy="afterInteractive">
+  {`
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-JB8S3WTHRB');
+  `}
+</Script>
       <div className="splash">
         <div style={{display:"flex",flexDirection:"column",alignItems:"center",gap:"1rem"}}>
           <div style={{width:"80px",height:"80px",borderRadius:"50%",background:"rgba(255,255,255,.15)",border:"2px solid rgba(255,255,255,.35)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:"2.4rem"}}>✦</div>
