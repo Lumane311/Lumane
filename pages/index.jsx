@@ -1083,5 +1083,101 @@ export default function LuMane(){
             <div style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"1.2rem",fontWeight:700,color:"#E8A0B0"}}>7 días completamente gratis</div>
             <div style={{fontSize:"0.77rem",color:"rgba(251,247,240,.6)",marginTop:"0.12rem"}}>Sin cargos. Cancela antes y no pagas nada.</div>
           </div>
+   </div>
+        {Object.values(PLANS).map(plan=>(
+          <div key={plan.id} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"0.7rem 0",borderBottom:"1px solid rgba(255,255,255,.08)"}}>
+            <div style={{color:"rgba(251,247,240,.8)",fontSize:"0.85rem"}}>{plan.label}</div>
+            <div style={{textAlign:"right"}}>
+              <span style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"1.3rem",fontWeight:700,color:"#E8A0B0"}}>{plan.price}</span>
+              <span style={{fontSize:"0.68rem",color:"rgba(251,247,240,.45)"}}>{plan.period}</span>
+              {plan.savings&&<div style={{fontSize:"0.62rem",color:"#90D490",fontWeight:700}}>{plan.savings}</div>}
+            </div>
+          </div>
+        ))}
+        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(185px,1fr))",gap:"0.55rem",margin:"1.3rem 0"}}>
+          {["🤖 Analizador IA 1A–4C","📸 Análisis con foto","📋 Rutina personalizada","🛍️ Tienda completa","💧 Guía anti-cal","🔄 Ilimitados"].map((f,i)=>(
+            <div key={i} style={{display:"flex",alignItems:"center",gap:"0.45rem",color:"rgba(251,247,240,.75)",fontSize:"0.8rem"}}>
+              <span style={{color:"#D4849A",fontWeight:700,flexShrink:0}}>✓</span>{f}
+            </div>
+          ))}
         </div>
-        {Object.va
+        {!isSubscribed()?(
+          <button onClick={()=>setShowPaywall(true)} style={{width:"100%",background:"linear-gradient(135deg,#C4687A,#E8A0B0)",color:"#2A1018",border:"none",padding:"1rem",borderRadius:"3rem",fontSize:"0.97rem",fontWeight:700,cursor:"pointer",fontFamily:"'Outfit',sans-serif"}}>
+            Comenzar 7 días gratis →
+          </button>
+        ):(
+          <div style={{background:"rgba(90,154,90,.18)",border:"1px solid rgba(90,154,90,.35)",borderRadius:"0.9rem",padding:"0.9rem",textAlign:"center"}}>
+            <div style={{color:"#90D490",fontWeight:700,fontSize:"0.9rem"}}>✦ Premium activo</div>
+          </div>
+        )}
+      </div>
+      {isSubscribed()&&(
+        <div style={{background:"rgba(170,85,85,.05)",border:"1px solid rgba(170,85,85,.16)",borderRadius:"0.9rem",padding:"1.1rem 1.3rem",display:"flex",alignItems:"center",justifyContent:"space-between",flexWrap:"wrap",gap:"0.8rem",marginTop:"1rem"}}>
+          <div>
+            <div style={{fontWeight:700,fontSize:"0.85rem",color:"#AA5555"}}>Cancelar suscripción</div>
+            <div style={{fontSize:"0.75rem",opacity:.55,marginTop:"0.12rem"}}>Perderás el acceso premium.</div>
+          </div>
+          <button onClick={cancelSub} style={{background:"none",border:"1.5px solid rgba(170,85,85,.38)",color:"#AA5555",padding:"0.45rem 1.1rem",borderRadius:"2rem",fontSize:"0.8rem",cursor:"pointer",fontFamily:"'Outfit',sans-serif",fontWeight:600}}>Cancelar</button>
+        </div>
+      )}
+    </div>
+  );
+
+  return(
+    <div style={{minHeight:"100vh",background:"#FDF4F5"}}>
+      <style>{CSS}</style>
+      <div className="splash">
+        <div style={{display:"flex",flexDirection:"column",alignItems:"center",gap:"1rem"}}>
+          <div style={{width:"80px",height:"80px",borderRadius:"50%",background:"rgba(255,255,255,.15)",border:"2px solid rgba(255,255,255,.35)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:"2.4rem"}}>✦</div>
+          <div className="splash-logo">LuMane</div>
+          <div className="splash-tag">Cuidado capilar con inteligencia artificial</div>
+          <div style={{display:"flex",gap:"0.45rem",marginTop:"0.4rem"}}>
+            {["1A","2B","3C","4A"].map(t=>(
+              <span key={t} style={{background:"rgba(255,255,255,.18)",color:"#fff",fontSize:"0.62rem",fontWeight:700,padding:"0.18rem 0.55rem",borderRadius:"2rem",letterSpacing:"0.08em"}}>{t}</span>
+            ))}
+          </div>
+          <div className="splash-dot"/>
+        </div>
+      </div>
+      {toast&&<div style={{position:"fixed",bottom:"6rem",left:"50%",transform:"translateX(-50%)",background:"#2A1018",color:"#FDF4F5",padding:"0.6rem 1.5rem",borderRadius:"2rem",fontSize:"0.84rem",zIndex:9999,boxShadow:"0 8px 28px rgba(0,0,0,.25)",whiteSpace:"nowrap"}}>{toast}</div>}
+      {showStores&&<StorePanel/>}
+      {showPaywall&&<PaywallModal/>}
+      <div style={{position:"sticky",top:0,zIndex:100,display:"flex",alignItems:"center",justifyContent:"space-between",padding:"0.85rem 1.2rem",background:"rgba(253,244,245,.96)",backdropFilter:"blur(14px)",borderBottom:"1px solid rgba(196,104,122,.11)"}}>
+        <div onClick={()=>setPage("home")} style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"1.45rem",fontWeight:700,color:"#C4687A",cursor:"pointer",letterSpacing:"0.08em"}}>✦ LuMane</div>
+        <div style={{display:"flex",gap:"0.45rem",alignItems:"center"}}>
+          {!isSubscribed()&&(
+            <button onClick={()=>setShowPaywall(true)} style={{background:"linear-gradient(135deg,#6B1F8A,#C4687A)",color:"#fff",border:"none",padding:"0.32rem 0.85rem",borderRadius:"2rem",fontSize:"0.73rem",fontWeight:700,cursor:"pointer",fontFamily:"'Outfit',sans-serif"}}>🎁 7 días gratis</button>
+          )}
+          <button onClick={()=>setShowStores(true)} style={{background:"rgba(196,104,122,.09)",border:"1px solid rgba(196,104,122,.18)",color:"#C4687A",padding:"0.32rem 0.65rem",borderRadius:"2rem",fontSize:"0.73rem",cursor:"pointer",fontFamily:"'Outfit',sans-serif"}}>⚙</button>
+        </div>
+      </div>
+      {!isSubscribed()&&<CountdownBanner/>}
+      <div className="page-content">
+        {page==="home"    &&<HomePage/>}
+        {page==="quiz"    &&<QuizPage/>}
+        {page==="result"  &&<ResultPage/>}
+        {page==="shop"    &&<ShopPage/>}
+        {page==="pricing" &&<PricingPage/>}
+        <ReviewsSection/>
+        <footer style={{background:"#2A1018",color:"rgba(253,244,245,.6)",padding:"2.2rem 2rem",textAlign:"center"}}>
+          <div style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"1.4rem",color:"#E8A0B0",marginBottom:"0.45rem",letterSpacing:"0.1em"}}>✦ LuMane</div>
+          <p style={{fontSize:"0.78rem",lineHeight:1.6,maxWidth:"360px",margin:"0 auto"}}>Cuidado capilar con inteligencia, amor y respeto por cada textura del mundo.</p>
+          {!isSubscribed()&&(
+            <button onClick={()=>setShowPaywall(true)} style={{background:"linear-gradient(135deg,#6B1F8A,#C4687A)",color:"#fff",border:"none",padding:"0.5rem 1.3rem",borderRadius:"2rem",fontSize:"0.78rem",fontWeight:700,cursor:"pointer",fontFamily:"'Outfit',sans-serif",marginTop:"0.9rem"}}>
+              🎁 7 días gratis · desde {"$2.99/sem"}
+            </button>
+          )}
+          <p style={{fontSize:"0.63rem",marginTop:"0.7rem",opacity:.25}}>Los enlaces pueden incluir comisiones de afiliado · LuMane © 2026</p>
+        </footer>
+      </div>
+      <nav className="bottom-nav">
+        {[{id:"home",icon:"🏠",label:"Inicio"},{id:"quiz",icon:"🤖",label:"Analizar"},{id:"shop",icon:"🛍️",label:"Tienda"},{id:"pricing",icon:"✦",label:"Premium"}].map(item=>(
+          <button key={item.id} className={"bottom-nav-item"+(page===item.id?" active":"")} onClick={()=>item.id==="quiz"?goQuiz():setPage(item.id)}>
+            <span className="bottom-nav-icon">{item.icon}</span>
+            <span className="bottom-nav-label">{item.label}</span>
+          </button>
+        ))}
+      </nav>
+    </div>
+  );
+}
