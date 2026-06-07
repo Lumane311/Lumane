@@ -557,40 +557,23 @@ export default function LuMane(){
             <div style={{background:"linear-gradient(135deg,#6B1F8A,#C4687A)",padding:"1.3rem 1.5rem",display:"flex",alignItems:"center",gap:"1rem"}}>
               <button onClick={()=>setSubStep(1)} style={{background:"rgba(255,255,255,.15)",border:"none",color:"#fff",width:"28px",height:"28px",borderRadius:"50%",cursor:"pointer",fontSize:"0.8rem",flexShrink:0}}>←</button>
               <div>
-                <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"1.3rem",fontWeight:700,color:"#fff"}}>Datos de pago</h2>
+                <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"1.3rem",fontWeight:700,color:"#fff"}}>Pago seguro</h2>
                 <p style={{color:"rgba(255,255,255,.6)",fontSize:"0.74rem"}}>🎁 7 días gratis · luego {PLANS[selectedPlan].price}{PLANS[selectedPlan].period}</p>
               </div>
               <button onClick={()=>{setShowPaywall(false);setSubStep(1);}} style={{marginLeft:"auto",background:"rgba(255,255,255,.15)",border:"none",color:"#fff",width:"28px",height:"28px",borderRadius:"50%",cursor:"pointer",fontSize:"0.8rem"}}>✕</button>
             </div>
-            <div style={{padding:"1.5rem"}}>
-              <div style={{background:"rgba(90,154,90,.1)",border:"1px solid rgba(90,154,90,.25)",borderRadius:"0.7rem",padding:"0.7rem 0.9rem",marginBottom:"1.2rem",display:"flex",gap:"0.5rem",alignItems:"center"}}>
-                <span>🔒</span><span style={{fontSize:"0.77rem",color:"#3A7A3A"}}>Pago seguro · Sin cargos durante los 7 días</span>
+            <div style={{padding:"2rem 1.5rem",textAlign:"center"}}>
+              <div style={{fontSize:"3rem",marginBottom:"1rem"}}>🔒</div>
+              <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"1.4rem",fontWeight:700,color:"#2A1018",marginBottom:"0.5rem"}}>Pago 100% seguro con Stripe</h3>
+              <p style={{fontSize:"0.85rem",color:"#666",lineHeight:1.7,marginBottom:"0.8rem"}}>Serás redirigido a la página oficial de Stripe donde ingresarás tu tarjeta de forma segura.</p>
+              <div style={{background:"rgba(90,154,90,.08)",border:"1px solid rgba(90,154,90,.2)",borderRadius:"0.8rem",padding:"0.8rem",marginBottom:"1.5rem",fontSize:"0.78rem",color:"#3A7A3A"}}>
+                ✓ Sin cargos durante 7 días · ✓ Cancela cuando quieras · ✓ SSL seguro
               </div>
-              <div style={{marginBottom:"0.9rem"}}>
-                <label style={{fontSize:"0.72rem",fontWeight:700,color:"#5A2030",letterSpacing:"0.08em",textTransform:"uppercase",display:"block",marginBottom:"0.3rem"}}>Email</label>
-                <input value={subEmail} onChange={e=>setSubEmail(e.target.value)} placeholder="tu@email.com" type="email" inputMode="email" autoComplete="email" style={{width:"100%",padding:"0.7rem 0.9rem",borderRadius:"0.65rem",border:"1.5px solid rgba(196,104,122,.25)",background:"#fff",fontFamily:"'Outfit',sans-serif",fontSize:"1rem",color:"#2A1018",outline:"none",WebkitAppearance:"none"}}/>
-              </div>
-              <div style={{marginBottom:"0.9rem"}}>
-                <label style={{fontSize:"0.72rem",fontWeight:700,color:"#5A2030",letterSpacing:"0.08em",textTransform:"uppercase",display:"block",marginBottom:"0.3rem"}}>Nombre en tarjeta</label>
-                <input value={subCard.name} onChange={e=>setSubCard(p=>({...p,name:e.target.value}))} placeholder="Tu nombre" type="text" inputMode="text" autoComplete="name" style={{width:"100%",padding:"0.7rem 0.9rem",borderRadius:"0.65rem",border:"1.5px solid rgba(196,104,122,.25)",background:"#fff",fontFamily:"'Outfit',sans-serif",fontSize:"1rem",color:"#2A1018",outline:"none",WebkitAppearance:"none"}}/>
-              </div>
-              <div style={{marginBottom:"0.9rem"}}>
-                <label style={{fontSize:"0.72rem",fontWeight:700,color:"#5A2030",letterSpacing:"0.08em",textTransform:"uppercase",display:"block",marginBottom:"0.3rem"}}>Número de tarjeta</label>
-                <input value={subCard.num} onChange={e=>setSubCard(p=>({...p,num:e.target.value.replace(/\D/g,"").slice(0,16)}))} placeholder="1234 5678 9012 3456" type="tel" inputMode="numeric" autoComplete="cc-number" style={{width:"100%",padding:"0.7rem 0.9rem",borderRadius:"0.65rem",border:"1.5px solid rgba(196,104,122,.25)",background:"#fff",fontFamily:"'Outfit',sans-serif",fontSize:"1rem",color:"#2A1018",outline:"none",WebkitAppearance:"none"}}/>
-              </div>
-              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"0.7rem",marginBottom:"1.3rem"}}>
-                <div>
-                  <label style={{fontSize:"0.72rem",fontWeight:700,color:"#5A2030",letterSpacing:"0.08em",textTransform:"uppercase",display:"block",marginBottom:"0.3rem"}}>Caducidad</label>
-                  <input value={subCard.exp} onChange={e=>setSubCard(p=>({...p,exp:e.target.value}))} placeholder="MM/AA" maxLength={5} type="tel" inputMode="numeric" autoComplete="cc-exp" style={{width:"100%",padding:"0.7rem 0.9rem",borderRadius:"0.65rem",border:"1.5px solid rgba(196,104,122,.25)",background:"#fff",fontFamily:"'Outfit',sans-serif",fontSize:"1rem",color:"#2A1018",outline:"none",WebkitAppearance:"none"}}/>
-                </div>
-                <div>
-                  <label style={{fontSize:"0.72rem",fontWeight:700,color:"#5A2030",letterSpacing:"0.08em",textTransform:"uppercase",display:"block",marginBottom:"0.3rem"}}>CVV</label>
-                  <input value={subCard.cvv} onChange={e=>setSubCard(p=>({...p,cvv:e.target.value.replace(/\D/g,"").slice(0,4)}))} placeholder="123" type="tel" inputMode="numeric" autoComplete="cc-csc" maxLength={4} style={{width:"100%",padding:"0.7rem 0.9rem",borderRadius:"0.65rem",border:"1.5px solid rgba(196,104,122,.25)",background:"#fff",fontFamily:"'Outfit',sans-serif",fontSize:"1rem",color:"#2A1018",outline:"none",WebkitAppearance:"none"}}/>
-                </div>
-              </div>
-              <button onClick={activatePaid} disabled={subLoading} style={{width:"100%",background:subLoading?"rgba(107,31,138,.4)":"linear-gradient(135deg,#6B1F8A,#C4687A)",color:"#fff",border:"none",padding:"0.95rem",borderRadius:"3rem",fontSize:"0.95rem",fontWeight:700,cursor:subLoading?"not-allowed":"pointer",fontFamily:"'Outfit',sans-serif",marginBottom:"0.5rem"}}>
-                {subLoading?"Procesando…":"🎁 Activar 7 días gratis"}
+              <button onClick={activatePaid} disabled={subLoading}
+                style={{width:"100%",background:subLoading?"rgba(107,31,138,.4)":"linear-gradient(135deg,#6B1F8A,#C4687A)",color:"#fff",border:"none",padding:"1rem",borderRadius:"3rem",fontSize:"1rem",fontWeight:700,cursor:subLoading?"not-allowed":"pointer",fontFamily:"'Outfit',sans-serif",marginBottom:"0.5rem"}}>
+                {subLoading?"Redirigiendo a Stripe…":"🎁 Ir a pago seguro →"}
               </button>
+              <p style={{fontSize:"0.68rem",color:"#bbb",marginTop:"0.5rem"}}>Powered by Stripe · Encriptación SSL</p>
             </div>
           </div>
         )}
