@@ -196,3 +196,105 @@ function ProductosRecomendados() {
     </section>
   );
 }
+function ReviewsSection() {
+  const [reviews, setReviews] = React.useState([
+    { id:1, nombre:"María G.", pais:"🇲🇽 México", tipo:"3C", estrellas:5, texto:"¡Increíble! Por fin una app que entiende mi cabello rizado. La rutina que me dio cambió todo.", fecha:"Hace 2 días" },
+    { id:2, nombre:"Valentina R.", pais:"🇨🇴 Colombia", tipo:"2B", estrellas:5, texto:"Llevaba años gastando dinero en productos que no funcionaban. LuMane me dio exactamente lo que necesitaba.", fecha:"Hace 5 días" },
+    { id:3, nombre:"Andrea M.", pais:"🇪🇸 España", tipo:"Cal", estrellas:5, texto:"El agua de Madrid me tenía el cabello horrible. Los productos anti-cal son una revolución total.", fecha:"Hace 1 semana" },
+    { id:4, nombre:"Carlos P.", pais:"🇦🇷 Argentina", tipo:"1C", estrellas:4, texto:"Muy buena página, fácil de usar y los productos que recomienda son reales y accesibles.", fecha:"Hace 1 semana" },
+    { id:5, nombre:"Sofía L.", pais:"🇬🇹 Guatemala", tipo:"4A", estrellas:5, texto:"Nunca pensé que habría una app que cubriera mi tipo de cabello afro. ¡Estoy emocionada!", fecha:"Hace 2 semanas" },
+  ]);
+  const [nombre, setNombre] = React.useState("");
+  const [pais, setPais] = React.useState("");
+  const [texto, setTexto] = React.useState("");
+  const [estrellas, setEstrellas] = React.useState(5);
+  const [hover, setHover] = React.useState(0);
+  const [enviado, setEnviado] = React.useState(false);
+  const total = reviews.length;
+  const promedio = (reviews.reduce((s,r)=>s+r.estrellas,0)/total).toFixed(1);
+  function enviar() {
+    if(!nombre.trim()||!texto.trim()) return;
+    const nuevo = { id:Date.now(), nombre:nombre.trim(), pais:pais||"🌎", tipo:"", estrellas, texto:texto.trim(), fecha:"Ahora mismo" };
+    setReviews(prev=>[nuevo,...prev]);
+    setNombre(""); setPais(""); setTexto(""); setEstrellas(5); setEnviado(true);
+    setTimeout(()=>setEnviado(false), 3000);
+  }
+  return (
+    <section style={{background:"#F5E8EA",padding:"3rem 1.5rem",fontFamily:"'Outfit',sans-serif"}}>
+      <div style={{maxWidth:760,margin:"0 auto"}}>
+        <div style={{textAlign:"center",marginBottom:28}}>
+          <span style={{fontSize:11,fontWeight:700,letterSpacing:"0.18em",textTransform:"uppercase",color:"#C4687A",display:"block",marginBottom:6}}>✦ Opiniones reales</span>
+          <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"clamp(22px,5vw,34px)",fontWeight:700,color:"#2A1018",margin:"0 0 8px 0"}}>Lo que dice nuestra comunidad</h2>
+          <div style={{display:"flex",alignItems:"center",justifyContent:"center",gap:10,marginTop:8}}>
+            <div style={{display:"flex",gap:3}}>
+              {[1,2,3,4,5].map(s=>(
+                <span key={s} style={{fontSize:20,color:s<=Math.round(promedio)?"#FFB800":"#ddd"}}>★</span>
+              ))}
+            </div>
+            <span style={{fontFamily:"'Cormorant Garamond',serif",fontSize:22,fontWeight:700,color:"#C4687A"}}>{promedio}</span>
+            <span style={{fontSize:13,color:"#999"}}>({total} opiniones)</span>
+          </div>
+        </div>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(280px,1fr))",gap:14,marginBottom:32}}>
+          {reviews.map(r=>(
+            <div key={r.id} style={{background:"#fff",borderRadius:16,padding:"18px 16px",border:"1.5px solid #f0e8ea",boxShadow:"0 2px 12px rgba(196,104,122,0.06)"}}>
+              <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:8}}>
+                <div>
+                  <div style={{fontWeight:700,fontSize:14,color:"#2A1018"}}>{r.nombre}</div>
+                  <div style={{fontSize:12,color:"#999",marginTop:2}}>{r.pais}{r.tipo?" · Tipo "+r.tipo:""}</div>
+                </div>
+                <div style={{display:"flex",gap:2}}>
+                  {[1,2,3,4,5].map(s=>(
+                    <span key={s} style={{fontSize:13,color:s<=r.estrellas?"#FFB800":"#ddd"}}>★</span>
+                  ))}
+                </div>
+              </div>
+              <p style={{fontSize:13,color:"#555",lineHeight:1.6,margin:0,fontStyle:"italic"}}>"{r.texto}"</p>
+              <div style={{fontSize:11,color:"#bbb",marginTop:10}}>{r.fecha}</div>
+            </div>
+          ))}
+        </div>
+        <div style={{background:"#fff",borderRadius:20,padding:"28px 24px",border:"1.5px solid rgba(196,104,122,.2)"}}>
+          <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:20,fontWeight:700,color:"#2A1018",marginBottom:4}}>¿Ya usaste LuMane?</h3>
+          <p style={{fontSize:13,color:"#999",marginBottom:20}}>Deja tu opinión y ayuda a otras personas</p>
+          <div style={{marginBottom:16}}>
+            <div style={{fontSize:12,fontWeight:700,color:"#5A2030",letterSpacing:"0.08em",textTransform:"uppercase",marginBottom:8}}>Tu calificación</div>
+            <div style={{display:"flex",gap:6}}>
+              {[1,2,3,4,5].map(s=>(
+                <span key={s} onMouseEnter={()=>setHover(s)} onMouseLeave={()=>setHover(0)} onClick={()=>setEstrellas(s)}
+                  style={{fontSize:32,cursor:"pointer",color:s<=(hover||estrellas)?"#FFB800":"#ddd"}}>★</span>
+              ))}
+            </div>
+          </div>
+          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12,marginBottom:12}}>
+            <div>
+              <label style={{fontSize:12,fontWeight:700,color:"#5A2030",letterSpacing:"0.08em",textTransform:"uppercase",display:"block",marginBottom:6}}>Tu nombre *</label>
+              <input value={nombre} onChange={e=>setNombre(e.target.value)} placeholder="Ej: María G."
+                style={{width:"100%",padding:"10px 12px",borderRadius:10,border:"1.5px solid rgba(196,104,122,.25)",fontFamily:"'Outfit',sans-serif",fontSize:14,color:"#2A1018",outline:"none",background:"#FDF4F5"}}/>
+            </div>
+            <div>
+              <label style={{fontSize:12,fontWeight:700,color:"#5A2030",letterSpacing:"0.08em",textTransform:"uppercase",display:"block",marginBottom:6}}>País</label>
+              <input value={pais} onChange={e=>setPais(e.target.value)} placeholder="Ej: 🇲🇽 México"
+                style={{width:"100%",padding:"10px 12px",borderRadius:10,border:"1.5px solid rgba(196,104,122,.25)",fontFamily:"'Outfit',sans-serif",fontSize:14,color:"#2A1018",outline:"none",background:"#FDF4F5"}}/>
+            </div>
+          </div>
+          <div style={{marginBottom:16}}>
+            <label style={{fontSize:12,fontWeight:700,color:"#5A2030",letterSpacing:"0.08em",textTransform:"uppercase",display:"block",marginBottom:6}}>Tu comentario *</label>
+            <textarea value={texto} onChange={e=>setTexto(e.target.value)} placeholder="¿Qué te pareció LuMane?" rows={3}
+              style={{width:"100%",padding:"10px 12px",borderRadius:10,border:"1.5px solid rgba(196,104,122,.25)",fontFamily:"'Outfit',sans-serif",fontSize:14,color:"#2A1018",outline:"none",background:"#FDF4F5",resize:"none"}}/>
+          </div>
+          {enviado?(
+            <div style={{background:"rgba(90,154,90,.1)",border:"1px solid rgba(90,154,90,.3)",borderRadius:10,padding:"12px",textAlign:"center",fontSize:14,color:"#3A7A3A",fontWeight:600}}>
+              🎉 ¡Gracias por tu opinión!
+            </div>
+          ):(
+            <button onClick={enviar}
+              style={{width:"100%",background:"linear-gradient(135deg,#6B1F8A,#C4687A)",color:"#fff",border:"none",padding:"12px",borderRadius:30,fontSize:15,fontWeight:700,cursor:"pointer",fontFamily:"'Outfit',sans-serif"}}>
+              ✨ Publicar mi opinión
+            </button>
+          )}
+        </div>
+      </div>
+    </section>
+  );
+}
