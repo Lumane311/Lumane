@@ -129,3 +129,70 @@ const SHOP = [
   { id:28, cat:"cal", step:"Mascarilla", emoji:"🍋", hue:55,  tag:"Bestseller",desc:"Vinagre de sidra y ácido málico disuelven depósitos de cal.",  sq:"apple cider vinegar hair mask hard water", howTo:"1. Limpio húmedo.\n2. Masajea bien.\n3. 10-15 min.\n4. Enjuaga bien.\n5. El olor desaparece. 1x semana.",
     prices:{eco:{price:5.99,name:"Mascarilla Vinagre",brand:"Garnier"},mid:{price:13.99,name:"Mascarilla ACV Anti-Cal",brand:"dpHUE"},lux:{price:28.00,name:"Mascarilla Ácido Málico",brand:"Briogeo"}} },
 ];
+function ProductosRecomendados() {
+  const prods = [
+    { id:1, emoji:"🌿", nombre:"Aceite de Argán Puro", marca:"OGX", beneficio:"Brillo y nutrición intensa para todo tipo de cabello", tag:"Más vendido", tagColor:"#5AAA46",
+      amazon:"https://www.amazon.com/s?k=argan+oil+hair+OGX&tag=lumanehair-21",
+      iherb:"https://www.iherb.com/search?kw=argan+oil+hair&rcode=TU_CODIGO_IHERB",
+      sephora:"https://www.sephora.com/search?keyword=argan+oil+OGX",
+      druni:"https://www.druni.es/buscar?q=aceite+argan+cabello" },
+    { id:2, emoji:"💧", nombre:"Shampoo Sin Sulfatos", marca:"Cantu", beneficio:"Limpieza suave que respeta los rizos y ondas naturales", tag:"CGM ✓", tagColor:"#7B68EE",
+      amazon:"https://www.amazon.com/s?k=cantu+sulfate+free+shampoo&tag=lumanehair-21",
+      iherb:"https://www.iherb.com/search?kw=cantu+sulfate+free&rcode=TU_CODIGO_IHERB",
+      sephora:"https://www.sephora.com/search?keyword=cantu+shampoo",
+      druni:"https://www.druni.es/buscar?q=champu+sin+sulfatos" },
+    { id:3, emoji:"🧴", nombre:"Mascarilla Reparadora", marca:"Olaplex", beneficio:"Reconstruye el cabello dañado por tinte o calor", tag:"-30%", tagColor:"#E75480",
+      amazon:"https://www.amazon.com/s?k=olaplex+hair+mask&tag=lumanehair-21",
+      iherb:"https://www.iherb.com/search?kw=olaplex+mask&rcode=TU_CODIGO_IHERB",
+      sephora:"https://www.sephora.com/search?keyword=olaplex+mask",
+      druni:"https://www.druni.es/buscar?q=olaplex+mascarilla" },
+    { id:4, emoji:"🍂", nombre:"Tónico Anticaída Biotina", marca:"Vichy Dercos", beneficio:"Cafeína y biotina que frenan la caída desde la raíz", tag:"Clínico", tagColor:"#2E86AB",
+      amazon:"https://www.amazon.com/s?k=vichy+dercos+biotin&tag=lumanehair-21",
+      iherb:"https://www.iherb.com/search?kw=hair+loss+biotin&rcode=TU_CODIGO_IHERB",
+      sephora:"https://www.sephora.com/search?keyword=vichy+dercos",
+      druni:"https://www.druni.es/buscar?q=vichy+dercos+anticaida" },
+    { id:5, emoji:"🌀", nombre:"Crema Definidora de Rizos", marca:"Shea Moisture", beneficio:"Define y humecta rizos 3A-3C sin efecto plástico", tag:"Natural", tagColor:"#5AAA46",
+      amazon:"https://www.amazon.com/s?k=shea+moisture+curl+cream&tag=lumanehair-21",
+      iherb:"https://www.iherb.com/search?kw=shea+moisture+curl&rcode=TU_CODIGO_IHERB",
+      sephora:"https://www.sephora.com/search?keyword=shea+moisture+curl",
+      druni:"https://www.druni.es/buscar?q=shea+moisture+rizos" },
+    { id:6, emoji:"🚿", nombre:"Filtro Ducha Anti-Cal", marca:"AquaBliss", beneficio:"Filtra el cloro y la cal que destruye el cabello en Europa", tag:"Esencial", tagColor:"#B8920A",
+      amazon:"https://www.amazon.com/s?k=shower+filter+hard+water&tag=lumanehair-21",
+      iherb:"https://www.iherb.com/search?kw=shower+filter&rcode=TU_CODIGO_IHERB",
+      sephora:"https://www.sephora.com/search?keyword=shower+filter+hair",
+      druni:"https://www.druni.es/buscar?q=filtro+ducha+cabello" },
+  ];
+  return (
+    <section style={{width:"100%",maxWidth:960,margin:"0 auto",padding:"3rem 1rem 2rem",fontFamily:"'Outfit',sans-serif"}}>
+      <div style={{textAlign:"center",marginBottom:32}}>
+        <span style={{fontSize:11,fontWeight:700,letterSpacing:"0.18em",textTransform:"uppercase",color:"#C4687A",marginBottom:8,display:"block"}}>✦ Selección LuMane</span>
+        <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"clamp(22px,5vw,36px)",fontWeight:700,color:"#2A1018",margin:"0 0 8px 0"}}>Productos que recomendamos</h2>
+        <p style={{fontSize:14,color:"#888",margin:0}}>Los más valorados · Amazon · iHerb · Sephora · Druni</p>
+      </div>
+      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(270px,1fr))",gap:18}}>
+        {prods.map(function(p){
+          return (
+            <div key={p.id} style={{background:"#fff",border:"1.5px solid #f0e8ea",borderRadius:18,padding:"22px 18px 18px",display:"flex",flexDirection:"column",gap:10,boxShadow:"0 2px 16px rgba(196,104,122,0.08)",position:"relative"}}>
+              <span style={{position:"absolute",top:14,right:14,background:p.tagColor+"22",color:p.tagColor,border:"1px solid "+p.tagColor+"44",borderRadius:20,padding:"3px 10px",fontSize:11,fontWeight:700}}>{p.tag}</span>
+              <div style={{fontSize:40}}>{p.emoji}</div>
+              <div>
+                <div style={{fontSize:11,fontWeight:700,letterSpacing:"0.1em",textTransform:"uppercase",color:"#C4687A"}}>{p.marca}</div>
+                <div style={{fontSize:16,fontWeight:700,color:"#1a1a1a",margin:"3px 0"}}>{p.nombre}</div>
+              </div>
+              <p style={{fontSize:13,color:"#777",lineHeight:1.55,flexGrow:1,margin:0}}>{p.beneficio}</p>
+              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:6,marginTop:6}}>
+                <a href={p.amazon} target="_blank" rel="noopener noreferrer" style={{background:"#FF9900",color:"#fff",borderRadius:10,padding:"9px 4px",fontSize:12,fontWeight:700,textDecoration:"none",textAlign:"center",display:"block"}}>📦 Amazon</a>
+                <a href={p.iherb} target="_blank" rel="noopener noreferrer" style={{background:"#5AAA46",color:"#fff",borderRadius:10,padding:"9px 4px",fontSize:12,fontWeight:700,textDecoration:"none",textAlign:"center",display:"block"}}>🌿 iHerb</a>
+                <a href={p.sephora} target="_blank" rel="noopener noreferrer" style={{background:"#E75480",color:"#fff",borderRadius:10,padding:"9px 4px",fontSize:12,fontWeight:700,textDecoration:"none",textAlign:"center",display:"block"}}>🖤 Sephora</a>
+                <a href={p.druni} target="_blank" rel="noopener noreferrer" style={{background:"#6B1F8A",color:"#fff",borderRadius:10,padding:"9px 4px",fontSize:12,fontWeight:700,textDecoration:"none",textAlign:"center",display:"block"}}>💜 Druni</a>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+      <p style={{textAlign:"center",fontSize:11,color:"#bbb",marginTop:20}}>
+        * Algunos enlaces son de afiliado. LuMane puede recibir una pequeña comisión sin coste adicional para ti.
+      </p>
+    </section>
+  );
+}
