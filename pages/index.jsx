@@ -350,3 +350,253 @@ function fallback(a){
     lifestyle:["Duerme en funda de seda","Bebe 2 litros de agua al día","Masajea el cuero 5 min diarios"],
   };
 }
+export default function LuMane(){
+  const [page,setPage]=useState("home");
+  const [quizStep,setQuizStep]=useState(0);
+  const [answers,setAnswers]=useState({});
+  const [result,setResult]=useState(null);
+  const [loading,setLoading]=useState(false);
+  const [stores,setStores]=useState(STORES);
+  const [showStores,setShowStores]=useState(false);
+  const [expanded,setExpanded]=useState(null);
+  const [shopFilter,setShopFilter]=useState("all");
+  const [toast,setToast]=useState(null);
+  const [subStatus,setSubStatus]=useState("none");
+  const [showPaywall,setShowPaywall]=useState(false);
+  const [subStep,setSubStep]=useState(1);
+  const [subEmail,setSubEmail]=useState("");
+  const [subCard,setSubCard]=useState({num:"",exp:"",cvv:"",name:""});
+  const [subLoading,setSubLoading]=useState(false);
+  const [selectedPlan,setSelectedPlan]=useState("monthly");
+  const [countdown,setCountdown]=useState(15*60);
+  const [hairPhoto,setHairPhoto]=useState(null);
+  const [photoLoading,setPhotoLoading]=useState(false);
+
+  useEffect(()=>{
+    const t=setInterval(()=>setCountdown(c=>c>0?c-1:0),1000);
+    return ()=>clearInterval(t);
+  },[]);
+
+  const PLANS={
+    weekly:{id:"weekly",label:"Semanal",price:"$2.99",period:"/sem",savings:null,priceNum:2.99},
+    monthly:{id:"monthly",label:"Mensual",price:"$9.99",period:"/mes",savings:null,priceNum:9.99},
+    annual:{id:"annual",label:"Anual",price:"$59.99",period:"/año",savings:"Ahorra 50% · antes $120",priceNum:59.99},
+  };
+
+  function fmtCountdown(s){return String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0");}
+  function isSubscribed(){return subStatus==="active"||subStatus==="trial";}
+  function requireSub(fn){if(isSubscribed()){fn();return;}setShowPaywall(true);setSubStep(1);}
+  function showToast(m){setToast(m);setTimeout(()=>setToast(null),2500);}
+  function goQuiz(){requireSub(()=>{setQuizStep(0);setAnswers({});setResult(null);setHairPhoto(null);setPage("quiz");});}
+  function cancelSub(){setSubStatus("none");showToast("Suscripción cancelada");}
+
+  function handlePhotoUpload(e){
+    const file=e.target.files[0];if(!file)return;
+    setPhotoLoading(true);
+    const reader=new FileReader();
+    reader.onload=(ev)=>{setHairPhoto(ev.target.result.split(",")[1]);setPhotoLoading(false);};
+    reader.readAsDataURL(file);
+  }
+
+  const activatePaid=async()=>{
+    setSubLoading(true);
+    try{
+      const res=await fetch('/api/checkout',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({plan:selectedPlan})});
+      const data=await res.json();
+      if(data.url){window.location.href=data.url;}
+      else{alert('Error al procesar. Intenta de nuevo.');}
+    }catch(e){alert('Error de conexión. Intenta de nuevo.');}
+    setSubLoading(false);
+  };
+
+  function filterProducts(cat){
+    if(cat==="all")return SHOP;
+    const fc=FILTER_CATS.find(f=>f.id===cat);
+    if(fc&&fc.sub)return SHOP.filter(p=>fc.sub.includes(p.cat));
+    return SHOP.filter(p=>p.cat===cat);
+  }
+
+  function getQuizOpts(idx){
+    if(idx===2)return SUBTYPES[answers.group]||[];
+    return QUESTIONS[idx].opts;
+  }
+
+  function handleAnswer(qId,val){
+    const next={...answers,[qId]:val};
+    setAnswers(next);
+    let ns=quizStep+1;
+    if(ns===2&&!SUBTYPES[next.group])ns=3;
+    if(ns<QUESTIONS.length)setQuizStep(ns);
+    else setQuizStep(QUESTIONS.length);
+  }
+
+  async function runAI(ans){
+    setLoading(true);setPage("result");
+    const prompt=`Eres tricóloga experta. Analiza: Género:${ans.gender} Grupo:${ans.group} Subtipo:${ans.subtype||ans.group} Cuero:${ans.scalp} Preocupación:${ans.concern} Tratamientos:${ans.damage}. Responde SOLO JSON: {"hairType":"${ans.subtype||ans.group}","condition":"seco|graso|normal","scalp":"normal|caspa|graso|sensible","title":"título 5 palabras","summary":"descripción 2-3 oraciones","score":{"hidratacion":7,"fuerza":6,"brillo":7,"salud_cuero":7},"products":[{"order":1,"step":"Limpieza","name":"","sq":"","why":"","howToApply":"","freq":"","tip":"","avoid":""},{"order":2,"step":"Acondicionado","name":"","sq":"","why":"","howToApply":"","freq":"","tip":"","avoid":""},{"order":3,"step":"Tratamiento","name":"","sq":"","why":"","howToApply":"","freq":"","tip":"","avoid":""},{"order":4,"step":"Definición","name":"","sq":"","why":"","howToApply":"","freq":"","tip":"","avoid":""},{"order":5,"step":"Sellado","name":"","sq":"","why":"","howToApply":"","freq":"","tip":"","avoid":""}],"weeklyRoutine":["Días 1-2:","Días 3-4:","Días 5-7:"],"ingredients":{"buscar":["i1","i2","i3"],"evitar":["i1","i2"]},"lifestyle":["h1","h2","h3"]}`;
+    try{
+      const msgs=hairPhoto?[{role:"user",content:[{type:"image",source:{type:"base64",media_type:"image/jpeg",data:hairPhoto}},{type:"text",text:prompt}]}]:[{role:"user",content:prompt}];
+      const r=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:2000,messages:msgs})});
+      const d=await r.json();
+      const txt=d.content.map(b=>b.text||"").join("");
+      setResult(JSON.parse(txt.replace(/```json|```/g,"").trim()));
+    }catch{setResult(fallback(ans));}
+    setLoading(false);
+  }
+
+  function openStore(query,key){
+    const s=stores[key];if(!s?.active)return;
+    window.open(s.buildUrl(query,s.tag),"_blank","noopener");
+    showToast("Abriendo "+s.name+"… 🛍️");
+  }
+
+  const activeStores=Object.entries(stores).filter(([,s])=>s.active);
+
+  const CountdownBanner=()=>(
+    <div style={{background:"linear-gradient(135deg,#6B1F8A,#9B1B6E,#C4187A)",padding:"0.65rem 1.2rem",display:"flex",alignItems:"center",justifyContent:"center",gap:"0.8rem",flexWrap:"wrap",animation:"bannerBounce 2.5s ease-in-out infinite, bannerGlow 2s ease-in-out infinite"}}>
+      <span style={{color:"#fff",fontSize:"0.8rem",fontWeight:600}}>🔥 <strong>47 personas</strong> viendo · 7 días GRATIS · Desde <strong>{"$2.99/sem"}</strong></span>
+      <div style={{background:"rgba(0,0,0,.2)",borderRadius:"0.45rem",padding:"0.2rem 0.65rem",border:"1px solid rgba(255,255,255,.25)"}}>
+        <span style={{fontFamily:"monospace",fontSize:"0.95rem",fontWeight:700,color:"#FFD4E0"}}>{fmtCountdown(countdown)}</span>
+      </div>
+      <button onClick={()=>setShowPaywall(true)} style={{background:"linear-gradient(135deg,#FFD700,#FFA500)",color:"#4A0070",border:"none",padding:"0.28rem 0.95rem",borderRadius:"2rem",fontSize:"0.76rem",fontWeight:700,cursor:"pointer",fontFamily:"'Outfit',sans-serif",animation:"pulsBtn 1.5s ease-in-out infinite"}}>
+        Activar →
+      </button>
+    </div>
+  );
+
+  const PaywallModal=()=>(
+    <div style={{position:"fixed",inset:0,background:"rgba(42,16,24,.75)",zIndex:700,display:"flex",alignItems:"center",justifyContent:"center",padding:"1rem",backdropFilter:"blur(4px)"}} onClick={()=>{setShowPaywall(false);setSubStep(1);}}>
+      <div style={{background:"#FDF4F5",borderRadius:"1.8rem",maxWidth:"460px",width:"100%",boxShadow:"0 40px 100px rgba(0,0,0,.4)",overflow:"hidden"}} onClick={e=>e.stopPropagation()}>
+        {subStep===1&&(
+          <div>
+            <div style={{background:"linear-gradient(135deg,#6B1F8A,#C4687A)",padding:"2rem",textAlign:"center",position:"relative"}}>
+              <button onClick={()=>{setShowPaywall(false);setSubStep(1);}} style={{position:"absolute",top:"1rem",right:"1rem",background:"rgba(255,255,255,.15)",border:"none",color:"#fff",width:"28px",height:"28px",borderRadius:"50%",cursor:"pointer",fontSize:"0.85rem"}}>✕</button>
+              <div style={{display:"inline-flex",alignItems:"center",gap:"0.4rem",background:"rgba(255,255,255,.15)",border:"1px solid rgba(255,255,255,.3)",borderRadius:"2rem",padding:"0.28rem 0.8rem",marginBottom:"0.7rem"}}>
+                <span style={{fontSize:"0.72rem",fontWeight:700,color:"#FFD4E0"}}>⏱️ Expira en <strong style={{fontFamily:"monospace",color:"#fff"}}>{fmtCountdown(countdown)}</strong></span>
+              </div>
+              <div style={{fontSize:"2rem",marginBottom:"0.3rem"}}>✦</div>
+              <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"1.8rem",fontWeight:700,color:"#fff",marginBottom:"0.3rem"}}>LuMane Premium</h2>
+              <p style={{color:"rgba(255,255,255,.7)",fontSize:"0.82rem"}}>Analizador IA · Rutinas · Tienda completa</p>
+            </div>
+            <div style={{padding:"1.5rem"}}>
+              <div style={{background:"rgba(196,104,122,.08)",border:"1.5px solid rgba(196,104,122,.25)",borderRadius:"1rem",padding:"0.9rem",marginBottom:"1.2rem",textAlign:"center"}}>
+                <div style={{fontSize:"0.68rem",fontWeight:700,color:"#C4687A",letterSpacing:"0.15em",textTransform:"uppercase"}}>🎁 7 días completamente gratis</div>
+                <div style={{fontSize:"0.78rem",opacity:.6,marginTop:"0.2rem"}}>Sin cargos. Cancela cuando quieras.</div>
+              </div>
+              {Object.values(PLANS).map(plan=>(
+                <button key={plan.id} onClick={()=>setSelectedPlan(plan.id)}
+                  style={{width:"100%",display:"flex",alignItems:"center",justifyContent:"space-between",padding:"0.8rem 1rem",borderRadius:"0.8rem",border:"2px solid "+(selectedPlan===plan.id?"#C4687A":"rgba(196,104,122,.2)"),background:selectedPlan===plan.id?"rgba(196,104,122,.07)":"#fff",cursor:"pointer",fontFamily:"'Outfit',sans-serif",marginBottom:"0.5rem"}}>
+                  <div style={{display:"flex",alignItems:"center",gap:"0.6rem"}}>
+                    <div style={{width:"16px",height:"16px",borderRadius:"50%",border:"2px solid "+(selectedPlan===plan.id?"#C4687A":"#ccc"),background:selectedPlan===plan.id?"#C4687A":"transparent",flexShrink:0}}/>
+                    <div style={{textAlign:"left"}}>
+                      <div style={{fontWeight:700,fontSize:"0.85rem",color:"#2A1018"}}>{plan.label}{plan.id==="annual"&&<span style={{marginLeft:"0.4rem",background:"#FFD700",color:"#4A0070",fontSize:"0.6rem",fontWeight:700,padding:"0.1rem 0.4rem",borderRadius:"2rem"}}>⭐ Popular</span>}</div>
+                      {plan.savings&&<div style={{fontSize:"0.64rem",color:"#5A9A5A",fontWeight:700}}>{plan.savings}</div>}
+                    </div>
+                  </div>
+                  <div>
+                    <span style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"1.35rem",fontWeight:700,color:selectedPlan===plan.id?"#C4687A":"#2A1018"}}>{plan.price}</span>
+                    <span style={{fontSize:"0.68rem",opacity:.5}}>{plan.period}</span>
+                  </div>
+                </button>
+              ))}
+              <div style={{display:"flex",flexDirection:"column",gap:"0.35rem",margin:"0.8rem 0 1.2rem"}}>
+                {["🤖 Analizador IA subtipo exacto 1A–4C","📸 Análisis con foto de tu cabello","📋 Rutina personalizada paso a paso","🛍️ Tienda + Amazon, Sephora, iHerb, Druni","💧 Guía agua calcárea Europa","🔄 Análisis ilimitados"].map((b,i)=>(
+                  <div key={i} style={{display:"flex",gap:"0.5rem",fontSize:"0.8rem",color:"#3A1020"}}>
+                    <span style={{color:"#5A9A5A",fontWeight:700,flexShrink:0}}>✓</span>{b}
+                  </div>
+                ))}
+              </div>
+              <button onClick={()=>setSubStep(2)} style={{width:"100%",background:"linear-gradient(135deg,#6B1F8A,#C4687A)",color:"#fff",border:"none",padding:"0.95rem",borderRadius:"3rem",fontSize:"0.97rem",fontWeight:700,cursor:"pointer",fontFamily:"'Outfit',sans-serif",marginBottom:"0.5rem"}}>
+                Comenzar 7 días gratis →
+              </button>
+              <p style={{textAlign:"center",fontSize:"0.68rem",opacity:.4,lineHeight:1.4}}>Sin cargos durante la prueba. Después {PLANS[selectedPlan].price}{PLANS[selectedPlan].period}.</p>
+            </div>
+          </div>
+        )}
+        {subStep===2&&(
+          <div>
+            <div style={{background:"linear-gradient(135deg,#6B1F8A,#C4687A)",padding:"1.3rem 1.5rem",display:"flex",alignItems:"center",gap:"1rem"}}>
+              <button onClick={()=>setSubStep(1)} style={{background:"rgba(255,255,255,.15)",border:"none",color:"#fff",width:"28px",height:"28px",borderRadius:"50%",cursor:"pointer",fontSize:"0.8rem",flexShrink:0}}>←</button>
+              <div>
+                <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"1.3rem",fontWeight:700,color:"#fff"}}>Datos de pago</h2>
+                <p style={{color:"rgba(255,255,255,.6)",fontSize:"0.74rem"}}>🎁 7 días gratis · luego {PLANS[selectedPlan].price}{PLANS[selectedPlan].period}</p>
+              </div>
+              <button onClick={()=>{setShowPaywall(false);setSubStep(1);}} style={{marginLeft:"auto",background:"rgba(255,255,255,.15)",border:"none",color:"#fff",width:"28px",height:"28px",borderRadius:"50%",cursor:"pointer",fontSize:"0.8rem"}}>✕</button>
+            </div>
+            <div style={{padding:"1.5rem",textAlign:"center"}}>
+              <div style={{fontSize:"3rem",marginBottom:"1rem"}}>🔒</div>
+              <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"1.4rem",fontWeight:700,color:"#2A1018",marginBottom:"0.5rem"}}>Pago seguro con Stripe</h3>
+              <p style={{fontSize:"0.85rem",opacity:.6,lineHeight:1.6,marginBottom:"1.5rem"}}>Serás redirigido a la página segura de Stripe para completar tu pago. Tus datos están protegidos.</p>
+              <button onClick={activatePaid} disabled={subLoading} style={{width:"100%",background:subLoading?"rgba(107,31,138,.4)":"linear-gradient(135deg,#6B1F8A,#C4687A)",color:"#fff",border:"none",padding:"0.95rem",borderRadius:"3rem",fontSize:"0.95rem",fontWeight:700,cursor:subLoading?"not-allowed":"pointer",fontFamily:"'Outfit',sans-serif",marginBottom:"0.5rem"}}>
+                {subLoading?"Procesando…":"🎁 Activar 7 días gratis"}
+              </button>
+              <p style={{textAlign:"center",fontSize:"0.68rem",opacity:.4,lineHeight:1.4}}>Sin cargos durante la prueba. Cancela cuando quieras.</p>
+            </div>
+          </div>
+        )}
+        {subStep===3&&(
+          <div style={{padding:"3rem 2rem",textAlign:"center"}}>
+            <div style={{fontSize:"3.5rem",marginBottom:"1rem"}}>🎉</div>
+            <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"1.9rem",fontWeight:700,color:"#2A1018",marginBottom:"0.5rem"}}>¡Bienvenida a Premium!</h2>
+            <p style={{fontSize:"0.88rem",opacity:.7,lineHeight:1.65,marginBottom:"1.2rem"}}>Tu suscripción está activa. Disfruta todo LuMane sin límites.</p>
+            <button onClick={()=>{setShowPaywall(false);setSubStep(1);}} style={{background:"linear-gradient(135deg,#6B1F8A,#C4687A)",color:"#fff",border:"none",padding:"0.85rem 2.2rem",borderRadius:"3rem",fontSize:"0.95rem",fontWeight:700,cursor:"pointer",fontFamily:"'Outfit',sans-serif"}}>
+              ¡Empezar ahora! ✨
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+
+  const StorePanel=()=>(
+    <div style={{position:"fixed",inset:0,background:"rgba(42,16,24,.65)",zIndex:600,display:"flex",alignItems:"center",justifyContent:"center",padding:"1rem"}} onClick={()=>setShowStores(false)}>
+      <div style={{background:"#FDF4F5",borderRadius:"1.5rem",padding:"1.8rem",maxWidth:"440px",width:"100%",boxShadow:"0 30px 80px rgba(0,0,0,.3)"}} onClick={e=>e.stopPropagation()}>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:"1rem"}}>
+          <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"1.4rem",fontWeight:700}}>Tiendas Afiliadas</h2>
+          <button onClick={()=>setShowStores(false)} style={{background:"none",border:"none",fontSize:"1.1rem",cursor:"pointer",color:"#999"}}>✕</button>
+        </div>
+        {Object.entries(stores).map(([key,s])=>(
+          <div key={key} style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"0.75rem 0.9rem",marginBottom:"0.45rem",background:s.active?s.color+"12":"rgba(0,0,0,.03)",borderRadius:"0.75rem",border:"1px solid "+(s.active?s.color+"35":"transparent")}}>
+            <div style={{display:"flex",alignItems:"center",gap:"0.65rem"}}>
+              <span style={{fontSize:"1.2rem"}}>{s.emoji}</span>
+              <div style={{fontWeight:600,fontSize:"0.85rem"}}>{s.name}</div>
+            </div>
+            <button onClick={()=>setStores(p=>({...p,[key]:{...p[key],active:!p[key].active}}))} style={{width:"44px",height:"24px",borderRadius:"12px",border:"none",cursor:"pointer",background:s.active?s.color:"#ddd",position:"relative",flexShrink:0}}>
+              <span style={{position:"absolute",top:"2px",left:s.active?"22px":"2px",width:"20px",height:"20px",background:"#fff",borderRadius:"50%",transition:"left .2s",boxShadow:"0 1px 4px rgba(0,0,0,.2)"}}/>
+            </button>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+
+  const HomePage=()=>(
+    <div>
+      <div style={{position:"relative",minHeight:"88vh",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:"3rem 1.5rem 2rem",textAlign:"center",overflow:"hidden"}}>
+        <div style={{position:"absolute",inset:0,background:"radial-gradient(ellipse 80% 70% at 50% 40%,rgba(107,31,138,.07) 0%,transparent 60%),#FDF4F5",zIndex:0}}/>
+        <div style={{position:"relative",zIndex:1,maxWidth:"580px"}}>
+          <div style={{display:"inline-flex",alignItems:"center",gap:"0.5rem",background:"rgba(90,154,90,.1)",border:"1px solid rgba(90,154,90,.3)",color:"#3A7A3A",fontSize:"0.72rem",fontWeight:700,padding:"0.32rem 1rem",borderRadius:"2rem",marginBottom:"1.2rem"}}>
+            <span style={{width:"7px",height:"7px",background:"#5A9A5A",borderRadius:"50%"}}/>
+            +2,847 cabellos analizados esta semana
+          </div>
+          <div style={{display:"flex",gap:"0.5rem",justifyContent:"center",marginBottom:"1rem",flexWrap:"wrap"}}>
+            <div style={{display:"flex",alignItems:"center",gap:"0.4rem",background:"rgba(196,104,122,.12)",border:"1px solid rgba(196,104,122,.3)",borderRadius:"2rem",padding:"0.35rem 1rem"}}>
+              <span>👩</span><span style={{fontSize:"0.75rem",fontWeight:700,color:"#C4687A"}}>Para ella</span>
+            </div>
+            <div style={{display:"flex",alignItems:"center",gap:"0.4rem",background:"rgba(42,90,138,.12)",border:"1px solid rgba(42,90,138,.3)",borderRadius:"2rem",padding:"0.35rem 1rem"}}>
+              <span>👨</span><span style={{fontSize:"0.75rem",fontWeight:700,color:"#2A5A8A"}}>Para él</span>
+            </div>
+          </div>
+          <h1 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"clamp(2.8rem,7vw,5rem)",lineHeight:1.02,fontWeight:700,color:"#2A1018",marginBottom:"1.2rem"}}>
+            Tu cabello<br/><em style={{color:"#C4687A",fontStyle:"italic"}}>es tu corona.</em><br/>
+            <span style={{fontSize:"62%",fontWeight:300,fontStyle:"italic",color:"#5A2030",opacity:.75}}>Y merece lo mejor.</span>
+          </h1>
+          <div style={{background:"linear-gradient(135deg,rgba(196,104,122,.07),rgba(212,132,154,.11))",border:"1px solid rgba(196,104,122,.2)",borderRadius:"1.3rem",padding:"1.4rem 1.6rem",marginBottom:"2rem",maxWidth:"480px",margin:"0 auto 2rem"}}>
+            <p style={{fontSize:"1rem",lineHeight:1.8,color:"#3A1020",fontWeight:400,marginBottom:"0.7rem"}}>
+              <strong style={{fontWeight:700,color:"#C4687A"}}>Sin importar tu raza, tu género ni tu textura</strong> — en LuMane creemos que cada cabello del mundo merece cuidado real, amor genuino y los mejores productos.
+            </p>
+            <p style={{fontSize:"0.88rem",lineHeight:1.75,color:"#5A2030",fontWeight:300}}>
+              Desde coils 4C hasta lacio 1A — cubrimos los <strong style={{fontWeight:600}}>12 tipos de cabello</strong> con rutinas e instrucciones paso a paso. <em>Tu cabello tiene nombre, y tiene solución.</em>
+            </p>
+          </div>
+          <div style={{display:"flex",flexDirection:"column",alignItems:"center",gap:"0.7rem",marginBottom:"2.5rem"}}>
+            <button onClick={goQuiz} style={{background:"linear-gradient(135deg,#6B1F8A,#
