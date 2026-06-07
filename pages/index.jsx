@@ -568,24 +568,24 @@ export default function LuMane(){
               </div>
               <div style={{marginBottom:"0.9rem"}}>
                 <label style={{fontSize:"0.72rem",fontWeight:700,color:"#5A2030",letterSpacing:"0.08em",textTransform:"uppercase",display:"block",marginBottom:"0.3rem"}}>Email</label>
-                <input value={subEmail} onChange={e=>setSubEmail(e.target.value)} placeholder="tu@email.com" type="email" style={{width:"100%",padding:"0.7rem 0.9rem",borderRadius:"0.65rem",border:"1.5px solid rgba(196,104,122,.25)",background:"#fff",fontFamily:"'Outfit',sans-serif",fontSize:"0.88rem",color:"#2A1018",outline:"none"}}/>
+                <input value={subEmail} onChange={e=>setSubEmail(e.target.value)} placeholder="tu@email.com" type="email" inputMode="email" autoComplete="email" style={{width:"100%",padding:"0.7rem 0.9rem",borderRadius:"0.65rem",border:"1.5px solid rgba(196,104,122,.25)",background:"#fff",fontFamily:"'Outfit',sans-serif",fontSize:"1rem",color:"#2A1018",outline:"none",WebkitAppearance:"none"}}/>
               </div>
               <div style={{marginBottom:"0.9rem"}}>
                 <label style={{fontSize:"0.72rem",fontWeight:700,color:"#5A2030",letterSpacing:"0.08em",textTransform:"uppercase",display:"block",marginBottom:"0.3rem"}}>Nombre en tarjeta</label>
-                <input value={subCard.name} onChange={e=>setSubCard(p=>({...p,name:e.target.value}))} placeholder="Tu nombre" style={{width:"100%",padding:"0.7rem 0.9rem",borderRadius:"0.65rem",border:"1.5px solid rgba(196,104,122,.25)",background:"#fff",fontFamily:"'Outfit',sans-serif",fontSize:"0.88rem",color:"#2A1018",outline:"none"}}/>
+                <input value={subCard.name} onChange={e=>setSubCard(p=>({...p,name:e.target.value}))} placeholder="Tu nombre" type="text" inputMode="text" autoComplete="name" style={{width:"100%",padding:"0.7rem 0.9rem",borderRadius:"0.65rem",border:"1.5px solid rgba(196,104,122,.25)",background:"#fff",fontFamily:"'Outfit',sans-serif",fontSize:"1rem",color:"#2A1018",outline:"none",WebkitAppearance:"none"}}/>
               </div>
               <div style={{marginBottom:"0.9rem"}}>
                 <label style={{fontSize:"0.72rem",fontWeight:700,color:"#5A2030",letterSpacing:"0.08em",textTransform:"uppercase",display:"block",marginBottom:"0.3rem"}}>Número de tarjeta</label>
-                <input value={subCard.num} onChange={e=>setSubCard(p=>({...p,num:e.target.value.replace(/\D/g,"").slice(0,16)}))} placeholder="1234 5678 9012 3456" style={{width:"100%",padding:"0.7rem 0.9rem",borderRadius:"0.65rem",border:"1.5px solid rgba(196,104,122,.25)",background:"#fff",fontFamily:"'Outfit',sans-serif",fontSize:"0.88rem",color:"#2A1018",outline:"none"}}/>
+                <input value={subCard.num} onChange={e=>setSubCard(p=>({...p,num:e.target.value.replace(/\D/g,"").slice(0,16)}))} placeholder="1234 5678 9012 3456" type="tel" inputMode="numeric" autoComplete="cc-number" style={{width:"100%",padding:"0.7rem 0.9rem",borderRadius:"0.65rem",border:"1.5px solid rgba(196,104,122,.25)",background:"#fff",fontFamily:"'Outfit',sans-serif",fontSize:"1rem",color:"#2A1018",outline:"none",WebkitAppearance:"none"}}/>
               </div>
               <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"0.7rem",marginBottom:"1.3rem"}}>
                 <div>
                   <label style={{fontSize:"0.72rem",fontWeight:700,color:"#5A2030",letterSpacing:"0.08em",textTransform:"uppercase",display:"block",marginBottom:"0.3rem"}}>Caducidad</label>
-                  <input value={subCard.exp} onChange={e=>setSubCard(p=>({...p,exp:e.target.value}))} placeholder="MM/AA" maxLength={5} style={{width:"100%",padding:"0.7rem 0.9rem",borderRadius:"0.65rem",border:"1.5px solid rgba(196,104,122,.25)",background:"#fff",fontFamily:"'Outfit',sans-serif",fontSize:"0.88rem",color:"#2A1018",outline:"none"}}/>
+                  <input value={subCard.exp} onChange={e=>setSubCard(p=>({...p,exp:e.target.value}))} placeholder="MM/AA" maxLength={5} type="tel" inputMode="numeric" autoComplete="cc-exp" style={{width:"100%",padding:"0.7rem 0.9rem",borderRadius:"0.65rem",border:"1.5px solid rgba(196,104,122,.25)",background:"#fff",fontFamily:"'Outfit',sans-serif",fontSize:"1rem",color:"#2A1018",outline:"none",WebkitAppearance:"none"}}/>
                 </div>
                 <div>
                   <label style={{fontSize:"0.72rem",fontWeight:700,color:"#5A2030",letterSpacing:"0.08em",textTransform:"uppercase",display:"block",marginBottom:"0.3rem"}}>CVV</label>
-                  <input value={subCard.cvv} onChange={e=>setSubCard(p=>({...p,cvv:e.target.value.replace(/\D/g,"").slice(0,4)}))} placeholder="123" type="password" maxLength={4} style={{width:"100%",padding:"0.7rem 0.9rem",borderRadius:"0.65rem",border:"1.5px solid rgba(196,104,122,.25)",background:"#fff",fontFamily:"'Outfit',sans-serif",fontSize:"0.88rem",color:"#2A1018",outline:"none"}}/>
+                  <input value={subCard.cvv} onChange={e=>setSubCard(p=>({...p,cvv:e.target.value.replace(/\D/g,"").slice(0,4)}))} placeholder="123" type="tel" inputMode="numeric" autoComplete="cc-csc" maxLength={4} style={{width:"100%",padding:"0.7rem 0.9rem",borderRadius:"0.65rem",border:"1.5px solid rgba(196,104,122,.25)",background:"#fff",fontFamily:"'Outfit',sans-serif",fontSize:"1rem",color:"#2A1018",outline:"none",WebkitAppearance:"none"}}/>
                 </div>
               </div>
               <button onClick={activatePaid} disabled={subLoading} style={{width:"100%",background:subLoading?"rgba(107,31,138,.4)":"linear-gradient(135deg,#6B1F8A,#C4687A)",color:"#fff",border:"none",padding:"0.95rem",borderRadius:"3rem",fontSize:"0.95rem",fontWeight:700,cursor:subLoading?"not-allowed":"pointer",fontFamily:"'Outfit',sans-serif",marginBottom:"0.5rem"}}>
@@ -1084,8 +1084,4 @@ export default function LuMane(){
             <div style={{fontSize:"0.77rem",color:"rgba(251,247,240,.6)",marginTop:"0.12rem"}}>Sin cargos. Cancela antes y no pagas nada.</div>
           </div>
         </div>
-        {Object.values(PLANS).map(plan=>(
-          <div key={plan.id} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"0.7rem 0",borderBottom:"1px solid rgba(255,255,255,.08)"}}>
-            <div style={{color:"rgba(251,247,240,.8)",fontSize:"0.85rem"}}>{plan.label}</div>
-            <div style={{textAlign:"right"}}>
-   
+        {Object.va
