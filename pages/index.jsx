@@ -298,3 +298,55 @@ function ReviewsSection() {
     </section>
   );
 }
+const CSS = `
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,700&family=Outfit:wght@300;400;500;600;700&display=swap');
+*{margin:0;padding:0;box-sizing:border-box;}
+html{-webkit-tap-highlight-color:transparent;scroll-behavior:smooth;}
+body{font-family:'Outfit',sans-serif;background:#FDF4F5;color:#2A1018;overflow-x:hidden;}
+.page-content{padding-bottom:5rem;}
+.splash{position:fixed;inset:0;background:linear-gradient(160deg,#6B1F8A 0%,#C4687A 60%,#E8A0B0 100%);display:flex;align-items:center;justify-content:center;z-index:9999;animation:splashOut 1.2s 3.5s ease-in-out forwards;}
+@keyframes splashOut{0%{opacity:1}100%{opacity:0;pointer-events:none;}}
+.splash-logo{font-family:'Cormorant Garamond',serif;font-size:3.8rem;font-weight:700;color:#fff;letter-spacing:0.15em;animation:fadeUp 0.6s ease both;}
+.splash-tag{color:rgba(255,255,255,.7);font-size:0.78rem;letter-spacing:0.2em;text-transform:uppercase;animation:fadeUp 0.6s 0.3s ease both;margin-top:0.4rem;text-align:center;}
+.splash-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.6);margin-top:2rem;animation:pulseDot 1s 0.5s ease infinite;}
+@keyframes pulseDot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(1.6)}}
+@keyframes pulsBtn{0%,100%{box-shadow:0 0 0 0 rgba(255,215,0,.6);transform:scale(1)}50%{box-shadow:0 0 0 8px rgba(255,215,0,0);transform:scale(1.05)}}
+@keyframes bannerBounce{0%,100%{transform:translateY(0)}25%{transform:translateY(-5px)}50%{transform:translateY(0)}75%{transform:translateY(-3px)}}
+@keyframes bannerGlow{0%,100%{box-shadow:0 4px 20px rgba(107,31,138,.4)}50%{box-shadow:0 4px 35px rgba(107,31,138,.8),0 0 20px rgba(196,104,122,.4)}}
+.fade{}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.spin{animation:rot 2s linear infinite;display:inline-block;}
+@keyframes rot{to{transform:rotate(360deg)}}
+.lift{transition:box-shadow .22s;}
+.lift:hover{box-shadow:0 12px 36px rgba(196,104,122,.18);}
+.sl{transition:box-shadow .16s;}
+.sl:hover{box-shadow:0 4px 14px rgba(0,0,0,.1);}
+button:active{opacity:.9;}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:200;background:rgba(253,244,245,.97);backdrop-filter:blur(20px);border-top:1px solid rgba(196,104,122,.15);display:flex;justify-content:space-around;align-items:center;padding:0.5rem 0 0.8rem;}
+.bottom-nav-item{display:flex;flex-direction:column;align-items:center;gap:0.2rem;background:none;border:none;cursor:pointer;padding:0.3rem 1rem;border-radius:0.8rem;font-family:'Outfit',sans-serif;}
+.bottom-nav-item.active{background:rgba(196,104,122,.12);}
+.bottom-nav-icon{font-size:1.4rem;}
+.bottom-nav-label{font-size:0.62rem;font-weight:600;letter-spacing:0.04em;color:#2A1018;opacity:0.5;}
+.bottom-nav-item.active .bottom-nav-label{color:#C4687A;opacity:1;}
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-thumb{background:rgba(196,104,122,.3);border-radius:3px;}
+`;
+
+function fallback(a){
+  return {
+    hairType:a.subtype||a.group||"2B",condition:"normal",scalp:a.scalp||"normal",
+    title:"Tu Cabello Es Tu Identidad",
+    summary:"Con la rutina adecuada, tu cabello brillará con todo su potencial natural.",
+    score:{hidratacion:7,fuerza:6,brillo:7,salud_cuero:7},
+    products:[
+      {order:1,step:"Limpieza",name:"Shampoo suave sin sulfatos",sq:"gentle sulfate free shampoo",why:"Limpia sin agredir la fibra.",howToApply:"1. Cuero mojado.\n2. Masajea 2 min.\n3. Agua fría.",freq:"2-3x semana",tip:"Agua fría cierra la cutícula.",avoid:"Agua muy caliente."},
+      {order:2,step:"Acondicionado",name:"Acondicionador hidratante",sq:"moisturizing conditioner",why:"Repone la humedad.",howToApply:"1. Medios a puntas.\n2. Peine ancho.\n3. 5 min.\n4. Agua fría.",freq:"Cada lavado",tip:"Con cabello chorreando.",avoid:"Aplicar en raíz."},
+      {order:3,step:"Tratamiento",name:"Mascarilla nutritiva",sq:"weekly hair mask nourishing",why:"Repone nutrientes.",howToApply:"1. Limpio húmedo.\n2. Gorro 15 min.\n3. Agua fría.",freq:"1x semana",tip:"Antes de un evento especial.",avoid:"Exceso de proteína."},
+      {order:4,step:"Leave-in",name:"Leave-in sin aclarado",sq:"leave in conditioner",why:"Protege y define.",howToApply:"1. Húmedo en secciones.\n2. No enjuagar.",freq:"Cada lavado",tip:"Antes del difusor.",avoid:"Exceso de producto."},
+      {order:5,step:"Sellado",name:"Aceite finalizador",sq:"lightweight hair oil shine",why:"Sella la cutícula y brillo.",howToApply:"1. 1-2 gotas en palmas.\n2. Solo en puntas.",freq:"Diario",tip:"Menos es más.",avoid:"Raíz o cuero."},
+    ],
+    weeklyRoutine:["Días 1-2: Lavado completo","Días 3-4: Refrescar con leave-in","Días 5-6: Mascarilla + aceite","Día 7: Descanso"],
+    ingredients:{buscar:["Karité","Aloe vera","Pantenol","Argán","Biotina"],evitar:["Sulfatos SLS","Alcohol desnaturalizado","Siliconas no solubles"]},
+    lifestyle:["Duerme en funda de seda","Bebe 2 litros de agua al día","Masajea el cuero 5 min diarios"],
+  };
+}
