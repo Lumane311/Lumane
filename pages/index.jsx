@@ -25,3 +25,49 @@ const PRICE_LABELS = {
   mid: { label:"💛 Medio",   color:"#B8920A", bg:"rgba(184,146,10,.1)",  border:"rgba(184,146,10,.3)" },
   lux: { label:"💎 Premium", color:"#C4687A", bg:"rgba(196,104,122,.1)", border:"rgba(196,104,122,.3)" },
 };
+const FILTER_CATS = [
+  { id:"all",       label:"Todos",        emoji:"✦",  sub:null },
+  { id:"lacio",     label:"Lacio",        emoji:"〰️", sub:["1A","1B","1C"] },
+  { id:"1A",        label:"1A",           emoji:"〰️", sub:null },
+  { id:"1B",        label:"1B",           emoji:"〰️", sub:null },
+  { id:"1C",        label:"1C",           emoji:"〰️", sub:null },
+  { id:"ondulado",  label:"Ondulado",     emoji:"〜",  sub:["2A","2B","2C"] },
+  { id:"2A",        label:"2A",           emoji:"〜",  sub:null },
+  { id:"2B",        label:"2B",           emoji:"〜",  sub:null },
+  { id:"2C",        label:"2C",           emoji:"〜",  sub:null },
+  { id:"rizado",    label:"Rizado",       emoji:"🌀", sub:["3A","3B","3C"] },
+  { id:"3A",        label:"3A",           emoji:"🌀", sub:null },
+  { id:"3B",        label:"3B",           emoji:"🌀", sub:null },
+  { id:"3C",        label:"3C",           emoji:"🌀", sub:null },
+  { id:"afro",      label:"Afro/Coily",   emoji:"✦",  sub:["4A","4B","4C"] },
+  { id:"4A",        label:"4A",           emoji:"✦",  sub:null },
+  { id:"4B",        label:"4B",           emoji:"✦",  sub:null },
+  { id:"4C",        label:"4C",           emoji:"✦",  sub:null },
+  { id:"caspa",     label:"Caspa",        emoji:"❄️", sub:null },
+  { id:"caida",     label:"Caída",        emoji:"🍂", sub:null },
+  { id:"cuero",     label:"Cuero",        emoji:"🔬", sub:null },
+  { id:"regenerar", label:"Regenerar",    emoji:"🌱", sub:null },
+  { id:"hombre",    label:"Hombre",       emoji:"💪", sub:null },
+  { id:"cal",       label:"Agua Cal",     emoji:"💧", sub:null },
+];
+
+const QUESTIONS = [
+  { id:"gender",  icon:"🌍", q:"¿Con qué género te identificas?",
+    opts:[{l:"Mujer",v:"mujer",i:"👩"},{l:"Hombre",v:"hombre",i:"👨"},{l:"No binario",v:"neutro",i:"🧑"}] },
+  { id:"group",   icon:"〰️", q:"¿Cuál es el grupo general de tu cabello?",
+    opts:[{l:"Lacio",v:"lacio",i:"〰️"},{l:"Ondulado",v:"ondulado",i:"〜"},{l:"Rizado",v:"rizado",i:"🌀"},{l:"Afro/Coily",v:"afro",i:"✦"}] },
+  { id:"subtype", icon:"🔎", q:"¿Cuál describe mejor tu tipo específico?", opts:[] },
+  { id:"scalp",   icon:"🔬", q:"¿Alguna preocupación con tu cuero cabelludo?",
+    opts:[{l:"Caspa",v:"caspa",i:"❄️"},{l:"Cuero graso",v:"graso",i:"🍃"},{l:"Cuero sensible",v:"sensible",i:"🌸"},{l:"Todo bien",v:"normal",i:"✅"}] },
+  { id:"concern", icon:"🎯", q:"¿Tu mayor preocupación capilar?",
+    opts:[{l:"Caída excesiva",v:"caida",i:"🍂"},{l:"Frizz y volumen",v:"frizz",i:"⚡"},{l:"Cabello dañado",v:"dano",i:"💔"},{l:"Falta de brillo",v:"brillo",i:"✨"}] },
+  { id:"damage",  icon:"🧪", q:"¿Tu cabello ha recibido tratamientos?",
+    opts:[{l:"Tinte/decoloración",v:"tinte",i:"🎨"},{l:"Alisado/keratina",v:"quimico",i:"🧴"},{l:"Calor frecuente",v:"calor",i:"🔥"},{l:"Virgen y natural",v:"virgen",i:"🌱"}] },
+];
+
+const SUBTYPES = {
+  lacio:   [{l:"1A — Ultrafino",v:"1A",i:"〰️"},{l:"1B — Liso normal",v:"1B",i:"〰️"},{l:"1C — Liso grueso",v:"1C",i:"〰️"}],
+  ondulado:[{l:"2A — Ondas suaves",v:"2A",i:"〜"},{l:"2B — Ondas medianas",v:"2B",i:"〜"},{l:"2C — Ondas pronunciadas",v:"2C",i:"〜"}],
+  rizado:  [{l:"3A — Rizos grandes",v:"3A",i:"🌀"},{l:"3B — Rizos medianos",v:"3B",i:"🌀"},{l:"3C — Rizos apretados",v:"3C",i:"🌀"}],
+  afro:    [{l:"4A — Coils suaves",v:"4A",i:"✦"},{l:"4B — Coils zigzag",v:"4B",i:"✦"},{l:"4C — Ultra apretados",v:"4C",i:"✦"}],
+};
