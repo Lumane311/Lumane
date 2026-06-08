@@ -1204,13 +1204,11 @@ export default function LuMane(){
                   <div style={{marginTop:"0.8rem",fontSize:"0.9rem",color:"#5A9A5A",fontWeight:700}}>✅ ¡Foto lista! La IA analizará tu cabello</div>
                 </div>
               ):(
-                <button
-                  onClick={()=>{ var el=document.getElementById('fotoInput'); if(el){el.value='';el.click();} }}
-                  style={{width:"100%",padding:"2rem 1rem",border:"2px dashed rgba(196,104,122,.5)",borderRadius:"1.2rem",background:"rgba(196,104,122,.04)",cursor:"pointer",fontFamily:"'Outfit',sans-serif",textAlign:"center",display:"block"}}>
+                <label htmlFor="fotoInput" style={{width:"100%",padding:"2rem 1rem",border:"2px dashed rgba(196,104,122,.5)",borderRadius:"1.2rem",background:"rgba(196,104,122,.04)",cursor:"pointer",fontFamily:"'Outfit',sans-serif",textAlign:"center",display:"block"}}>
                   <div style={{fontSize:"2.5rem",marginBottom:"0.5rem"}}>📷</div>
                   <div style={{fontWeight:700,fontSize:"1rem",color:"#C4687A",marginBottom:"0.3rem"}}>Toca aquí para subir tu foto</div>
                   <div style={{fontSize:"0.78rem",color:"#999"}}>Galería o cámara · JPG · PNG · HEIC</div>
-                </button>
+                </label>
               )}
             </div>
             <div style={{display:"flex",flexDirection:"column",gap:"0.7rem"}}>
