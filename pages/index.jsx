@@ -558,9 +558,11 @@ function RegisterPage({selectedPlan, onBack, onSuccess}) {
 
 // Global store for price ranges - persists across re-renders
 const cardRanges = {};
+const cardOpen = {};
 
 function ShopCard({p, activeStores, openStore}){
-  const [open,setOpen]=useState(false);
+  const [open,setOpen]=useState(cardOpen[p.id]||false);
+  function changeOpen(val){ cardOpen[p.id]=val; setOpen(val); }
   const [range,setRange]=useState(cardRanges[p.id]||"mid");
   const sel=p.prices&&p.prices[range]?p.prices[range]:{};
   function changeRange(key){ cardRanges[p.id]=key; setRange(key); }
@@ -592,7 +594,7 @@ function ShopCard({p, activeStores, openStore}){
             </div>
           </div>
         )}
-        <button onClick={()=>setOpen(!open)} style={{width:"100%",padding:"0.45rem",background:"rgba(196,104,122,.06)",border:"1px solid rgba(196,104,122,.15)",borderRadius:"0.6rem",cursor:"pointer",fontSize:"0.72rem",color:"#C4687A",fontWeight:600,marginBottom:open?"0.65rem":0,fontFamily:"'Outfit',sans-serif"}}>
+        <button onClick={()=>changeOpen(!open)} style={{width:"100%",padding:"0.45rem",background:"rgba(196,104,122,.06)",border:"1px solid rgba(196,104,122,.15)",borderRadius:"0.6rem",cursor:"pointer",fontSize:"0.72rem",color:"#C4687A",fontWeight:600,marginBottom:open?"0.65rem":0,fontFamily:"'Outfit',sans-serif"}}>
           {open?"▲ Ocultar":"▼ Ver instrucciones + Comprar"}
         </button>
         {open&&(
