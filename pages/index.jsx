@@ -1189,33 +1189,28 @@ export default function LuMane(){
             </h2>
             <p style={{fontSize:"0.85rem",opacity:.6,lineHeight:1.7,marginBottom:"1.5rem",maxWidth:"400px",margin:"0 auto 1.5rem"}}>Sube una foto y nuestra IA detectará el tipo exacto, la porosidad y lo que realmente necesita tu cabello.</p>
             <div style={{marginBottom:"1.5rem"}}>
-              {hairPhoto?(
+              <input id="fotoInput" type="file" accept="image/*" style={{display:"none",position:"absolute"}} onChange={handlePhotoUpload}/>
+              {photoLoading?(
+                <div style={{padding:"2rem",border:"2px dashed rgba(196,104,122,.4)",borderRadius:"1.2rem",background:"rgba(196,104,122,.04)",textAlign:"center"}}>
+                  <div style={{fontSize:"2rem"}} className="spin">✦</div>
+                  <div style={{fontSize:"0.85rem",color:"#C4687A",fontWeight:600,marginTop:"0.5rem"}}>Cargando foto…</div>
+                </div>
+              ):hairPhoto?(
                 <div style={{textAlign:"center"}}>
                   <div style={{position:"relative",display:"inline-block"}}>
-                    <img src={hairPhoto} alt="Tu cabello" style={{width:"220px",height:"220px",objectFit:"cover",borderRadius:"1.2rem",border:"3px solid #C4687A",boxShadow:"0 8px 28px rgba(196,104,122,.3)",display:"block"}}/>
-                    <button onClick={()=>setHairPhoto(null)} style={{position:"absolute",top:"-8px",right:"-8px",width:"28px",height:"28px",borderRadius:"50%",background:"#C4687A",border:"2px solid #fff",color:"#fff",cursor:"pointer",fontSize:"0.8rem",fontWeight:700}}>✕</button>
+                    <img src={hairPhoto} alt="Tu cabello" style={{width:"220px",height:"220px",objectFit:"cover",borderRadius:"1.2rem",border:"3px solid #5A9A5A",boxShadow:"0 8px 28px rgba(90,154,90,.3)"}}/>
+                    <button onClick={()=>setHairPhoto(null)} style={{position:"absolute",top:"-8px",right:"-8px",width:"30px",height:"30px",borderRadius:"50%",background:"#C4687A",border:"2px solid #fff",color:"#fff",cursor:"pointer",fontSize:"0.9rem",fontWeight:700}}>✕</button>
                   </div>
-                  <div style={{marginTop:"0.8rem",fontSize:"0.85rem",color:"#5A9A5A",fontWeight:700}}>✅ Foto cargada correctamente</div>
-                  <div style={{fontSize:"0.72rem",color:"#999",marginTop:"0.2rem"}}>La IA analizará tu cabello con esta imagen</div>
+                  <div style={{marginTop:"0.8rem",fontSize:"0.9rem",color:"#5A9A5A",fontWeight:700}}>✅ ¡Foto lista! La IA analizará tu cabello</div>
                 </div>
               ):(
-                <label style={{display:"block",cursor:"pointer"}}>
-                  <input type="file" accept="image/*" onChange={handlePhotoUpload} style={{display:"none"}}/>
-                  <div style={{border:"2px dashed rgba(196,104,122,.4)",borderRadius:"1.2rem",padding:"2rem 1.5rem",background:"rgba(196,104,122,.04)",textAlign:"center"}}>
-                    {photoLoading?(
-                      <div>
-                        <div style={{fontSize:"2rem",marginBottom:"0.5rem"}} className="spin">✦</div>
-                        <div style={{fontSize:"0.85rem",color:"#C4687A",fontWeight:600}}>Cargando foto…</div>
-                      </div>
-                    ):(
-                      <>
-                        <div style={{fontSize:"2.5rem",marginBottom:"0.5rem"}}>📷</div>
-                        <div style={{fontWeight:700,fontSize:"0.9rem",color:"#C4687A",marginBottom:"0.3rem"}}>Toca aquí para subir una foto</div>
-                        <div style={{fontSize:"0.75rem",opacity:.5}}>Galería o cámara · JPG, PNG, HEIC</div>
-                      </>
-                    )}
-                  </div>
-                </label>
+                <button
+                  onClick={()=>{ var el=document.getElementById('fotoInput'); if(el){el.value='';el.click();} }}
+                  style={{width:"100%",padding:"2rem 1rem",border:"2px dashed rgba(196,104,122,.5)",borderRadius:"1.2rem",background:"rgba(196,104,122,.04)",cursor:"pointer",fontFamily:"'Outfit',sans-serif",textAlign:"center",display:"block"}}>
+                  <div style={{fontSize:"2.5rem",marginBottom:"0.5rem"}}>📷</div>
+                  <div style={{fontWeight:700,fontSize:"1rem",color:"#C4687A",marginBottom:"0.3rem"}}>Toca aquí para subir tu foto</div>
+                  <div style={{fontSize:"0.78rem",color:"#999"}}>Galería o cámara · JPG · PNG · HEIC</div>
+                </button>
               )}
             </div>
             <div style={{display:"flex",flexDirection:"column",gap:"0.7rem"}}>
