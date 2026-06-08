@@ -556,10 +556,14 @@ function RegisterPage({selectedPlan, onBack, onSuccess}) {
   );
 }
 
+// Global store for price ranges - persists across re-renders
+const cardRanges = {};
+
 function ShopCard({p, activeStores, openStore}){
   const [open,setOpen]=useState(false);
-  const [range,setRange]=useState("mid");
+  const [range,setRange]=useState(cardRanges[p.id]||"mid");
   const sel=p.prices&&p.prices[range]?p.prices[range]:{};
+  function changeRange(key){ cardRanges[p.id]=key; setRange(key); }
   return(
     <div style={{background:"#fff",borderRadius:"1rem",overflow:"hidden",border:"1.5px solid "+(open?"rgba(107,31,138,.3)":"rgba(196,104,122,.1)"),transition:"all .2s"}} className="lift">
       <div style={{height:"100px",background:"hsl("+p.hue+",40%,91%)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:"2.5rem",position:"relative"}}>
@@ -572,12 +576,14 @@ function ShopCard({p, activeStores, openStore}){
         <p style={{fontSize:"0.74rem",opacity:.5,lineHeight:1.4,marginBottom:"0.65rem"}}>{p.desc}</p>
         {p.prices&&(
           <div style={{marginBottom:"0.7rem"}}>
-            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:"0.28rem",marginBottom:"0.45rem"}}>
+            <div style={{display:"flex",gap:"0.4rem",marginBottom:"0.45rem"}}>
               {Object.entries(PRICE_LABELS).map(([key,pl])=>(
-                <button key={key} onClick={(e)=>{e.stopPropagation();setRange(key);}} style={{padding:"0.35rem 0.15rem",borderRadius:"0.45rem",border:"1.5px solid "+(range===key?pl.color:"rgba(0,0,0,.09)"),background:range===key?pl.bg:"transparent",cursor:"pointer",fontFamily:"'Outfit',sans-serif"}}>
+                <div key={key}
+                  onClick={(e)=>{e.stopPropagation();e.preventDefault();changeRange(key);}}
+                  style={{flex:1,padding:"0.6rem 0.2rem",borderRadius:"0.6rem",border:"2px solid "+(range===key?pl.color:"rgba(0,0,0,.12)"),background:range===key?pl.bg:"#fff",cursor:"pointer",textAlign:"center",minHeight:"44px",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center"}}>
                   <div style={{fontSize:"0.65rem",fontWeight:700,color:range===key?pl.color:"#666"}}>{pl.label}</div>
                   <div style={{fontSize:"0.6rem",fontWeight:700,color:range===key?pl.color:"#999",marginTop:"0.08rem"}}>{"$"+(p.prices[key]&&p.prices[key].price?p.prices[key].price.toFixed(2):"")}</div>
-                </button>
+                </div>
               ))}
             </div>
             <div style={{padding:"0.55rem 0.75rem",background:PRICE_LABELS[range].bg,border:"1px solid "+PRICE_LABELS[range].border,borderRadius:"0.6rem"}}>
