@@ -399,34 +399,38 @@ export default function LuMane(){
   const [countdown,setCountdown]     = useState(15*60);
   const [hairPhoto,setHairPhoto]     = useState(null);
   const [photoLoading,setPhotoLoading] = useState(false);
+  // AUTH
+  const [showLogin,setShowLogin]     = useState(false);
+  const [loginEmail,setLoginEmail]   = useState("");
+  const [loginPass,setLoginPass]     = useState("");
+  const [loginError,setLoginError]   = useState("");
+  const [regData,setRegData]         = useState({nombre:"",apellido:"",nacimiento:"",email:"",password:"",confirm:""});
+  const [regError,setRegError]       = useState("");
+  const [regStep,setRegStep]         = useState(1);
 
-  // ✅ FIX PRINCIPAL: detectar pago exitoso de Stripe y restaurar acceso guardado
+  // ✅ FIX PRINCIPAL: detectar pago exitoso de Stripe, login y acceso guardado
   useEffect(() => {
-    // 1. Checar si ya tiene acceso guardado en localStorage
     try {
+      const user = localStorage.getItem('lumane_user');
       const saved = localStorage.getItem('lumane_premium');
-      if (saved === 'active') {
+      // Si tiene cuenta registrada y premium, pedir login al volver
+      if (user && saved === 'active') {
+        const session = sessionStorage.getItem('lumane_session');
+        if (!session) { setShowLogin(true); return; }
         setSubStatus('active');
         return;
       }
+      if (saved === 'active') { setSubStatus('active'); return; }
     } catch(e) {}
 
-    // 2. Checar si Stripe acaba de redirigir con ?success=true
     const params = new URLSearchParams(window.location.search);
     if (params.get('success') === 'true') {
       try { localStorage.setItem('lumane_premium', 'active'); } catch(e) {}
       setSubStatus('active');
       setShowPaywall(false);
-      // Limpiar la URL sin recargar la página
       window.history.replaceState({}, '', window.location.pathname);
-      // Ir directo al quiz como bienvenida
-      setPage('quiz');
-      setQuizStep(0);
-      setAnswers({});
-      setResult(null);
+      setPage('quiz'); setQuizStep(0); setAnswers({}); setResult(null);
     }
-
-    // 3. Si canceló el pago
     if (params.get('canceled') === 'true') {
       window.history.replaceState({}, '', window.location.pathname);
     }
@@ -452,6 +456,47 @@ export default function LuMane(){
     setSubStatus("none");
     try { localStorage.removeItem('lumane_premium'); } catch(e) {}
     showToast("Suscripción cancelada");
+  }
+
+  function doLogin(){
+    setLoginError("");
+    try {
+      const user = JSON.parse(localStorage.getItem('lumane_user')||'{}');
+      if(!loginEmail.trim()||!loginPass.trim()){setLoginError("Completa todos los campos.");return;}
+      if(user.email===loginEmail.trim()&&user.password===loginPass){
+        sessionStorage.setItem('lumane_session','1');
+        setSubStatus('active');
+        setShowLogin(false);
+        setLoginEmail(""); setLoginPass("");
+      } else {
+        setLoginError("Correo o contraseña incorrectos.");
+      }
+    } catch(e){ setLoginError("Error al iniciar sesión."); }
+  }
+
+  function doRegister(){
+    setRegError("");
+    if(!regData.nombre.trim()||!regData.email.trim()||!regData.password.trim()||!regData.nacimiento){
+      setRegError("Completa todos los campos obligatorios."); return;
+    }
+    if(regData.password!==regData.confirm){
+      setRegError("Las contraseñas no coinciden."); return;
+    }
+    if(regData.password.length<6){
+      setRegError("La contraseña debe tener al menos 6 caracteres."); return;
+    }
+    try {
+      localStorage.setItem('lumane_user', JSON.stringify({
+        nombre: regData.nombre.trim(),
+        apellido: regData.apellido.trim(),
+        nacimiento: regData.nacimiento,
+        email: regData.email.trim(),
+        password: regData.password,
+      }));
+      sessionStorage.setItem('lumane_session','1');
+    } catch(e){}
+    // proceed to Stripe
+    activatePaid();
   }
 
   function handlePhotoUpload(e){
@@ -592,23 +637,50 @@ export default function LuMane(){
             <div style={{background:"linear-gradient(135deg,#6B1F8A,#C4687A)",padding:"1.3rem 1.5rem",display:"flex",alignItems:"center",gap:"1rem"}}>
               <button onClick={()=>setSubStep(1)} style={{background:"rgba(255,255,255,.15)",border:"none",color:"#fff",width:"28px",height:"28px",borderRadius:"50%",cursor:"pointer",fontSize:"0.8rem",flexShrink:0}}>←</button>
               <div>
-                <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"1.3rem",fontWeight:700,color:"#fff"}}>Pago seguro</h2>
-                <p style={{color:"rgba(255,255,255,.6)",fontSize:"0.74rem"}}>🎁 7 días gratis · luego {PLANS[selectedPlan].price}{PLANS[selectedPlan].period}</p>
+                <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"1.3rem",fontWeight:700,color:"#fff"}}>Crea tu cuenta</h2>
+                <p style={{color:"rgba(255,255,255,.6)",fontSize:"0.74rem"}}>Paso 1 de 2 · Datos personales</p>
               </div>
               <button onClick={()=>{setShowPaywall(false);setSubStep(1);}} style={{marginLeft:"auto",background:"rgba(255,255,255,.15)",border:"none",color:"#fff",width:"28px",height:"28px",borderRadius:"50%",cursor:"pointer",fontSize:"0.8rem"}}>✕</button>
             </div>
-            <div style={{padding:"2rem 1.5rem",textAlign:"center"}}>
-              <div style={{fontSize:"3rem",marginBottom:"1rem"}}>🔒</div>
-              <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"1.4rem",fontWeight:700,color:"#2A1018",marginBottom:"0.5rem"}}>Pago 100% seguro con Stripe</h3>
-              <p style={{fontSize:"0.85rem",color:"#666",lineHeight:1.7,marginBottom:"0.8rem"}}>Serás redirigido a la página oficial de Stripe donde ingresarás tu tarjeta de forma segura.</p>
-              <div style={{background:"rgba(90,154,90,.08)",border:"1px solid rgba(90,154,90,.2)",borderRadius:"0.8rem",padding:"0.8rem",marginBottom:"1.5rem",fontSize:"0.78rem",color:"#3A7A3A"}}>
-                ✓ Sin cargos durante 7 días · ✓ Cancela cuando quieras · ✓ SSL seguro
+            <div style={{padding:"1.5rem",overflowY:"auto",maxHeight:"70vh"}}>
+              {regError&&<div style={{background:"rgba(200,50,50,.1)",border:"1px solid rgba(200,50,50,.3)",borderRadius:"0.6rem",padding:"0.7rem",fontSize:"0.78rem",color:"#AA3333",marginBottom:"1rem"}}>{regError}</div>}
+              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"0.8rem",marginBottom:"0.8rem"}}>
+                <div>
+                  <label style={{fontSize:"0.65rem",fontWeight:700,color:"#5A2030",letterSpacing:"0.08em",textTransform:"uppercase",display:"block",marginBottom:"0.4rem"}}>Nombre *</label>
+                  <input value={regData.nombre} onChange={e=>setRegData(p=>({...p,nombre:e.target.value}))} placeholder="Tu nombre"
+                    style={{width:"100%",padding:"10px 12px",borderRadius:10,border:"1.5px solid rgba(196,104,122,.25)",fontFamily:"'Outfit',sans-serif",fontSize:14,color:"#2A1018",outline:"none",background:"#FDF4F5"}}/>
+                </div>
+                <div>
+                  <label style={{fontSize:"0.65rem",fontWeight:700,color:"#5A2030",letterSpacing:"0.08em",textTransform:"uppercase",display:"block",marginBottom:"0.4rem"}}>Apellido</label>
+                  <input value={regData.apellido} onChange={e=>setRegData(p=>({...p,apellido:e.target.value}))} placeholder="Tu apellido"
+                    style={{width:"100%",padding:"10px 12px",borderRadius:10,border:"1.5px solid rgba(196,104,122,.25)",fontFamily:"'Outfit',sans-serif",fontSize:14,color:"#2A1018",outline:"none",background:"#FDF4F5"}}/>
+                </div>
               </div>
-              <button onClick={activatePaid} disabled={subLoading}
+              <div style={{marginBottom:"0.8rem"}}>
+                <label style={{fontSize:"0.65rem",fontWeight:700,color:"#5A2030",letterSpacing:"0.08em",textTransform:"uppercase",display:"block",marginBottom:"0.4rem"}}>Fecha de nacimiento *</label>
+                <input type="date" value={regData.nacimiento} onChange={e=>setRegData(p=>({...p,nacimiento:e.target.value}))}
+                  style={{width:"100%",padding:"10px 12px",borderRadius:10,border:"1.5px solid rgba(196,104,122,.25)",fontFamily:"'Outfit',sans-serif",fontSize:14,color:"#2A1018",outline:"none",background:"#FDF4F5"}}/>
+              </div>
+              <div style={{marginBottom:"0.8rem"}}>
+                <label style={{fontSize:"0.65rem",fontWeight:700,color:"#5A2030",letterSpacing:"0.08em",textTransform:"uppercase",display:"block",marginBottom:"0.4rem"}}>Correo electrónico *</label>
+                <input type="email" value={regData.email} onChange={e=>setRegData(p=>({...p,email:e.target.value}))} placeholder="tu@correo.com"
+                  style={{width:"100%",padding:"10px 12px",borderRadius:10,border:"1.5px solid rgba(196,104,122,.25)",fontFamily:"'Outfit',sans-serif",fontSize:14,color:"#2A1018",outline:"none",background:"#FDF4F5"}}/>
+              </div>
+              <div style={{marginBottom:"0.8rem"}}>
+                <label style={{fontSize:"0.65rem",fontWeight:700,color:"#5A2030",letterSpacing:"0.08em",textTransform:"uppercase",display:"block",marginBottom:"0.4rem"}}>Contraseña * (mín. 6 caracteres)</label>
+                <input type="password" value={regData.password} onChange={e=>setRegData(p=>({...p,password:e.target.value}))} placeholder="••••••••"
+                  style={{width:"100%",padding:"10px 12px",borderRadius:10,border:"1.5px solid rgba(196,104,122,.25)",fontFamily:"'Outfit',sans-serif",fontSize:14,color:"#2A1018",outline:"none",background:"#FDF4F5"}}/>
+              </div>
+              <div style={{marginBottom:"1.2rem"}}>
+                <label style={{fontSize:"0.65rem",fontWeight:700,color:"#5A2030",letterSpacing:"0.08em",textTransform:"uppercase",display:"block",marginBottom:"0.4rem"}}>Confirmar contraseña *</label>
+                <input type="password" value={regData.confirm} onChange={e=>setRegData(p=>({...p,confirm:e.target.value}))} placeholder="••••••••"
+                  style={{width:"100%",padding:"10px 12px",borderRadius:10,border:"1.5px solid rgba(196,104,122,.25)",fontFamily:"'Outfit',sans-serif",fontSize:14,color:"#2A1018",outline:"none",background:"#FDF4F5"}}/>
+              </div>
+              <button onClick={doRegister} disabled={subLoading}
                 style={{width:"100%",background:subLoading?"rgba(107,31,138,.4)":"linear-gradient(135deg,#6B1F8A,#C4687A)",color:"#fff",border:"none",padding:"1rem",borderRadius:"3rem",fontSize:"1rem",fontWeight:700,cursor:subLoading?"not-allowed":"pointer",fontFamily:"'Outfit',sans-serif",marginBottom:"0.5rem"}}>
-                {subLoading?"Redirigiendo a Stripe…":"🎁 Ir a pago seguro →"}
+                {subLoading?"Redirigiendo a Stripe…":"Continuar al pago →"}
               </button>
-              <p style={{fontSize:"0.68rem",color:"#bbb",marginTop:"0.5rem"}}>Powered by Stripe · Encriptación SSL</p>
+              <p style={{textAlign:"center",fontSize:"0.68rem",opacity:.4,lineHeight:1.4}}>Paso 2: pagarás de forma segura con Stripe</p>
             </div>
           </div>
         )}
@@ -622,6 +694,39 @@ export default function LuMane(){
             </button>
           </div>
         )}
+      </div>
+    </div>
+  );
+
+  const LoginModal=()=>(
+    <div style={{position:"fixed",inset:0,background:"rgba(42,16,24,.85)",zIndex:800,display:"flex",alignItems:"center",justifyContent:"center",padding:"1rem",backdropFilter:"blur(6px)"}}>
+      <div style={{background:"#FDF4F5",borderRadius:"1.8rem",maxWidth:"400px",width:"100%",boxShadow:"0 40px 100px rgba(0,0,0,.4)",overflow:"hidden"}}>
+        <div style={{background:"linear-gradient(135deg,#6B1F8A,#C4687A)",padding:"2rem",textAlign:"center"}}>
+          <div style={{fontSize:"2rem",marginBottom:"0.4rem"}}>✦</div>
+          <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"1.8rem",fontWeight:700,color:"#fff",marginBottom:"0.2rem"}}>Bienvenida de vuelta</h2>
+          <p style={{color:"rgba(255,255,255,.7)",fontSize:"0.82rem"}}>Inicia sesión para acceder a tu cuenta</p>
+        </div>
+        <div style={{padding:"1.8rem"}}>
+          {loginError&&<div style={{background:"rgba(200,50,50,.1)",border:"1px solid rgba(200,50,50,.3)",borderRadius:"0.6rem",padding:"0.7rem",fontSize:"0.78rem",color:"#AA3333",marginBottom:"1rem",textAlign:"center"}}>{loginError}</div>}
+          <div style={{marginBottom:"0.9rem"}}>
+            <label style={{fontSize:"0.65rem",fontWeight:700,color:"#5A2030",letterSpacing:"0.08em",textTransform:"uppercase",display:"block",marginBottom:"0.4rem"}}>Correo electrónico</label>
+            <input type="email" value={loginEmail} onChange={e=>setLoginEmail(e.target.value)} placeholder="tu@correo.com"
+              style={{width:"100%",padding:"12px 14px",borderRadius:12,border:"1.5px solid rgba(196,104,122,.25)",fontFamily:"'Outfit',sans-serif",fontSize:15,color:"#2A1018",outline:"none",background:"#FDF4F5"}}/>
+          </div>
+          <div style={{marginBottom:"1.4rem"}}>
+            <label style={{fontSize:"0.65rem",fontWeight:700,color:"#5A2030",letterSpacing:"0.08em",textTransform:"uppercase",display:"block",marginBottom:"0.4rem"}}>Contraseña</label>
+            <input type="password" value={loginPass} onChange={e=>setLoginPass(e.target.value)} placeholder="••••••••"
+              onKeyDown={e=>e.key==='Enter'&&doLogin()}
+              style={{width:"100%",padding:"12px 14px",borderRadius:12,border:"1.5px solid rgba(196,104,122,.25)",fontFamily:"'Outfit',sans-serif",fontSize:15,color:"#2A1018",outline:"none",background:"#FDF4F5"}}/>
+          </div>
+          <button onClick={doLogin} style={{width:"100%",background:"linear-gradient(135deg,#6B1F8A,#C4687A)",color:"#fff",border:"none",padding:"1rem",borderRadius:"3rem",fontSize:"1rem",fontWeight:700,cursor:"pointer",fontFamily:"'Outfit',sans-serif",marginBottom:"1rem"}}>
+            Entrar a mi cuenta →
+          </button>
+          <p style={{textAlign:"center",fontSize:"0.72rem",color:"#999"}}>
+            ¿No tienes cuenta?{" "}
+            <span onClick={()=>{setShowLogin(false);setShowPaywall(true);setSubStep(1);}} style={{color:"#C4687A",fontWeight:700,cursor:"pointer"}}>Suscríbete aquí</span>
+          </p>
+        </div>
       </div>
     </div>
   );
@@ -869,7 +974,7 @@ export default function LuMane(){
                 </div>
               ):(
                 <label style={{display:"block",cursor:"pointer"}}>
-                  <input type="file" accept="image/*" capture="environment" onChange={handlePhotoUpload} style={{display:"none"}}/>
+                  <input type="file" accept="image/*" onChange={handlePhotoUpload} style={{display:"none"}}/>
                   <div style={{border:"2px dashed rgba(196,104,122,.4)",borderRadius:"1.2rem",padding:"2rem 1.5rem",background:"rgba(196,104,122,.04)"}}>
                     {photoLoading?<div style={{fontSize:"2rem"}} className="spin">✦</div>:(
                       <>
@@ -1157,6 +1262,7 @@ export default function LuMane(){
         </div>
       </div>
       {toast&&<div style={{position:"fixed",bottom:"6rem",left:"50%",transform:"translateX(-50%)",background:"#2A1018",color:"#FDF4F5",padding:"0.6rem 1.5rem",borderRadius:"2rem",fontSize:"0.84rem",zIndex:9999,boxShadow:"0 8px 28px rgba(0,0,0,.25)",whiteSpace:"nowrap"}}>{toast}</div>}
+      {showLogin&&<LoginModal/>}
       {showStores&&<StorePanel/>}
       {showPaywall&&<PaywallModal/>}
       <div style={{position:"sticky",top:0,zIndex:100,display:"flex",alignItems:"center",justifyContent:"space-between",padding:"0.85rem 1.2rem",background:"rgba(253,244,245,.96)",backdropFilter:"blur(14px)",borderBottom:"1px solid rgba(196,104,122,.11)"}}>
