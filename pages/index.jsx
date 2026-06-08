@@ -378,6 +378,115 @@ function fallback(a){
   };
 }
 
+
+function RegisterPage({selectedPlan, onBack, onSuccess}) {
+  const [regData, setRegData] = React.useState({nombre:"",apellido:"",nacimiento:"",email:"",password:"",confirm:""});
+  const [regError, setRegError] = React.useState("");
+  const [loading, setLoading] = React.useState(false);
+
+  async function doRegister(){
+    setRegError("");
+    if(!regData.nombre.trim()||!regData.email.trim()||!regData.password.trim()||!regData.nacimiento){
+      setRegError("Completa todos los campos obligatorios."); return;
+    }
+    if(regData.password !== regData.confirm){
+      setRegError("Las contraseñas no coinciden."); return;
+    }
+    if(regData.password.length < 6){
+      setRegError("La contraseña debe tener al menos 6 caracteres."); return;
+    }
+    try {
+      localStorage.setItem('lumane_user', JSON.stringify({
+        nombre: regData.nombre.trim(),
+        apellido: regData.apellido.trim(),
+        nacimiento: regData.nacimiento,
+        email: regData.email.trim(),
+        password: regData.password,
+      }));
+      sessionStorage.setItem('lumane_session','1');
+    } catch(e){}
+    setLoading(true);
+    try {
+      const res = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ plan: selectedPlan })
+      });
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        setRegError('Error al procesar. Intenta de nuevo.');
+        setLoading(false);
+      }
+    } catch(e) {
+      setRegError('Error de conexión. Intenta de nuevo.');
+      setLoading(false);
+    }
+  }
+
+  return (
+    <div style={{minHeight:"85vh",display:"flex",alignItems:"center",justifyContent:"center",padding:"2rem 1.5rem 5rem",background:"#FDF4F5"}}>
+      <div style={{maxWidth:"480px",width:"100%"}}>
+        <div style={{textAlign:"center",marginBottom:"1.8rem"}}>
+          <div style={{fontSize:"0.65rem",color:"#C4687A",fontWeight:700,letterSpacing:"0.15em",textTransform:"uppercase",marginBottom:"0.4rem"}}>✦ Paso 1 de 2</div>
+          <h1 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"clamp(1.8rem,5vw,2.4rem)",fontWeight:700,color:"#2A1018",marginBottom:"0.4rem"}}>Crea tu cuenta</h1>
+          <p style={{fontSize:"0.85rem",color:"#999"}}>Luego te llevaremos al pago seguro con Stripe</p>
+        </div>
+        <div style={{background:"#fff",borderRadius:"1.5rem",padding:"2rem",border:"1.5px solid rgba(196,104,122,.15)",boxShadow:"0 8px 32px rgba(196,104,122,.08)"}}>
+          {regError&&(
+            <div style={{background:"rgba(200,50,50,.08)",border:"1px solid rgba(200,50,50,.25)",borderRadius:"0.75rem",padding:"0.8rem 1rem",fontSize:"0.82rem",color:"#AA3333",marginBottom:"1.2rem",textAlign:"center"}}>
+              {regError}
+            </div>
+          )}
+          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"1rem",marginBottom:"1rem"}}>
+            <div>
+              <label style={{fontSize:"0.65rem",fontWeight:700,color:"#5A2030",letterSpacing:"0.08em",textTransform:"uppercase",display:"block",marginBottom:"0.4rem"}}>Nombre *</label>
+              <input value={regData.nombre} onChange={e=>setRegData(p=>({...p,nombre:e.target.value}))} placeholder="Tu nombre"
+                style={{width:"100%",padding:"12px 14px",borderRadius:12,border:"1.5px solid rgba(196,104,122,.3)",fontFamily:"'Outfit',sans-serif",fontSize:15,color:"#2A1018",outline:"none",background:"#FDF4F5",boxSizing:"border-box"}}/>
+            </div>
+            <div>
+              <label style={{fontSize:"0.65rem",fontWeight:700,color:"#5A2030",letterSpacing:"0.08em",textTransform:"uppercase",display:"block",marginBottom:"0.4rem"}}>Apellido</label>
+              <input value={regData.apellido} onChange={e=>setRegData(p=>({...p,apellido:e.target.value}))} placeholder="Tu apellido"
+                style={{width:"100%",padding:"12px 14px",borderRadius:12,border:"1.5px solid rgba(196,104,122,.3)",fontFamily:"'Outfit',sans-serif",fontSize:15,color:"#2A1018",outline:"none",background:"#FDF4F5",boxSizing:"border-box"}}/>
+            </div>
+          </div>
+          <div style={{marginBottom:"1rem"}}>
+            <label style={{fontSize:"0.65rem",fontWeight:700,color:"#5A2030",letterSpacing:"0.08em",textTransform:"uppercase",display:"block",marginBottom:"0.4rem"}}>Fecha de nacimiento *</label>
+            <input type="date" value={regData.nacimiento} onChange={e=>setRegData(p=>({...p,nacimiento:e.target.value}))}
+              style={{width:"100%",padding:"12px 14px",borderRadius:12,border:"1.5px solid rgba(196,104,122,.3)",fontFamily:"'Outfit',sans-serif",fontSize:15,color:"#2A1018",outline:"none",background:"#FDF4F5",boxSizing:"border-box"}}/>
+          </div>
+          <div style={{marginBottom:"1rem"}}>
+            <label style={{fontSize:"0.65rem",fontWeight:700,color:"#5A2030",letterSpacing:"0.08em",textTransform:"uppercase",display:"block",marginBottom:"0.4rem"}}>Correo electrónico *</label>
+            <input type="email" value={regData.email} onChange={e=>setRegData(p=>({...p,email:e.target.value}))} placeholder="tu@correo.com"
+              style={{width:"100%",padding:"12px 14px",borderRadius:12,border:"1.5px solid rgba(196,104,122,.3)",fontFamily:"'Outfit',sans-serif",fontSize:15,color:"#2A1018",outline:"none",background:"#FDF4F5",boxSizing:"border-box"}}/>
+          </div>
+          <div style={{marginBottom:"1rem"}}>
+            <label style={{fontSize:"0.65rem",fontWeight:700,color:"#5A2030",letterSpacing:"0.08em",textTransform:"uppercase",display:"block",marginBottom:"0.4rem"}}>Contraseña * (mín. 6 caracteres)</label>
+            <input type="password" value={regData.password} onChange={e=>setRegData(p=>({...p,password:e.target.value}))} placeholder="••••••••"
+              style={{width:"100%",padding:"12px 14px",borderRadius:12,border:"1.5px solid rgba(196,104,122,.3)",fontFamily:"'Outfit',sans-serif",fontSize:15,color:"#2A1018",outline:"none",background:"#FDF4F5",boxSizing:"border-box"}}/>
+          </div>
+          <div style={{marginBottom:"1.5rem"}}>
+            <label style={{fontSize:"0.65rem",fontWeight:700,color:"#5A2030",letterSpacing:"0.08em",textTransform:"uppercase",display:"block",marginBottom:"0.4rem"}}>Confirmar contraseña *</label>
+            <input type="password" value={regData.confirm} onChange={e=>setRegData(p=>({...p,confirm:e.target.value}))} placeholder="••••••••"
+              style={{width:"100%",padding:"12px 14px",borderRadius:12,border:"1.5px solid rgba(196,104,122,.3)",fontFamily:"'Outfit',sans-serif",fontSize:15,color:"#2A1018",outline:"none",background:"#FDF4F5",boxSizing:"border-box"}}/>
+          </div>
+          <button onClick={doRegister} disabled={loading}
+            style={{width:"100%",background:loading?"rgba(107,31,138,.4)":"linear-gradient(135deg,#6B1F8A,#C4687A)",color:"#fff",border:"none",padding:"1rem",borderRadius:"3rem",fontSize:"1rem",fontWeight:700,cursor:loading?"not-allowed":"pointer",fontFamily:"'Outfit',sans-serif",marginBottom:"0.8rem"}}>
+            {loading?"Redirigiendo a Stripe…":"🔒 Continuar al pago seguro →"}
+          </button>
+          <button onClick={onBack} style={{width:"100%",background:"transparent",color:"#C4687A",border:"none",fontSize:"0.82rem",cursor:"pointer",fontFamily:"'Outfit',sans-serif",opacity:.6}}>
+            ← Volver
+          </button>
+        </div>
+        <p style={{textAlign:"center",fontSize:"0.68rem",color:"#bbb",marginTop:"1rem",lineHeight:1.5}}>
+          🔒 Pago seguro con Stripe · Sin cargos 7 días · Cancela cuando quieras
+        </p>
+      </div>
+    </div>
+  );
+}
+
 export default function LuMane(){
   const [page,setPage]               = useState("home");
   const [quizStep,setQuizStep]       = useState(0);
@@ -1109,103 +1218,6 @@ export default function LuMane(){
   );
 
 
-  const RegisterPage=()=>(
-    <div style={{minHeight:"85vh",display:"flex",alignItems:"center",justifyContent:"center",padding:"2rem 1.5rem 5rem",background:"#FDF4F5"}}>
-      <div style={{maxWidth:"480px",width:"100%"}} className="fade">
-        <div style={{textAlign:"center",marginBottom:"1.8rem"}}>
-          <div style={{fontSize:"0.65rem",color:"#C4687A",fontWeight:700,letterSpacing:"0.15em",textTransform:"uppercase",marginBottom:"0.4rem"}}>✦ Paso 1 de 2</div>
-          <h1 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"clamp(1.8rem,5vw,2.4rem)",fontWeight:700,color:"#2A1018",marginBottom:"0.4rem"}}>Crea tu cuenta</h1>
-          <p style={{fontSize:"0.85rem",color:"#999"}}>Luego te llevaremos al pago seguro con Stripe</p>
-        </div>
-
-        <div style={{background:"#fff",borderRadius:"1.5rem",padding:"2rem",border:"1.5px solid rgba(196,104,122,.15)",boxShadow:"0 8px 32px rgba(196,104,122,.08)"}}>
-          {regError&&(
-            <div style={{background:"rgba(200,50,50,.08)",border:"1px solid rgba(200,50,50,.25)",borderRadius:"0.75rem",padding:"0.8rem 1rem",fontSize:"0.82rem",color:"#AA3333",marginBottom:"1.2rem",textAlign:"center"}}>
-              {regError}
-            </div>
-          )}
-
-          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"1rem",marginBottom:"1rem"}}>
-            <div>
-              <label style={{fontSize:"0.65rem",fontWeight:700,color:"#5A2030",letterSpacing:"0.08em",textTransform:"uppercase",display:"block",marginBottom:"0.4rem"}}>Nombre *</label>
-              <input
-                value={regData.nombre}
-                onChange={e=>setRegData(p=>({...p,nombre:e.target.value}))}
-                placeholder="Tu nombre"
-                style={{width:"100%",padding:"12px 14px",borderRadius:12,border:"1.5px solid rgba(196,104,122,.3)",fontFamily:"'Outfit',sans-serif",fontSize:15,color:"#2A1018",outline:"none",background:"#FDF4F5",boxSizing:"border-box"}}
-              />
-            </div>
-            <div>
-              <label style={{fontSize:"0.65rem",fontWeight:700,color:"#5A2030",letterSpacing:"0.08em",textTransform:"uppercase",display:"block",marginBottom:"0.4rem"}}>Apellido</label>
-              <input
-                value={regData.apellido}
-                onChange={e=>setRegData(p=>({...p,apellido:e.target.value}))}
-                placeholder="Tu apellido"
-                style={{width:"100%",padding:"12px 14px",borderRadius:12,border:"1.5px solid rgba(196,104,122,.3)",fontFamily:"'Outfit',sans-serif",fontSize:15,color:"#2A1018",outline:"none",background:"#FDF4F5",boxSizing:"border-box"}}
-              />
-            </div>
-          </div>
-
-          <div style={{marginBottom:"1rem"}}>
-            <label style={{fontSize:"0.65rem",fontWeight:700,color:"#5A2030",letterSpacing:"0.08em",textTransform:"uppercase",display:"block",marginBottom:"0.4rem"}}>Fecha de nacimiento *</label>
-            <input
-              type="date"
-              value={regData.nacimiento}
-              onChange={e=>setRegData(p=>({...p,nacimiento:e.target.value}))}
-              style={{width:"100%",padding:"12px 14px",borderRadius:12,border:"1.5px solid rgba(196,104,122,.3)",fontFamily:"'Outfit',sans-serif",fontSize:15,color:"#2A1018",outline:"none",background:"#FDF4F5",boxSizing:"border-box"}}
-            />
-          </div>
-
-          <div style={{marginBottom:"1rem"}}>
-            <label style={{fontSize:"0.65rem",fontWeight:700,color:"#5A2030",letterSpacing:"0.08em",textTransform:"uppercase",display:"block",marginBottom:"0.4rem"}}>Correo electrónico *</label>
-            <input
-              type="email"
-              value={regData.email}
-              onChange={e=>setRegData(p=>({...p,email:e.target.value}))}
-              placeholder="tu@correo.com"
-              style={{width:"100%",padding:"12px 14px",borderRadius:12,border:"1.5px solid rgba(196,104,122,.3)",fontFamily:"'Outfit',sans-serif",fontSize:15,color:"#2A1018",outline:"none",background:"#FDF4F5",boxSizing:"border-box"}}
-            />
-          </div>
-
-          <div style={{marginBottom:"1rem"}}>
-            <label style={{fontSize:"0.65rem",fontWeight:700,color:"#5A2030",letterSpacing:"0.08em",textTransform:"uppercase",display:"block",marginBottom:"0.4rem"}}>Contraseña * (mín. 6 caracteres)</label>
-            <input
-              type="password"
-              value={regData.password}
-              onChange={e=>setRegData(p=>({...p,password:e.target.value}))}
-              placeholder="••••••••"
-              style={{width:"100%",padding:"12px 14px",borderRadius:12,border:"1.5px solid rgba(196,104,122,.3)",fontFamily:"'Outfit',sans-serif",fontSize:15,color:"#2A1018",outline:"none",background:"#FDF4F5",boxSizing:"border-box"}}
-            />
-          </div>
-
-          <div style={{marginBottom:"1.5rem"}}>
-            <label style={{fontSize:"0.65rem",fontWeight:700,color:"#5A2030",letterSpacing:"0.08em",textTransform:"uppercase",display:"block",marginBottom:"0.4rem"}}>Confirmar contraseña *</label>
-            <input
-              type="password"
-              value={regData.confirm}
-              onChange={e=>setRegData(p=>({...p,confirm:e.target.value}))}
-              placeholder="••••••••"
-              style={{width:"100%",padding:"12px 14px",borderRadius:12,border:"1.5px solid rgba(196,104,122,.3)",fontFamily:"'Outfit',sans-serif",fontSize:15,color:"#2A1018",outline:"none",background:"#FDF4F5",boxSizing:"border-box"}}
-            />
-          </div>
-
-          <button onClick={doRegister} disabled={subLoading}
-            style={{width:"100%",background:subLoading?"rgba(107,31,138,.4)":"linear-gradient(135deg,#6B1F8A,#C4687A)",color:"#fff",border:"none",padding:"1rem",borderRadius:"3rem",fontSize:"1rem",fontWeight:700,cursor:subLoading?"not-allowed":"pointer",fontFamily:"'Outfit',sans-serif",marginBottom:"0.8rem"}}>
-            {subLoading?"Redirigiendo a Stripe…":"🔒 Continuar al pago seguro →"}
-          </button>
-
-          <button onClick={()=>setPage("home")} style={{width:"100%",background:"transparent",color:"#C4687A",border:"none",fontSize:"0.82rem",cursor:"pointer",fontFamily:"'Outfit',sans-serif",opacity:.6}}>
-            ← Volver al inicio
-          </button>
-        </div>
-
-        <p style={{textAlign:"center",fontSize:"0.68rem",color:"#bbb",marginTop:"1rem",lineHeight:1.5}}>
-          🔒 Pago seguro con Stripe · Sin cargos durante 7 días · Cancela cuando quieras
-        </p>
-      </div>
-    </div>
-  );
-
   function ShopCard({p}){
     const [open,setOpen]=useState(false);
     const [range,setRange]=useState("mid");
@@ -1383,7 +1395,7 @@ export default function LuMane(){
         {page==="result"   &&<ResultPage/>}
         {page==="shop"     &&<ShopPage/>}
         {page==="pricing"  &&<PricingPage/>}
-        {page==="register" &&<RegisterPage/>}
+        {page==="register" &&<RegisterPage selectedPlan={selectedPlan} onBack={()=>setPage('home')} onSuccess={()=>{setSubStatus('active');setPage('quiz');}} />}
         <ReviewsSection/>
         <footer style={{background:"#2A1018",color:"rgba(253,244,245,.6)",padding:"2.2rem 2rem",textAlign:"center"}}>
           <div style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"1.4rem",color:"#E8A0B0",marginBottom:"0.45rem",letterSpacing:"0.1em"}}>✦ LuMane</div>
