@@ -556,6 +556,56 @@ function RegisterPage({selectedPlan, onBack, onSuccess}) {
   );
 }
 
+function ShopCard({p, activeStores, openStore}){
+  const [open,setOpen]=useState(false);
+  const [range,setRange]=useState("mid");
+  const sel=p.prices&&p.prices[range]?p.prices[range]:{};
+  return(
+    <div style={{background:"#fff",borderRadius:"1rem",overflow:"hidden",border:"1.5px solid "+(open?"rgba(107,31,138,.3)":"rgba(196,104,122,.1)"),transition:"all .2s"}} className="lift">
+      <div style={{height:"100px",background:"hsl("+p.hue+",40%,91%)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:"2.5rem",position:"relative"}}>
+        {p.emoji}
+        <span style={{position:"absolute",top:"0.45rem",right:"0.45rem",background:"#C4687A",color:"#fff",fontSize:"0.56rem",fontWeight:700,padding:"0.13rem 0.45rem",borderRadius:"2rem"}}>{p.tag}</span>
+        <span style={{position:"absolute",bottom:"0.45rem",left:"0.45rem",background:"rgba(42,16,24,.7)",color:"#E8A0B0",fontSize:"0.58rem",fontWeight:700,padding:"0.1rem 0.4rem",borderRadius:"2rem"}}>{p.cat}</span>
+      </div>
+      <div style={{padding:"0.85rem"}}>
+        <div style={{fontSize:"0.58rem",color:"#C4687A",fontWeight:700,letterSpacing:"0.1em",textTransform:"uppercase",marginBottom:"0.18rem"}}>{p.step}</div>
+        <p style={{fontSize:"0.74rem",opacity:.5,lineHeight:1.4,marginBottom:"0.65rem"}}>{p.desc}</p>
+        {p.prices&&(
+          <div style={{marginBottom:"0.7rem"}}>
+            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:"0.28rem",marginBottom:"0.45rem"}}>
+              {Object.entries(PRICE_LABELS).map(([key,pl])=>(
+                <button key={key} onClick={()=>setRange(key)} style={{padding:"0.35rem 0.15rem",borderRadius:"0.45rem",border:"1.5px solid "+(range===key?pl.color:"rgba(0,0,0,.09)"),background:range===key?pl.bg:"transparent",cursor:"pointer",fontFamily:"'Outfit',sans-serif"}}>
+                  <div style={{fontSize:"0.65rem",fontWeight:700,color:range===key?pl.color:"#666"}}>{pl.label}</div>
+                  <div style={{fontSize:"0.6rem",fontWeight:700,color:range===key?pl.color:"#999",marginTop:"0.08rem"}}>{"$"+(p.prices[key]&&p.prices[key].price?p.prices[key].price.toFixed(2):"")}</div>
+                </button>
+              ))}
+            </div>
+            <div style={{padding:"0.55rem 0.75rem",background:PRICE_LABELS[range].bg,border:"1px solid "+PRICE_LABELS[range].border,borderRadius:"0.6rem"}}>
+              <div style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"0.9rem",fontWeight:700,color:"#2A1018"}}>{sel.name||""}</div>
+              <div style={{fontSize:"0.66rem",opacity:.55}}>{sel.brand||""}</div>
+            </div>
+          </div>
+        )}
+        <button onClick={()=>setOpen(!open)} style={{width:"100%",padding:"0.45rem",background:"rgba(196,104,122,.06)",border:"1px solid rgba(196,104,122,.15)",borderRadius:"0.6rem",cursor:"pointer",fontSize:"0.72rem",color:"#C4687A",fontWeight:600,marginBottom:open?"0.65rem":0,fontFamily:"'Outfit',sans-serif"}}>
+          {open?"▲ Ocultar":"▼ Ver instrucciones + Comprar"}
+        </button>
+        {open&&(
+          <div className="fade">
+            <div style={{fontSize:"0.76rem",lineHeight:1.65,opacity:.7,marginBottom:"0.75rem",background:"rgba(196,104,122,.04)",padding:"0.65rem",borderRadius:"0.5rem",whiteSpace:"pre-line"}}>{p.howTo}</div>
+            <div style={{display:"flex",gap:"0.35rem",flexWrap:"wrap"}}>
+              {activeStores.map(([key,s])=>(
+                <button key={key} className="sl" onClick={()=>openStore((sel.name||"")+" "+(sel.brand||"")+" "+p.sq,key)} style={{display:"flex",alignItems:"center",gap:"0.3rem",padding:"0.32rem 0.75rem",borderRadius:"2rem",border:"1.5px solid "+s.color+"40",background:s.color+"0E",fontSize:"0.7rem",fontWeight:600,cursor:"pointer",fontFamily:"'Outfit',sans-serif",color:"#2A1018"}}>
+                  {s.emoji} {s.name}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+  }
+
 export default function LuMane(){
   const [page,setPage]               = useState("home");
   const [quizStep,setQuizStep]       = useState(0);
@@ -1340,55 +1390,6 @@ export default function LuMane(){
   );
 
 
-  function ShopCard({p}){
-    const [open,setOpen]=useState(false);
-    const [range,setRange]=useState("mid");
-    const sel=p.prices&&p.prices[range]?p.prices[range]:{};
-    return(
-      <div style={{background:"#fff",borderRadius:"1rem",overflow:"hidden",border:"1.5px solid "+(open?"rgba(107,31,138,.3)":"rgba(196,104,122,.1)"),transition:"all .2s"}} className="lift">
-        <div style={{height:"100px",background:"hsl("+p.hue+",40%,91%)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:"2.5rem",position:"relative"}}>
-          {p.emoji}
-          <span style={{position:"absolute",top:"0.45rem",right:"0.45rem",background:"#C4687A",color:"#fff",fontSize:"0.56rem",fontWeight:700,padding:"0.13rem 0.45rem",borderRadius:"2rem"}}>{p.tag}</span>
-          <span style={{position:"absolute",bottom:"0.45rem",left:"0.45rem",background:"rgba(42,16,24,.7)",color:"#E8A0B0",fontSize:"0.58rem",fontWeight:700,padding:"0.1rem 0.4rem",borderRadius:"2rem"}}>{p.cat}</span>
-        </div>
-        <div style={{padding:"0.85rem"}}>
-          <div style={{fontSize:"0.58rem",color:"#C4687A",fontWeight:700,letterSpacing:"0.1em",textTransform:"uppercase",marginBottom:"0.18rem"}}>{p.step}</div>
-          <p style={{fontSize:"0.74rem",opacity:.5,lineHeight:1.4,marginBottom:"0.65rem"}}>{p.desc}</p>
-          {p.prices&&(
-            <div style={{marginBottom:"0.7rem"}}>
-              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:"0.28rem",marginBottom:"0.45rem"}}>
-                {Object.entries(PRICE_LABELS).map(([key,pl])=>(
-                  <button key={key} onClick={()=>setRange(key)} style={{padding:"0.35rem 0.15rem",borderRadius:"0.45rem",border:"1.5px solid "+(range===key?pl.color:"rgba(0,0,0,.09)"),background:range===key?pl.bg:"transparent",cursor:"pointer",fontFamily:"'Outfit',sans-serif"}}>
-                    <div style={{fontSize:"0.65rem",fontWeight:700,color:range===key?pl.color:"#666"}}>{pl.label}</div>
-                    <div style={{fontSize:"0.6rem",fontWeight:700,color:range===key?pl.color:"#999",marginTop:"0.08rem"}}>{"$"+(p.prices[key]&&p.prices[key].price?p.prices[key].price.toFixed(2):"")}</div>
-                  </button>
-                ))}
-              </div>
-              <div style={{padding:"0.55rem 0.75rem",background:PRICE_LABELS[range].bg,border:"1px solid "+PRICE_LABELS[range].border,borderRadius:"0.6rem"}}>
-                <div style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"0.9rem",fontWeight:700,color:"#2A1018"}}>{sel.name||""}</div>
-                <div style={{fontSize:"0.66rem",opacity:.55}}>{sel.brand||""}</div>
-              </div>
-            </div>
-          )}
-          <button onClick={()=>setOpen(!open)} style={{width:"100%",padding:"0.45rem",background:"rgba(196,104,122,.06)",border:"1px solid rgba(196,104,122,.15)",borderRadius:"0.6rem",cursor:"pointer",fontSize:"0.72rem",color:"#C4687A",fontWeight:600,marginBottom:open?"0.65rem":0,fontFamily:"'Outfit',sans-serif"}}>
-            {open?"▲ Ocultar":"▼ Ver instrucciones + Comprar"}
-          </button>
-          {open&&(
-            <div className="fade">
-              <div style={{fontSize:"0.76rem",lineHeight:1.65,opacity:.7,marginBottom:"0.75rem",background:"rgba(196,104,122,.04)",padding:"0.65rem",borderRadius:"0.5rem",whiteSpace:"pre-line"}}>{p.howTo}</div>
-              <div style={{display:"flex",gap:"0.35rem",flexWrap:"wrap"}}>
-                {activeStores.map(([key,s])=>(
-                  <button key={key} className="sl" onClick={()=>openStore((sel.name||"")+" "+(sel.brand||"")+" "+p.sq,key)} style={{display:"flex",alignItems:"center",gap:"0.3rem",padding:"0.32rem 0.75rem",borderRadius:"2rem",border:"1.5px solid "+s.color+"40",background:s.color+"0E",fontSize:"0.7rem",fontWeight:600,cursor:"pointer",fontFamily:"'Outfit',sans-serif",color:"#2A1018"}}>
-                    {s.emoji} {s.name}
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-    );
-  }
 
   const ShopPage=()=>{
     const filtered=filterProducts(shopFilter);
@@ -1408,7 +1409,7 @@ export default function LuMane(){
         </div>
         <div style={{marginBottom:"0.75rem",fontSize:"0.75rem",opacity:.4}}>{filtered.length} productos</div>
         <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(240px,1fr))",gap:"1rem"}}>
-          {filtered.map(prod=><ShopCard key={prod.id} p={prod}/>)}
+          {filtered.map(prod=><ShopCard key={prod.id} p={prod} activeStores={activeStores} openStore={openStore}/>)}
         </div>
       </div>
     );
