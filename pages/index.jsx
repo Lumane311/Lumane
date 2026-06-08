@@ -678,32 +678,51 @@ export default function LuMane(){
   }
 
   function handlePhotoUpload(e){
-    const file=e.target.files[0]; if(!file) return;
+    const file=e.target.files[0];
+    if(!file){ return; }
     setPhotoLoading(true);
-    const reader=new FileReader();
-    reader.onload=(ev)=>{
-      // Comprimir imagen con canvas para que no falle en móvil
-      const img=new Image();
-      img.onload=()=>{
-        const MAX=800;
-        let w=img.width, h=img.height;
-        if(w>MAX||h>MAX){
-          if(w>h){ h=Math.round(h*MAX/w); w=MAX; }
-          else { w=Math.round(w*MAX/h); h=MAX; }
+    setHairPhoto(null);
+
+    // Usar URL.createObjectURL primero (más rápido y funciona con Google Fotos)
+    const objectUrl = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => {
+      try {
+        const MAX = 900;
+        let w = img.naturalWidth || img.width;
+        let h = img.naturalHeight || img.height;
+        if(w === 0 || h === 0){ w = 800; h = 800; }
+        if(w > MAX || h > MAX){
+          if(w > h){ h = Math.round(h * MAX / w); w = MAX; }
+          else { w = Math.round(w * MAX / h); h = MAX; }
         }
-        const canvas=document.createElement('canvas');
-        canvas.width=w; canvas.height=h;
-        const ctx=canvas.getContext('2d');
-        ctx.drawImage(img,0,0,w,h);
-        const compressed=canvas.toDataURL('image/jpeg',0.7);
-        setHairPhoto(compressed);
+        const canvas = document.createElement('canvas');
+        canvas.width = w;
+        canvas.height = h;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, w, h);
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.75);
+        URL.revokeObjectURL(objectUrl);
+        setHairPhoto(dataUrl);
         setPhotoLoading(false);
-      };
-      img.onerror=()=>{ setPhotoLoading(false); };
-      img.src=ev.target.result;
+      } catch(err) {
+        // Fallback: usar FileReader directo
+        URL.revokeObjectURL(objectUrl);
+        const reader = new FileReader();
+        reader.onload = (ev) => { setHairPhoto(ev.target.result); setPhotoLoading(false); };
+        reader.onerror = () => { setPhotoLoading(false); };
+        reader.readAsDataURL(file);
+      }
     };
-    reader.onerror=()=>{ setPhotoLoading(false); };
-    reader.readAsDataURL(file);
+    img.onerror = () => {
+      // Fallback: usar FileReader directo
+      URL.revokeObjectURL(objectUrl);
+      const reader = new FileReader();
+      reader.onload = (ev) => { setHairPhoto(ev.target.result); setPhotoLoading(false); };
+      reader.onerror = () => { setPhotoLoading(false); };
+      reader.readAsDataURL(file);
+    };
+    img.src = objectUrl;
   }
 
   const activatePaid = async () => {
@@ -1171,20 +1190,28 @@ export default function LuMane(){
             <p style={{fontSize:"0.85rem",opacity:.6,lineHeight:1.7,marginBottom:"1.5rem",maxWidth:"400px",margin:"0 auto 1.5rem"}}>Sube una foto y nuestra IA detectará el tipo exacto, la porosidad y lo que realmente necesita tu cabello.</p>
             <div style={{marginBottom:"1.5rem"}}>
               {hairPhoto?(
-                <div style={{position:"relative",display:"inline-block"}}>
-                  <img src={hairPhoto} alt="Tu cabello" style={{width:"200px",height:"200px",objectFit:"cover",borderRadius:"1.2rem",border:"3px solid #C4687A",boxShadow:"0 8px 28px rgba(196,104,122,.3)"}}/>
-                  <button onClick={()=>setHairPhoto(null)} style={{position:"absolute",top:"-8px",right:"-8px",width:"28px",height:"28px",borderRadius:"50%",background:"#C4687A",border:"2px solid #fff",color:"#fff",cursor:"pointer",fontSize:"0.8rem",fontWeight:700}}>✕</button>
-                  <div style={{marginTop:"0.6rem",fontSize:"0.75rem",color:"#5A9A5A",fontWeight:700}}>✓ Foto lista</div>
+                <div style={{textAlign:"center"}}>
+                  <div style={{position:"relative",display:"inline-block"}}>
+                    <img src={hairPhoto} alt="Tu cabello" style={{width:"220px",height:"220px",objectFit:"cover",borderRadius:"1.2rem",border:"3px solid #C4687A",boxShadow:"0 8px 28px rgba(196,104,122,.3)",display:"block"}}/>
+                    <button onClick={()=>setHairPhoto(null)} style={{position:"absolute",top:"-8px",right:"-8px",width:"28px",height:"28px",borderRadius:"50%",background:"#C4687A",border:"2px solid #fff",color:"#fff",cursor:"pointer",fontSize:"0.8rem",fontWeight:700}}>✕</button>
+                  </div>
+                  <div style={{marginTop:"0.8rem",fontSize:"0.85rem",color:"#5A9A5A",fontWeight:700}}>✅ Foto cargada correctamente</div>
+                  <div style={{fontSize:"0.72rem",color:"#999",marginTop:"0.2rem"}}>La IA analizará tu cabello con esta imagen</div>
                 </div>
               ):(
                 <label style={{display:"block",cursor:"pointer"}}>
                   <input type="file" accept="image/*" onChange={handlePhotoUpload} style={{display:"none"}}/>
-                  <div style={{border:"2px dashed rgba(196,104,122,.4)",borderRadius:"1.2rem",padding:"2rem 1.5rem",background:"rgba(196,104,122,.04)"}}>
-                    {photoLoading?<div style={{fontSize:"2rem"}} className="spin">✦</div>:(
+                  <div style={{border:"2px dashed rgba(196,104,122,.4)",borderRadius:"1.2rem",padding:"2rem 1.5rem",background:"rgba(196,104,122,.04)",textAlign:"center"}}>
+                    {photoLoading?(
+                      <div>
+                        <div style={{fontSize:"2rem",marginBottom:"0.5rem"}} className="spin">✦</div>
+                        <div style={{fontSize:"0.85rem",color:"#C4687A",fontWeight:600}}>Cargando foto…</div>
+                      </div>
+                    ):(
                       <>
                         <div style={{fontSize:"2.5rem",marginBottom:"0.5rem"}}>📷</div>
-                        <div style={{fontWeight:700,fontSize:"0.9rem",color:"#C4687A",marginBottom:"0.3rem"}}>Toca para subir una foto</div>
-                        <div style={{fontSize:"0.75rem",opacity:.5}}>Cámara o galería · JPG, PNG</div>
+                        <div style={{fontWeight:700,fontSize:"0.9rem",color:"#C4687A",marginBottom:"0.3rem"}}>Toca aquí para subir una foto</div>
+                        <div style={{fontSize:"0.75rem",opacity:.5}}>Galería o cámara · JPG, PNG, HEIC</div>
                       </>
                     )}
                   </div>
@@ -1192,8 +1219,9 @@ export default function LuMane(){
               )}
             </div>
             <div style={{display:"flex",flexDirection:"column",gap:"0.7rem"}}>
-              <button onClick={()=>runAI(answers)} style={{background:"linear-gradient(135deg,#6B1F8A,#C4687A)",color:"#fff",border:"none",padding:"1rem",borderRadius:"3rem",fontSize:"1rem",fontWeight:700,cursor:"pointer",fontFamily:"'Outfit',sans-serif"}}>
-                {hairPhoto?"✨ Analizar con mi foto":"✨ Analizar sin foto"}
+              <button onClick={()=>runAI(answers)}
+                style={{background:hairPhoto?"linear-gradient(135deg,#2A7A3A,#5AAA5A)":"linear-gradient(135deg,#6B1F8A,#C4687A)",color:"#fff",border:"none",padding:"1rem",borderRadius:"3rem",fontSize:"1rem",fontWeight:700,cursor:"pointer",fontFamily:"'Outfit',sans-serif",boxShadow:hairPhoto?"0 8px 24px rgba(42,122,58,.4)":"0 8px 24px rgba(107,31,138,.3)"}}>
+                {hairPhoto?"📸 Analizar con mi foto →":"✨ Analizar sin foto"}
               </button>
               {!hairPhoto&&(
                 <button onClick={()=>runAI(answers)} style={{background:"transparent",color:"#C4687A",border:"1.5px solid rgba(196,104,122,.3)",padding:"0.75rem",borderRadius:"3rem",fontSize:"0.85rem",cursor:"pointer",fontFamily:"'Outfit',sans-serif",opacity:.7}}>
