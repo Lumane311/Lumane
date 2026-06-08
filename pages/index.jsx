@@ -612,7 +612,28 @@ export default function LuMane(){
     const file=e.target.files[0]; if(!file) return;
     setPhotoLoading(true);
     const reader=new FileReader();
-    reader.onload=(ev)=>{ setHairPhoto(ev.target.result.split(",")[1]); setPhotoLoading(false); };
+    reader.onload=(ev)=>{
+      // Comprimir imagen con canvas para que no falle en móvil
+      const img=new Image();
+      img.onload=()=>{
+        const MAX=800;
+        let w=img.width, h=img.height;
+        if(w>MAX||h>MAX){
+          if(w>h){ h=Math.round(h*MAX/w); w=MAX; }
+          else { w=Math.round(w*MAX/h); h=MAX; }
+        }
+        const canvas=document.createElement('canvas');
+        canvas.width=w; canvas.height=h;
+        const ctx=canvas.getContext('2d');
+        ctx.drawImage(img,0,0,w,h);
+        const compressed=canvas.toDataURL('image/jpeg',0.7);
+        setHairPhoto(compressed);
+        setPhotoLoading(false);
+      };
+      img.onerror=()=>{ setPhotoLoading(false); };
+      img.src=ev.target.result;
+    };
+    reader.onerror=()=>{ setPhotoLoading(false); };
     reader.readAsDataURL(file);
   }
 
@@ -662,7 +683,12 @@ export default function LuMane(){
     const prompt=`Eres tricóloga experta. Analiza: Género:${ans.gender} Grupo:${ans.group} Subtipo:${ans.subtype||ans.group} Cuero:${ans.scalp} Preocupación:${ans.concern} Tratamientos:${ans.damage}. Responde SOLO JSON: {"hairType":"${ans.subtype||ans.group}","condition":"seco|graso|normal","scalp":"normal|caspa|graso|sensible","title":"título 5 palabras","summary":"descripción 2-3 oraciones","score":{"hidratacion":7,"fuerza":6,"brillo":7,"salud_cuero":7},"products":[{"order":1,"step":"Limpieza","name":"","sq":"","why":"","howToApply":"","freq":"","tip":"","avoid":""},{"order":2,"step":"Acondicionado","name":"","sq":"","why":"","howToApply":"","freq":"","tip":"","avoid":""},{"order":3,"step":"Tratamiento","name":"","sq":"","why":"","howToApply":"","freq":"","tip":"","avoid":""},{"order":4,"step":"Definición","name":"","sq":"","why":"","howToApply":"","freq":"","tip":"","avoid":""},{"order":5,"step":"Sellado","name":"","sq":"","why":"","howToApply":"","freq":"","tip":"","avoid":""}],"weeklyRoutine":["Días 1-2:","Días 3-4:","Días 5-7:"],"ingredients":{"buscar":["i1","i2","i3"],"evitar":["i1","i2"]},"lifestyle":["h1","h2","h3"]}`;
     try{
       const msgs=hairPhoto
-        ?[{role:"user",content:[{type:"image",source:{type:"base64",media_type:"image/jpeg",data:hairPhoto}},{type:"text",text:prompt+" Analiza también la imagen del cabello para mayor precisión."}]}]
+        ?(()=>{
+          const parts=hairPhoto.split(",");
+          const mime=(parts[0].match(/:(.*?);/)||[])[1]||"image/jpeg";
+          const b64=parts[1];
+          return [{role:"user",content:[{type:"image",source:{type:"base64",media_type:mime,data:b64}},{type:"text",text:prompt+" Analiza también la imagen del cabello para mayor precisión."}]}];
+        })()
         :[{role:"user",content:prompt}];
       const r=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:2000,messages:msgs})});
       const d=await r.json();
@@ -1077,7 +1103,7 @@ export default function LuMane(){
             <div style={{marginBottom:"1.5rem"}}>
               {hairPhoto?(
                 <div style={{position:"relative",display:"inline-block"}}>
-                  <img src={"data:image/jpeg;base64,"+hairPhoto} alt="Tu cabello" style={{width:"200px",height:"200px",objectFit:"cover",borderRadius:"1.2rem",border:"3px solid #C4687A",boxShadow:"0 8px 28px rgba(196,104,122,.3)"}}/>
+                  <img src={hairPhoto} alt="Tu cabello" style={{width:"200px",height:"200px",objectFit:"cover",borderRadius:"1.2rem",border:"3px solid #C4687A",boxShadow:"0 8px 28px rgba(196,104,122,.3)"}}/>
                   <button onClick={()=>setHairPhoto(null)} style={{position:"absolute",top:"-8px",right:"-8px",width:"28px",height:"28px",borderRadius:"50%",background:"#C4687A",border:"2px solid #fff",color:"#fff",cursor:"pointer",fontSize:"0.8rem",fontWeight:700}}>✕</button>
                   <div style={{marginTop:"0.6rem",fontSize:"0.75rem",color:"#5A9A5A",fontWeight:700}}>✓ Foto lista</div>
                 </div>
