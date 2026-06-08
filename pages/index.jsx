@@ -379,6 +379,75 @@ function fallback(a){
 }
 
 
+
+function LoginPage({onSuccess, onRegister}) {
+  const [email, setEmail] = React.useState("");
+  const [pass, setPass] = React.useState("");
+  const [error, setError] = React.useState("");
+
+  function doLogin(){
+    setError("");
+    if(!email.trim()||!pass.trim()){setError("Completa todos los campos.");return;}
+    try {
+      const user = JSON.parse(localStorage.getItem('lumane_user')||'{}');
+      if(user.email===email.trim()&&user.password===pass){
+        sessionStorage.setItem('lumane_session','1');
+        onSuccess();
+      } else {
+        setError("Correo o contraseña incorrectos.");
+      }
+    } catch(e){ setError("Error al iniciar sesión."); }
+  }
+
+  return (
+    <div style={{minHeight:"85vh",display:"flex",alignItems:"center",justifyContent:"center",padding:"2rem 1.5rem 5rem",background:"#FDF4F5"}}>
+      <div style={{maxWidth:"420px",width:"100%"}}>
+        <div style={{textAlign:"center",marginBottom:"1.8rem"}}>
+          <div style={{fontSize:"2.5rem",marginBottom:"0.5rem"}}>✦</div>
+          <h1 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"clamp(1.8rem,5vw,2.4rem)",fontWeight:700,color:"#2A1018",marginBottom:"0.4rem"}}>Bienvenida de vuelta</h1>
+          <p style={{fontSize:"0.85rem",color:"#999"}}>Inicia sesión para acceder a tu cuenta</p>
+        </div>
+        <div style={{background:"#fff",borderRadius:"1.5rem",padding:"2rem",border:"1.5px solid rgba(196,104,122,.15)",boxShadow:"0 8px 32px rgba(196,104,122,.08)"}}>
+          {error&&(
+            <div style={{background:"rgba(200,50,50,.08)",border:"1px solid rgba(200,50,50,.25)",borderRadius:"0.75rem",padding:"0.8rem 1rem",fontSize:"0.82rem",color:"#AA3333",marginBottom:"1.2rem",textAlign:"center"}}>
+              {error}
+            </div>
+          )}
+          <div style={{marginBottom:"1rem"}}>
+            <label style={{fontSize:"0.65rem",fontWeight:700,color:"#5A2030",letterSpacing:"0.08em",textTransform:"uppercase",display:"block",marginBottom:"0.4rem"}}>Correo electrónico</label>
+            <input
+              type="email"
+              value={email}
+              onChange={e=>setEmail(e.target.value)}
+              placeholder="tu@correo.com"
+              style={{width:"100%",padding:"14px 16px",borderRadius:12,border:"1.5px solid rgba(196,104,122,.3)",fontFamily:"'Outfit',sans-serif",fontSize:16,color:"#2A1018",outline:"none",background:"#FDF4F5",boxSizing:"border-box"}}
+            />
+          </div>
+          <div style={{marginBottom:"1.5rem"}}>
+            <label style={{fontSize:"0.65rem",fontWeight:700,color:"#5A2030",letterSpacing:"0.08em",textTransform:"uppercase",display:"block",marginBottom:"0.4rem"}}>Contraseña</label>
+            <input
+              type="password"
+              value={pass}
+              onChange={e=>setPass(e.target.value)}
+              onKeyDown={e=>e.key==='Enter'&&doLogin()}
+              placeholder="••••••••"
+              style={{width:"100%",padding:"14px 16px",borderRadius:12,border:"1.5px solid rgba(196,104,122,.3)",fontFamily:"'Outfit',sans-serif",fontSize:16,color:"#2A1018",outline:"none",background:"#FDF4F5",boxSizing:"border-box"}}
+            />
+          </div>
+          <button onClick={doLogin}
+            style={{width:"100%",background:"linear-gradient(135deg,#6B1F8A,#C4687A)",color:"#fff",border:"none",padding:"1rem",borderRadius:"3rem",fontSize:"1rem",fontWeight:700,cursor:"pointer",fontFamily:"'Outfit',sans-serif",marginBottom:"1rem"}}>
+            Entrar a mi cuenta →
+          </button>
+          <p style={{textAlign:"center",fontSize:"0.78rem",color:"#999"}}>
+            ¿No tienes cuenta?{" "}
+            <span onClick={onRegister} style={{color:"#C4687A",fontWeight:700,cursor:"pointer"}}>Suscríbete aquí</span>
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function RegisterPage({selectedPlan, onBack, onSuccess}) {
   const [regData, setRegData] = React.useState({nombre:"",apellido:"",nacimiento:"",email:"",password:"",confirm:""});
   const [regError, setRegError] = React.useState("");
@@ -525,7 +594,7 @@ export default function LuMane(){
       // Si tiene cuenta registrada y premium, pedir login al volver
       if (user && saved === 'active') {
         const session = sessionStorage.getItem('lumane_session');
-        if (!session) { setShowLogin(true); return; }
+        if (!session) { setPage('login'); return; }
         setSubStatus('active');
         return;
       }
@@ -1398,7 +1467,6 @@ export default function LuMane(){
         </div>
       </div>
       {toast&&<div style={{position:"fixed",bottom:"6rem",left:"50%",transform:"translateX(-50%)",background:"#2A1018",color:"#FDF4F5",padding:"0.6rem 1.5rem",borderRadius:"2rem",fontSize:"0.84rem",zIndex:9999,boxShadow:"0 8px 28px rgba(0,0,0,.25)",whiteSpace:"nowrap"}}>{toast}</div>}
-      {showLogin&&<LoginModal/>}
       {showStores&&<StorePanel/>}
       {showPaywall&&<PaywallModal/>}
       <div style={{position:"sticky",top:0,zIndex:100,display:"flex",alignItems:"center",justifyContent:"space-between",padding:"0.85rem 1.2rem",background:"rgba(253,244,245,.96)",backdropFilter:"blur(14px)",borderBottom:"1px solid rgba(196,104,122,.11)"}}>
@@ -1421,6 +1489,7 @@ export default function LuMane(){
         {page==="result"   &&<ResultPage/>}
         {page==="shop"     &&<ShopPage/>}
         {page==="pricing"  &&<PricingPage/>}
+        {page==="login"    &&<LoginPage onSuccess={()=>{setSubStatus('active');setPage('home');}} onRegister={()=>setPage('home')} />}
         {page==="register" &&<RegisterPage selectedPlan={selectedPlan} onBack={()=>setPage('home')} onSuccess={()=>{setSubStatus('active');setPage('quiz');}} />}
         <ReviewsSection/>
         <footer style={{background:"#2A1018",color:"rgba(253,244,245,.6)",padding:"2.2rem 2rem",textAlign:"center"}}>
