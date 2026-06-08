@@ -208,7 +208,6 @@ function ProductosRecomendados() {
   );
 }
 
-
 function ReviewsSection() {
   const [reviews, setReviews] = React.useState([
     { id:1, nombre:"María G.", pais:"🇲🇽 México",    tipo:"3C", estrellas:5, texto:"¡Increíble! Por fin una app que entiende mi cabello rizado. La rutina que me dio cambió todo.", fecha:"Hace 2 días" },
@@ -401,6 +400,38 @@ export default function LuMane(){
   const [hairPhoto,setHairPhoto]     = useState(null);
   const [photoLoading,setPhotoLoading] = useState(false);
 
+  // ✅ FIX PRINCIPAL: detectar pago exitoso de Stripe y restaurar acceso guardado
+  useEffect(() => {
+    // 1. Checar si ya tiene acceso guardado en localStorage
+    try {
+      const saved = localStorage.getItem('lumane_premium');
+      if (saved === 'active') {
+        setSubStatus('active');
+        return;
+      }
+    } catch(e) {}
+
+    // 2. Checar si Stripe acaba de redirigir con ?success=true
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('success') === 'true') {
+      try { localStorage.setItem('lumane_premium', 'active'); } catch(e) {}
+      setSubStatus('active');
+      setShowPaywall(false);
+      // Limpiar la URL sin recargar la página
+      window.history.replaceState({}, '', window.location.pathname);
+      // Ir directo al quiz como bienvenida
+      setPage('quiz');
+      setQuizStep(0);
+      setAnswers({});
+      setResult(null);
+    }
+
+    // 3. Si canceló el pago
+    if (params.get('canceled') === 'true') {
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+  }, []);
+
   useEffect(()=>{
     const t=setInterval(()=>setCountdown(c=>c>0?c-1:0),1000);
     return ()=>clearInterval(t);
@@ -417,7 +448,11 @@ export default function LuMane(){
   function requireSub(fn){ if(isSubscribed()){fn();return;} setShowPaywall(true);setSubStep(1); }
   function showToast(m){ setToast(m);setTimeout(()=>setToast(null),2500); }
   function goQuiz(){ requireSub(()=>{setQuizStep(0);setAnswers({});setResult(null);setHairPhoto(null);setPage("quiz");}); }
-  function cancelSub(){ setSubStatus("none");showToast("Suscripción cancelada"); }
+  function cancelSub(){
+    setSubStatus("none");
+    try { localStorage.removeItem('lumane_premium'); } catch(e) {}
+    showToast("Suscripción cancelada");
+  }
 
   function handlePhotoUpload(e){
     const file=e.target.files[0]; if(!file) return;
@@ -643,8 +678,7 @@ export default function LuMane(){
             </p>
           </div>
           <div style={{display:"flex",flexDirection:"column",alignItems:"center",gap:"0.7rem",marginBottom:"2.5rem"}}>
-            <button onClick={goQuiz} style={{background:"linear-gradient(135deg,#6B1F8A,#C4687A)",color:"#fff",border:"none",padding:"1.05rem 2.6rem",borderRadius:"3rem",fontSize:"1rem",fontWeight:700,cursor:"pointer",fontFamily:"'Outfit',sans-serif",boxShadow:"0 10px 32px rgba(107,31,138,.35)"}}
-              >
+            <button onClick={goQuiz} style={{background:"linear-gradient(135deg,#6B1F8A,#C4687A)",color:"#fff",border:"none",padding:"1.05rem 2.6rem",borderRadius:"3rem",fontSize:"1rem",fontWeight:700,cursor:"pointer",fontFamily:"'Outfit',sans-serif",boxShadow:"0 10px 32px rgba(107,31,138,.35)"}}>
               ✨ Descubrir mi tipo de cabello
             </button>
             <span style={{fontSize:"0.73rem",opacity:.45}}>🎁 7 días gratis · desde {"$2.99/sem"} · cancela cuando quieras</span>
@@ -1128,7 +1162,11 @@ export default function LuMane(){
       <div style={{position:"sticky",top:0,zIndex:100,display:"flex",alignItems:"center",justifyContent:"space-between",padding:"0.85rem 1.2rem",background:"rgba(253,244,245,.96)",backdropFilter:"blur(14px)",borderBottom:"1px solid rgba(196,104,122,.11)"}}>
         <div onClick={()=>setPage("home")} style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"1.45rem",fontWeight:700,color:"#C4687A",cursor:"pointer",letterSpacing:"0.08em"}}>✦ LuMane</div>
         <div style={{display:"flex",gap:"0.45rem",alignItems:"center"}}>
-          {!isSubscribed()&&(
+          {isSubscribed()?(
+            <div style={{background:"rgba(90,154,90,.12)",border:"1px solid rgba(90,154,90,.3)",color:"#3A7A3A",padding:"0.32rem 0.85rem",borderRadius:"2rem",fontSize:"0.73rem",fontWeight:700}}>
+              ✦ Premium activo
+            </div>
+          ):(
             <button onClick={()=>setShowPaywall(true)} style={{background:"linear-gradient(135deg,#6B1F8A,#C4687A)",color:"#fff",border:"none",padding:"0.32rem 0.85rem",borderRadius:"2rem",fontSize:"0.73rem",fontWeight:700,cursor:"pointer",fontFamily:"'Outfit',sans-serif"}}>🎁 7 días gratis</button>
           )}
           <button onClick={()=>setShowStores(true)} style={{background:"rgba(196,104,122,.09)",border:"1px solid rgba(196,104,122,.18)",color:"#C4687A",padding:"0.32rem 0.65rem",borderRadius:"2rem",fontSize:"0.73rem",cursor:"pointer",fontFamily:"'Outfit',sans-serif"}}>⚙</button>
