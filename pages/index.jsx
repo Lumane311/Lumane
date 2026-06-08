@@ -584,8 +584,8 @@ export default function LuMane(){
   );
 
   const PaywallModal=()=>(
-    <div style={{position:"fixed",inset:0,background:"rgba(42,16,24,.75)",zIndex:700,display:"flex",alignItems:"center",justifyContent:"center",padding:"1rem",backdropFilter:"blur(4px)"}} onClick={()=>{setShowPaywall(false);setSubStep(1);}}>
-      <div style={{background:"#FDF4F5",borderRadius:"1.8rem",maxWidth:"460px",width:"100%",boxShadow:"0 40px 100px rgba(0,0,0,.4)",overflow:"hidden"}} onClick={e=>e.stopPropagation()}>
+    <div style={{position:"fixed",inset:0,background:"rgba(42,16,24,.75)",zIndex:700,display:"flex",alignItems:"center",justifyContent:"center",padding:"1rem",backdropFilter:"blur(4px)"}}>
+      <div style={{background:"#FDF4F5",borderRadius:"1.8rem",maxWidth:"460px",width:"100%",boxShadow:"0 40px 100px rgba(0,0,0,.4)",overflow:"hidden"}}>
         {subStep===1&&(
           <div>
             <div style={{background:"linear-gradient(135deg,#6B1F8A,#C4687A)",padding:"2rem",textAlign:"center",position:"relative"}}>
