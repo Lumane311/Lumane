@@ -574,7 +574,7 @@ function ShopCard({p, activeStores, openStore}){
           <div style={{marginBottom:"0.7rem"}}>
             <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:"0.28rem",marginBottom:"0.45rem"}}>
               {Object.entries(PRICE_LABELS).map(([key,pl])=>(
-                <button key={key} onClick={()=>setRange(key)} style={{padding:"0.35rem 0.15rem",borderRadius:"0.45rem",border:"1.5px solid "+(range===key?pl.color:"rgba(0,0,0,.09)"),background:range===key?pl.bg:"transparent",cursor:"pointer",fontFamily:"'Outfit',sans-serif"}}>
+                <button key={key} onClick={(e)=>{e.stopPropagation();setRange(key);}} style={{padding:"0.35rem 0.15rem",borderRadius:"0.45rem",border:"1.5px solid "+(range===key?pl.color:"rgba(0,0,0,.09)"),background:range===key?pl.bg:"transparent",cursor:"pointer",fontFamily:"'Outfit',sans-serif"}}>
                   <div style={{fontSize:"0.65rem",fontWeight:700,color:range===key?pl.color:"#666"}}>{pl.label}</div>
                   <div style={{fontSize:"0.6rem",fontWeight:700,color:range===key?pl.color:"#999",marginTop:"0.08rem"}}>{"$"+(p.prices[key]&&p.prices[key].price?p.prices[key].price.toFixed(2):"")}</div>
                 </button>
