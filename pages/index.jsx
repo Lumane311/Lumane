@@ -378,7 +378,31 @@ function fallback(a){
   };
 }
 
+// ─── HELPER: detectar país y elegir pasarela ───────────────
+async function detectPaymentGateway() {
+  try {
+    const geoRes = await fetch('https://ipapi.co/json/');
+    const geoData = await geoRes.json();
+    return geoData.country_code === 'CO' ? 'wompi' : 'stripe';
+  } catch (e) {
+    return 'stripe'; // fallback a Stripe si falla la detección
+  }
+}
 
+async function redirectToPayment(plan, gateway) {
+  const endpoint = gateway === 'wompi' ? '/api/wompi-checkout' : '/api/checkout';
+  const res = await fetch(endpoint, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ plan }),
+  });
+  const data = await res.json();
+  if (data.url) {
+    window.location.href = data.url;
+    return true;
+  }
+  return false;
+}
 
 function LoginPage({onSuccess, onRegister}) {
   const [email, setEmail] = React.useState("");
@@ -453,6 +477,21 @@ function RegisterPage({selectedPlan, onBack, onSuccess}) {
   const [regError, setRegError] = React.useState("");
   const [loading, setLoading] = React.useState(false);
 
+  async function activatePaidRegister() {
+    setLoading(true);
+    try {
+      const gateway = await detectPaymentGateway();
+      const ok = await redirectToPayment(selectedPlan, gateway);
+      if (!ok) {
+        setRegError('Error al procesar el pago. Intenta de nuevo.');
+        setLoading(false);
+      }
+    } catch(e) {
+      setRegError('Error de conexión. Intenta de nuevo.');
+      setLoading(false);
+    }
+  }
+
   async function doRegister(){
     setRegError("");
     if(!regData.nombre.trim()||!regData.email.trim()||!regData.password.trim()||!regData.nacimiento){
@@ -474,24 +513,8 @@ function RegisterPage({selectedPlan, onBack, onSuccess}) {
       }));
       sessionStorage.setItem('lumane_session','1');
     } catch(e){}
-    setLoading(true);
-    try {
-      const res = await fetch('/api/checkout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ plan: selectedPlan })
-      });
-      const data = await res.json();
-      if (data.url) {
-        window.location.href = data.url;
-      } else {
-        setRegError('Error al procesar. Intenta de nuevo.');
-        setLoading(false);
-      }
-    } catch(e) {
-      setRegError('Error de conexión. Intenta de nuevo.');
-      setLoading(false);
-    }
+    // Detectar país y redirigir a Wompi o Stripe
+    activatePaidRegister();
   }
 
   return (
@@ -500,7 +523,7 @@ function RegisterPage({selectedPlan, onBack, onSuccess}) {
         <div style={{textAlign:"center",marginBottom:"1.8rem"}}>
           <div style={{fontSize:"0.65rem",color:"#C4687A",fontWeight:700,letterSpacing:"0.15em",textTransform:"uppercase",marginBottom:"0.4rem"}}>✦ Paso 1 de 2</div>
           <h1 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"clamp(1.8rem,5vw,2.4rem)",fontWeight:700,color:"#2A1018",marginBottom:"0.4rem"}}>Crea tu cuenta</h1>
-          <p style={{fontSize:"0.85rem",color:"#999"}}>Luego te llevaremos al pago seguro con Stripe</p>
+          <p style={{fontSize:"0.85rem",color:"#999"}}>Luego te llevaremos al pago seguro</p>
         </div>
         <div style={{background:"#fff",borderRadius:"1.5rem",padding:"2rem",border:"1.5px solid rgba(196,104,122,.15)",boxShadow:"0 8px 32px rgba(196,104,122,.08)"}}>
           {regError&&(
@@ -542,14 +565,14 @@ function RegisterPage({selectedPlan, onBack, onSuccess}) {
           </div>
           <button onClick={doRegister} disabled={loading}
             style={{width:"100%",background:loading?"rgba(107,31,138,.4)":"linear-gradient(135deg,#6B1F8A,#C4687A)",color:"#fff",border:"none",padding:"1rem",borderRadius:"3rem",fontSize:"1rem",fontWeight:700,cursor:loading?"not-allowed":"pointer",fontFamily:"'Outfit',sans-serif",marginBottom:"0.8rem"}}>
-            {loading?"Redirigiendo a Stripe…":"🔒 Continuar al pago seguro →"}
+            {loading?"Redirigiendo al pago…":"🔒 Continuar al pago seguro →"}
           </button>
           <button onClick={onBack} style={{width:"100%",background:"transparent",color:"#C4687A",border:"none",fontSize:"0.82rem",cursor:"pointer",fontFamily:"'Outfit',sans-serif",opacity:.6}}>
             ← Volver
           </button>
         </div>
         <p style={{textAlign:"center",fontSize:"0.68rem",color:"#bbb",marginTop:"1rem",lineHeight:1.5}}>
-          🔒 Pago seguro con Stripe · Sin cargos 7 días · Cancela cuando quieras
+          🔒 Pago seguro · 🇨🇴 Colombia: Wompi (Nequi, PSE, Bancolombia) · 🌍 Internacional: Stripe
         </p>
       </div>
     </div>
@@ -612,7 +635,7 @@ function ShopCard({p, activeStores, openStore}){
       </div>
     </div>
   );
-  }
+}
 
 export default function LuMane(){
   const [page,setPage]               = useState("home");
@@ -644,12 +667,10 @@ export default function LuMane(){
   const [regError,setRegError]       = useState("");
   const [regStep,setRegStep]         = useState(1);
 
-  // ✅ FIX PRINCIPAL: detectar pago exitoso de Stripe, login y acceso guardado
   useEffect(() => {
     try {
       const user = localStorage.getItem('lumane_user');
       const saved = localStorage.getItem('lumane_premium');
-      // Si tiene cuenta registrada y premium, pedir login al volver
       if (user && saved === 'active') {
         const session = sessionStorage.getItem('lumane_session');
         if (!session) { setPage('login'); return; }
@@ -731,7 +752,6 @@ export default function LuMane(){
       }));
       sessionStorage.setItem('lumane_session','1');
     } catch(e){}
-    // proceed to Stripe
     activatePaid();
   }
 
@@ -740,8 +760,6 @@ export default function LuMane(){
     if(!file){ return; }
     setPhotoLoading(true);
     setHairPhoto(null);
-
-    // Usar URL.createObjectURL primero (más rápido y funciona con Google Fotos)
     const objectUrl = URL.createObjectURL(file);
     const img = new Image();
     img.onload = () => {
@@ -764,7 +782,6 @@ export default function LuMane(){
         setHairPhoto(dataUrl);
         setPhotoLoading(false);
       } catch(err) {
-        // Fallback: usar FileReader directo
         URL.revokeObjectURL(objectUrl);
         const reader = new FileReader();
         reader.onload = (ev) => { setHairPhoto(ev.target.result); setPhotoLoading(false); };
@@ -773,7 +790,6 @@ export default function LuMane(){
       }
     };
     img.onerror = () => {
-      // Fallback: usar FileReader directo
       URL.revokeObjectURL(objectUrl);
       const reader = new FileReader();
       reader.onload = (ev) => { setHairPhoto(ev.target.result); setPhotoLoading(false); };
@@ -783,19 +799,14 @@ export default function LuMane(){
     img.src = objectUrl;
   }
 
+  // ─── WOMPI + STRIPE: detecta país y redirige ───────────────
   const activatePaid = async () => {
     setSubLoading(true);
     try {
-      const res = await fetch('/api/checkout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ plan: selectedPlan })
-      });
-      const data = await res.json();
-      if (data.url) {
-        window.location.href = data.url;
-      } else {
-        alert('Error al procesar. Intenta de nuevo.');
+      const gateway = await detectPaymentGateway();
+      const ok = await redirectToPayment(selectedPlan, gateway);
+      if (!ok) {
+        alert('Error al procesar el pago. Intenta de nuevo.');
       }
     } catch (e) {
       alert('Error de conexión. Intenta de nuevo.');
@@ -906,9 +917,12 @@ export default function LuMane(){
                   </div>
                 ))}
               </div>
-              <button onClick={()=>{setShowPaywall(false);setPage("register");setRegError("");setRegData({nombre:"",apellido:"",nacimiento:"",email:"",password:"",confirm:""});}} style={{width:"100%",background:"linear-gradient(135deg,#6B1F8A,#C4687A)",color:"#fff",border:"none",padding:"0.95rem",borderRadius:"3rem",fontSize:"0.97rem",fontWeight:700,cursor:"pointer",fontFamily:"'Outfit',sans-serif",marginBottom:"0.5rem"}}>
+              <button onClick={()=>{setShowPaywall(false);setPage("register");setRegError("");setRegData({nombre:"",apellido:"",nacimiento:"",email:"",password:"",confirm:""});}} style={{width:"100%",background:"linear-gradient(135deg,#6B1F8A,#C4687A)",color:"#fff",border:"none",padding:"0.95rem",borderRadius:"3rem",fontSize:"0.97rem",fontWeight:700,cursor:"pointer",fontFamily:"'Outfit',sans-serif",marginBottom:"0.4rem"}}>
                 Comenzar 7 días gratis →
               </button>
+              <p style={{textAlign:"center",fontSize:"0.68rem",color:"#999",margin:"0 0 0.3rem"}}>
+                🇨🇴 Colombia: Nequi · PSE · Bancolombia &nbsp;|&nbsp; 🌍 Internacional: Stripe
+              </p>
               <p style={{textAlign:"center",fontSize:"0.68rem",opacity:.4,lineHeight:1.4}}>Sin cargos durante la prueba. Después {PLANS[selectedPlan].price}{PLANS[selectedPlan].period}.</p>
             </div>
           </div>
@@ -959,9 +973,9 @@ export default function LuMane(){
               </div>
               <button onClick={doRegister} disabled={subLoading}
                 style={{width:"100%",background:subLoading?"rgba(107,31,138,.4)":"linear-gradient(135deg,#6B1F8A,#C4687A)",color:"#fff",border:"none",padding:"1rem",borderRadius:"3rem",fontSize:"1rem",fontWeight:700,cursor:subLoading?"not-allowed":"pointer",fontFamily:"'Outfit',sans-serif",marginBottom:"0.5rem"}}>
-                {subLoading?"Redirigiendo a Stripe…":"Continuar al pago →"}
+                {subLoading?"Redirigiendo al pago…":"Continuar al pago →"}
               </button>
-              <p style={{textAlign:"center",fontSize:"0.68rem",opacity:.4,lineHeight:1.4}}>Paso 2: pagarás de forma segura con Stripe</p>
+              <p style={{textAlign:"center",fontSize:"0.68rem",opacity:.4,lineHeight:1.4}}>Paso 2: pagarás de forma segura con Stripe o Wompi</p>
             </div>
           </div>
         )}
@@ -1194,7 +1208,7 @@ export default function LuMane(){
 
       <div style={{padding:"2rem 1.5rem",background:"#FDF4F5"}}>
         <div style={{maxWidth:"620px",margin:"0 auto",display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(180px,1fr))",gap:"0.8rem"}}>
-          {[{emoji:"🎁",title:"7 días gratis",desc:"Prueba todo LuMane sin pagar nada. Sin compromisos."},{emoji:"🔒",title:"Pago 100% seguro",desc:"Datos protegidos con encriptación SSL de nivel bancario."},{emoji:"⚡",title:"Resultado inmediato",desc:"Recibes tu rutina personalizada en menos de 30 segundos."},{emoji:"❌",title:"Sin permanencia",desc:"Cancela cuando quieras. Sin llamadas, sin formularios."}].map((f,i)=>(
+          {[{emoji:"🎁",title:"7 días gratis",desc:"Prueba todo LuMane sin pagar nada. Sin compromisos."},{emoji:"🔒",title:"Pago 100% seguro",desc:"Stripe (internacional) · Wompi (Colombia: Nequi, PSE, Bancolombia)."},{emoji:"⚡",title:"Resultado inmediato",desc:"Recibes tu rutina personalizada en menos de 30 segundos."},{emoji:"❌",title:"Sin permanencia",desc:"Cancela cuando quieras. Sin llamadas, sin formularios."}].map((f,i)=>(
             <div key={i} style={{background:"#fff",borderRadius:"1rem",padding:"1.1rem",border:"1px solid rgba(196,104,122,.1)",textAlign:"center"}}>
               <div style={{fontSize:"1.6rem",marginBottom:"0.4rem"}}>{f.emoji}</div>
               <div style={{fontWeight:700,fontSize:"0.82rem",marginBottom:"0.2rem",color:"#2A1018"}}>{f.title}</div>
@@ -1247,7 +1261,6 @@ export default function LuMane(){
             </h2>
             <p style={{fontSize:"0.85rem",opacity:.6,lineHeight:1.7,marginBottom:"1.5rem",maxWidth:"400px",margin:"0 auto 1.5rem"}}>Sube una foto y nuestra IA detectará el tipo exacto, la porosidad y lo que realmente necesita tu cabello.</p>
             <div style={{marginBottom:"1.5rem"}}>
-              
               {photoLoading?(
                 <div style={{padding:"2rem",border:"2px dashed rgba(196,104,122,.4)",borderRadius:"1.2rem",background:"rgba(196,104,122,.04)",textAlign:"center"}}>
                   <div style={{fontSize:"2rem"}} className="spin">✦</div>
@@ -1396,8 +1409,6 @@ export default function LuMane(){
       )}
     </div>
   );
-
-
 
   const ShopPage=()=>{
     const filtered=filterProducts(shopFilter);
