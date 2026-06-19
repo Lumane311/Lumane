@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 
 const STORES = {
-  amazon:  { name:"Amazon",  emoji:"📦", color:"#FF9900", active:true,  tag:"lumanehair-21", buildUrl:(q,t)=>`https://www.amazon.com/s?k=${encodeURIComponent(q)}&tag=${t}` },
-  sephora: { name:"Sephora", emoji:"🖤", color:"#E75480", active:true,  tag:"", buildUrl:(q)=>`https://www.sephora.com/search?keyword=${encodeURIComponent(q)}` },
-  iherb:   { name:"iHerb",   emoji:"🌿", color:"#5AAA46", active:true,  tag:"TU_CODIGO_IHERB", buildUrl:(q,t)=>`https://www.iherb.com/search?kw=${encodeURIComponent(q)}&rcode=${t}` },
-  druni:   { name:"Druni",   emoji:"💜", color:"#6B1F8A", active:true,  tag:"", buildUrl:(q)=>`https://www.druni.es/buscar?q=${encodeURIComponent(q)}` },
+  amazon:       { name:"Amazon",        emoji:"📦", color:"#FF9900", active:true,  tag:"lumanehair-21", buildUrl:(q,t)=>`https://www.amazon.com/s?k=${encodeURIComponent(q)}&tag=${t}` },
+  sephora:      { name:"Sephora",       emoji:"🖤", color:"#E75480", active:true,  tag:"", buildUrl:(q)=>`https://www.sephora.com/search?keyword=${encodeURIComponent(q)}` },
+  iherb:        { name:"iHerb",         emoji:"🌿", color:"#5AAA46", active:true,  tag:"TU_CODIGO_IHERB", buildUrl:(q,t)=>`https://www.iherb.com/search?kw=${encodeURIComponent(q)}&rcode=${t}` },
+  druni:        { name:"Druni",         emoji:"💜", color:"#6B1F8A", active:true,  tag:"", buildUrl:(q)=>`https://www.druni.es/buscar?q=${encodeURIComponent(q)}` },
+  mercadolibre: { name:"Mercado Libre", emoji:"🛒", color:"#FFE600", active:true,  tag:"TU_ID_MERCADOLIBRE", buildUrl:(q,t)=>`https://listado.mercadolibre.com.co/${encodeURIComponent(q)}?matt_word=${t}` },
 };
 
 const HAIR_SYSTEM = [
@@ -861,7 +862,21 @@ export default function LuMane(){
     showToast("Abriendo "+s.name+"… 🛍️");
   }
 
-  const activeStores=Object.entries(stores).filter(([,s])=>s.active);
+  const [userCountry,setUserCountry] = useState(null);
+  useEffect(()=>{
+    fetch('https://ipapi.co/json/')
+      .then(r=>r.json())
+      .then(d=>setUserCountry(d.country_code))
+      .catch(()=>setUserCountry(null));
+  },[]);
+
+  const activeStores = Object.entries(stores).filter(([key,s])=>{
+    if(!s.active) return false;
+    if(userCountry === 'CO'){
+      return key === 'amazon' || key === 'mercadolibre';
+    }
+    return key !== 'mercadolibre';
+  });
 
   const CountdownBanner=()=>(
     <div style={{background:"linear-gradient(135deg,#6B1F8A,#9B1B6E,#C4187A)",padding:"0.65rem 1.2rem",display:"flex",alignItems:"center",justifyContent:"center",gap:"0.8rem",flexWrap:"wrap",boxShadow:"0 4px 20px rgba(107,31,138,.4)",animation:"bannerBounce 2.5s ease-in-out infinite, bannerGlow 2s ease-in-out infinite"}}>
