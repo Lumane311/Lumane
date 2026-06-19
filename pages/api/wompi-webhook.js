@@ -1,4 +1,19 @@
-import { kv } from '@vercel/kv';
+const KV_URL = process.env.KV_REST_API_URL;
+const KV_TOKEN = process.env.KV_REST_API_TOKEN;
+
+async function kvSet(key, value) {
+  await fetch(`${KV_URL}/set/${key}`, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${KV_TOKEN}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify(value),
+  });
+}
+
+async function kvSadd(setKey, member) {
+  await fetch(`${KV_URL}/sadd/${setKey}/${encodeURIComponent(member)}`, {
+    headers: { Authorization: `Bearer ${KV_TOKEN}` },
+  });
+}
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -7,8 +22,6 @@ export default async function handler(req, res) {
 
   try {
     const event = req.body;
-
-    // Wompi envía el evento con esta estructura: { event: "transaction.updated", data: { transaction: {...} } }
     const tx = event?.data?.transaction;
     if (!tx) {
       return res.status(200).json({ received: true, ignored: true });
@@ -26,8 +39,8 @@ export default async function handler(req, res) {
         status: 'active',
         createdAt: new Date().toISOString(),
       };
-      await kv.set(`subscriber:wompi:${tx.id}`, record);
-      await kv.sadd('subscribers:all', `wompi:${tx.id}`);
+      await kvSet(`subscriber:wompi:${tx.id}`, record);
+      await kvSadd('subscribers:all', `wompi:${tx.id}`);
     }
 
     res.status(200).json({ received: true });
