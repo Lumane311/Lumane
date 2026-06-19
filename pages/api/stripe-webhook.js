@@ -1,7 +1,39 @@
 import Stripe from 'stripe';
-import { kv } from '@vercel/kv';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+const KV_URL = process.env.KV_REST_API_URL;
+const KV_TOKEN = process.env.KV_REST_API_TOKEN;
+
+async function kvSet(key, value) {
+  await fetch(`${KV_URL}/set/${key}`, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${KV_TOKEN}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify(value),
+  });
+}
+
+async function kvSadd(setKey, member) {
+  await fetch(`${KV_URL}/sadd/${setKey}/${encodeURIComponent(member)}`, {
+    headers: { Authorization: `Bearer ${KV_TOKEN}` },
+  });
+}
+
+async function kvSmembers(key) {
+  const res = await fetch(`${KV_URL}/smembers/${key}`, {
+    headers: { Authorization: `Bearer ${KV_TOKEN}` },
+  });
+  const data = await res.json();
+  return data.result || [];
+}
+
+async function kvGet(key) {
+  const res = await fetch(`${KV_URL}/get/${key}`, {
+    headers: { Authorization: `Bearer ${KV_TOKEN}` },
+  });
+  const data = await res.json();
+  if (!data.result) return null;
+  try { return JSON.parse(data.result); } catch (e) { return data.result; }
+}
 
 export const config = {
   api: { bodyParser: false },
@@ -47,18 +79,18 @@ export default async function handler(req, res) {
         status: 'active',
         createdAt: new Date().toISOString(),
       };
-      await kv.set(`subscriber:stripe:${session.id}`, record);
-      await kv.sadd('subscribers:all', `stripe:${session.id}`);
+      await kvSet(`subscriber:stripe:${session.id}`, record);
+      await kvSadd('subscribers:all', `stripe:${session.id}`);
     }
 
     if (event.type === 'customer.subscription.deleted') {
       const sub = event.data.object;
-      const keys = await kv.smembers('subscribers:all');
+      const keys = await kvSmembers('subscribers:all');
       for (const k of keys) {
-        const rec = await kv.get(`subscriber:${k}`);
+        const rec = await kvGet(`subscriber:${k}`);
         if (rec && rec.subscriptionId === sub.id) {
           rec.status = 'cancelled';
-          await kv.set(`subscriber:${k}`, rec);
+          await kvSet(`subscriber:${k}`, rec);
         }
       }
     }
