@@ -420,6 +420,22 @@ function LoginPage({onSuccess, onRegister}) {
   const [email, setEmail] = React.useState("");
   const [pass, setPass] = React.useState("");
   const [error, setError] = React.useState("");
+  const [forgotSent, setForgotSent] = React.useState(false);
+  const [forgotLoading, setForgotLoading] = React.useState(false);
+
+  async function doForgot() {
+    if (!email.trim()) { return; }
+    setForgotLoading(true);
+    try {
+      await fetch('/api/forgot-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email.trim() }),
+      });
+      setForgotSent(true);
+    } catch(e) {}
+    setForgotLoading(false);
+  }
 
   function doLogin(){
     setError("");
@@ -474,6 +490,15 @@ function LoginPage({onSuccess, onRegister}) {
             style={{width:"100%",background:"linear-gradient(135deg,#1A1A1A,#A07A30)",color:"#fff",border:"none",padding:"1rem",borderRadius:"3rem",fontSize:"1rem",fontWeight:700,cursor:"pointer",fontFamily:"'Outfit',sans-serif",marginBottom:"1rem"}}>
             Entrar a mi cuenta →
           </button>
+          {forgotSent ? (
+            <div style={{background:"rgba(200,164,107,.1)",border:"1px solid rgba(200,164,107,.3)",borderRadius:"0.75rem",padding:"0.8rem",fontSize:"0.82rem",color:"#A07A30",marginBottom:"1rem",textAlign:"center"}}>
+              ✅ Te enviamos un link a tu correo. Revisa tu bandeja de entrada.
+            </div>
+          ) : (
+            <p style={{textAlign:"center",fontSize:"0.78rem",color:"#C8A46B",cursor:"pointer",marginBottom:"0.5rem"}} onClick={doForgot}>
+              {forgotLoading ? "Enviando…" : "¿Olvidaste tu contraseña?"}
+            </p>
+          )}
           <p style={{textAlign:"center",fontSize:"0.78rem",color:"#999"}}>
             ¿No tienes cuenta?{" "}
             <span onClick={onRegister} style={{color:"#C8A46B",fontWeight:700,cursor:"pointer"}}>Suscríbete aquí</span>
@@ -1148,11 +1173,11 @@ Responde SOLO JSON sin texto adicional: {"hairType":"tipo detectado 1A-4C o esti
             <p style={{fontSize:"0.8rem",opacity:.65,lineHeight:1.5,marginBottom:"0.8rem"}}>Shampoo, anticaída y estilizado específico para hombre.</p>
             <div style={{fontSize:"0.78rem",color:"#2A5A8A",fontWeight:700}}>Ver productos masculinos →</div>
           </div>
-          <div className="lift" onClick={()=>{goShop("ninos");}} style={{background:"linear-gradient(135deg,rgba(90,154,90,.1),rgba(120,184,120,.15))",border:"1.5px solid rgba(90,154,90,.3)",borderRadius:"1.3rem",padding:"1.5rem",cursor:"pointer",textAlign:"center"}}>
+          <div className="lift" onClick={()=>{goQuiz();}} style={{background:"linear-gradient(135deg,rgba(90,154,90,.1),rgba(120,184,120,.15))",border:"1.5px solid rgba(90,154,90,.3)",borderRadius:"1.3rem",padding:"1.5rem",cursor:"pointer",textAlign:"center"}}>
             <div style={{fontSize:"2.5rem",marginBottom:"0.5rem"}}>👶</div>
             <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"1.3rem",fontWeight:700,color:"#3A7A3A",marginBottom:"0.4rem"}}>Cuidado Infantil</h3>
-            <p style={{fontSize:"0.8rem",opacity:.65,lineHeight:1.5,marginBottom:"0.8rem"}}>Shampoo suave, rizos, anti-piojos y cuero cabelludo para los más pequeños.</p>
-            <div style={{fontSize:"0.78rem",color:"#3A7A3A",fontWeight:700}}>Ver productos infantiles →</div>
+            <p style={{fontSize:"0.8rem",opacity:.65,lineHeight:1.5,marginBottom:"0.8rem"}}>Analizamos el cabello de tu hijo/a con IA y te damos la rutina perfecta para los más pequeños.</p>
+            <div style={{fontSize:"0.78rem",color:"#3A7A3A",fontWeight:700}}>Analizar cabello de mi hijo/a →</div>
           </div>
         </div>
       </div>
