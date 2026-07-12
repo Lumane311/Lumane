@@ -3,9 +3,9 @@ import React, { useState, useEffect } from "react";
 const STORES = {
   amazon:        { name:"Amazon",          emoji:"📦", color:"#FF9900", active:true,  tag:"lumanehair-21", buildUrl:(q,t)=>`https://www.amazon.com/s?k=${encodeURIComponent(q)}&tag=${t}` },
   sephora:       { name:"Sephora",         emoji:"🖤", color:"#E75480", active:true,  tag:"", buildUrl:(q)=>`https://www.sephora.com/search?keyword=${encodeURIComponent(q)}` },
-  iherb:         { name:"iHerb",           emoji:"🌿", color:"#5AAA46", active:true,  tag:"TU_CODIGO_IHERB", buildUrl:(q,t)=>`https://www.iherb.com/search?kw=${encodeURIComponent(q)}&rcode=${t}` },
+  iherb:         { name:"iHerb",           emoji:"🌿", color:"#5AAA46", active:true,  tag:"", buildUrl:(q)=>`https://www.iherb.com/search?kw=${encodeURIComponent(q)}` },
   druni:         { name:"Druni",           emoji:"💜", color:"#1A1A1A", active:true,  tag:"", buildUrl:(q)=>`https://www.druni.es/buscar?q=${encodeURIComponent(q)}` },
-  mercadolibre:  { name:"Mercado Libre",   emoji:"🛒", color:"#FFE600", active:true,  tag:"TU_ID_MERCADOLIBRE", buildUrl:(q,t)=>`https://listado.mercadolibre.com.co/${encodeURIComponent(q)}?matt_word=${t}` },
+  mercadolibre:  { name:"Mercado Libre",   emoji:"🛒", color:"#FFE600", active:true,  tag:"", buildUrl:(q)=>`https://listado.mercadolibre.com.co/${encodeURIComponent(q)}` },
   surticosmeticos:{ name:"Surticosméticos",emoji:"💛", color:"#D4A017", active:true,  tag:"", buildUrl:(q)=>`https://surticosmeticos.com/search?q=${encodeURIComponent(q)}` },
 };
 
@@ -150,32 +150,32 @@ function ProductosRecomendados() {
   const prods = [
     { id:1, emoji:"🌿", nombre:"Aceite de Argán Puro",      marca:"OGX",          beneficio:"Brillo y nutrición intensa para todo tipo de cabello",    tag:"Más vendido", tagColor:"#5AAA46",
       amazon:"https://www.amazon.com/s?k=argan+oil+hair+OGX&tag=lumanehair-21",
-      iherb:"https://www.iherb.com/search?kw=argan+oil+hair&rcode=TU_CODIGO_IHERB",
+      iherb:"https://www.iherb.com/search?kw=argan+oil+hair",
       sephora:"https://www.sephora.com/search?keyword=argan+oil+OGX",
       druni:"https://www.druni.es/buscar?q=aceite+argan+cabello" },
     { id:2, emoji:"💧", nombre:"Shampoo Sin Sulfatos",       marca:"Cantu",        beneficio:"Limpieza suave que respeta los rizos y ondas naturales",   tag:"CGM ✓",     tagColor:"#7B68EE",
       amazon:"https://www.amazon.com/s?k=cantu+sulfate+free+shampoo&tag=lumanehair-21",
-      iherb:"https://www.iherb.com/search?kw=cantu+sulfate+free&rcode=TU_CODIGO_IHERB",
+      iherb:"https://www.iherb.com/search?kw=cantu+sulfate+free",
       sephora:"https://www.sephora.com/search?keyword=cantu+shampoo",
       druni:"https://www.druni.es/buscar?q=champu+sin+sulfatos" },
     { id:3, emoji:"🧴", nombre:"Mascarilla Reparadora",      marca:"Olaplex",      beneficio:"Reconstruye el cabello dañado por tinte o calor",          tag:"-30%",      tagColor:"#E75480",
       amazon:"https://www.amazon.com/s?k=olaplex+hair+mask&tag=lumanehair-21",
-      iherb:"https://www.iherb.com/search?kw=olaplex+mask&rcode=TU_CODIGO_IHERB",
+      iherb:"https://www.iherb.com/search?kw=olaplex+mask",
       sephora:"https://www.sephora.com/search?keyword=olaplex+mask",
       druni:"https://www.druni.es/buscar?q=olaplex+mascarilla" },
     { id:4, emoji:"🍂", nombre:"Tónico Anticaída Biotina",   marca:"Vichy Dercos", beneficio:"Cafeína y biotina que frenan la caída desde la raíz",      tag:"Clínico",   tagColor:"#2E86AB",
       amazon:"https://www.amazon.com/s?k=vichy+dercos+biotin&tag=lumanehair-21",
-      iherb:"https://www.iherb.com/search?kw=hair+loss+biotin&rcode=TU_CODIGO_IHERB",
+      iherb:"https://www.iherb.com/search?kw=hair+loss+biotin",
       sephora:"https://www.sephora.com/search?keyword=vichy+dercos",
       druni:"https://www.druni.es/buscar?q=vichy+dercos+anticaida" },
     { id:5, emoji:"🌀", nombre:"Crema Definidora de Rizos",  marca:"Shea Moisture",beneficio:"Define y humecta rizos 3A-3C sin efecto plástico",         tag:"Natural",   tagColor:"#5AAA46",
       amazon:"https://www.amazon.com/s?k=shea+moisture+curl+cream&tag=lumanehair-21",
-      iherb:"https://www.iherb.com/search?kw=shea+moisture+curl&rcode=TU_CODIGO_IHERB",
+      iherb:"https://www.iherb.com/search?kw=shea+moisture+curl",
       sephora:"https://www.sephora.com/search?keyword=shea+moisture+curl",
       druni:"https://www.druni.es/buscar?q=shea+moisture+rizos" },
     { id:6, emoji:"🚿", nombre:"Filtro Ducha Anti-Cal",      marca:"AquaBliss",    beneficio:"Filtra el cloro y la cal que destruye el cabello en Europa",tag:"Esencial",  tagColor:"#B8920A",
       amazon:"https://www.amazon.com/s?k=shower+filter+hard+water&tag=lumanehair-21",
-      iherb:"https://www.iherb.com/search?kw=shower+filter&rcode=TU_CODIGO_IHERB",
+      iherb:"https://www.iherb.com/search?kw=shower+filter",
       sephora:"https://www.sephora.com/search?keyword=shower+filter+hair",
       druni:"https://www.druni.es/buscar?q=filtro+ducha+cabello" },
   ];
@@ -361,7 +361,7 @@ body{font-family:'Outfit',sans-serif;background:#FDFAF5;color:#1A1A1A;overflow-x
 .sl{transition:box-shadow .16s;}
 .sl:hover{box-shadow:0 4px 14px rgba(0,0,0,.1);}
 button:active{opacity:.9;}
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:200;background:rgba(245,237,224,.97);backdrop-filter:blur(20px);border-top:1px solid #DDD4C8,.15);display:flex;justify-content:space-around;align-items:center;padding:0.5rem 0 0.8rem;}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:200;background:rgba(245,237,224,.97);backdrop-filter:blur(20px);border-top:1px solid #DDD4C8;display:flex;justify-content:space-around;align-items:center;padding:0.5rem 0 0.8rem;}
 .bottom-nav-item{display:flex;flex-direction:column;align-items:center;gap:0.2rem;background:none;border:none;cursor:pointer;padding:0.3rem 1rem;border-radius:0.8rem;font-family:'Outfit',sans-serif;}
 .bottom-nav-item.active{background:rgba(200,164,107,.12);}
 .bottom-nav-icon{font-size:1.4rem;}
@@ -402,11 +402,17 @@ async function detectPaymentGateway() {
 }
 
 async function redirectToPayment(plan, gateway) {
+  // NUEVO: enviamos el email para asociar el pago a la cuenta (webhooks)
+  let email = '';
+  try {
+    const u = JSON.parse(localStorage.getItem('lumane_user')||'{}');
+    email = u.email || localStorage.getItem('lumane_lead') || '';
+  } catch (e) {}
   const endpoint = gateway === 'wompi' ? '/api/wompi-checkout' : '/api/checkout';
   const res = await fetch(endpoint, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ plan }),
+    body: JSON.stringify({ plan, email }),
   });
   const data = await res.json();
   if (data.url) {
@@ -414,6 +420,17 @@ async function redirectToPayment(plan, gateway) {
     return true;
   }
   return false;
+}
+
+// ─── Verificación REAL de suscripción contra la base de datos ──
+async function checkSubscriptionServer(email) {
+  try {
+    const r = await fetch('/api/check-subscription?email=' + encodeURIComponent(email));
+    const d = await r.json();
+    return d && d.status === 'active';
+  } catch (e) {
+    return null; // error de red: no cambiar nada
+  }
 }
 
 function LoginPage({onSuccess, onRegister}) {
@@ -444,7 +461,7 @@ function LoginPage({onSuccess, onRegister}) {
       const user = JSON.parse(localStorage.getItem('lumane_user')||'{}');
       if(user.email===email.trim()&&user.password===pass){
         sessionStorage.setItem('lumane_session','1');
-        onSuccess();
+        onSuccess(email.trim());
       } else {
         setError("Correo o contraseña incorrectos.");
       }
@@ -550,6 +567,18 @@ function RegisterPage({selectedPlan, onBack, onSuccess}) {
       }));
       sessionStorage.setItem('lumane_session','1');
     } catch(e){}
+    // Guardar usuario en KV para recuperación de contraseña
+    try {
+      fetch('/api/save-user', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          nombre: regData.nombre.trim(),
+          apellido: regData.apellido.trim(),
+          email: regData.email.trim(),
+        }),
+      }).catch(()=>{});
+    } catch(e){}
     // Detectar país y redirigir a Wompi o Stripe
     activatePaidRegister();
   }
@@ -619,6 +648,8 @@ function RegisterPage({selectedPlan, onBack, onSuccess}) {
 // Global store for price ranges - persists across re-renders
 const cardRanges = {};
 const cardOpen = {};
+// Global store para el email del lead (evita perder el foco al escribir)
+const leadStore = { email: "" };
 
 function ShopCard({p, activeStores, openStore}){
   const [open,setOpen]=useState(cardOpen[p.id]||false);
@@ -704,30 +735,49 @@ export default function LuMane(){
   const [regError,setRegError]       = useState("");
   const [regStep,setRegStep]         = useState(1);
 
+  // ── NUEVO: verificación REAL de suscripción contra el servidor ──
   useEffect(() => {
+    let email = null;
     try {
-      const user = localStorage.getItem('lumane_user');
-      const saved = localStorage.getItem('lumane_premium');
-      if (user && saved === 'active') {
-        const session = sessionStorage.getItem('lumane_session');
-        if (!session) { setPage('login'); return; }
-        setSubStatus('active');
-        return;
+      const u = JSON.parse(localStorage.getItem('lumane_user')||'{}');
+      if (u.email) email = u.email;
+      if (!email) {
+        const lead = localStorage.getItem('lumane_lead');
+        if (lead) email = lead;
       }
-      if (saved === 'active') { setSubStatus('active'); return; }
+      if (email) leadStore.email = email;
+      // Cache optimista mientras el servidor confirma
+      const cached = localStorage.getItem('lumane_premium');
+      if (cached === 'active') setSubStatus('active');
     } catch(e) {}
+
+    async function verify(em) {
+      const isActive = await checkSubscriptionServer(em);
+      if (isActive === true) {
+        setSubStatus('active');
+        try { localStorage.setItem('lumane_premium', 'active'); } catch(e) {}
+      } else if (isActive === false) {
+        setSubStatus('none');
+        try { localStorage.removeItem('lumane_premium'); } catch(e) {}
+      }
+      // isActive === null → error de red: no cambiamos nada
+    }
 
     const params = new URLSearchParams(window.location.search);
     if (params.get('success') === 'true') {
-      try { localStorage.setItem('lumane_premium', 'active'); } catch(e) {}
+      // Activación optimista (el webhook puede tardar unos segundos)
       setSubStatus('active');
+      try { localStorage.setItem('lumane_premium', 'active'); } catch(e) {}
       setShowPaywall(false);
       window.history.replaceState({}, '', window.location.pathname);
       setPage('quiz'); setQuizStep(0); setAnswers({}); setResult(null);
+      if (email) setTimeout(() => verify(email), 10000);
+      return;
     }
     if (params.get('canceled') === 'true') {
       window.history.replaceState({}, '', window.location.pathname);
     }
+    if (email) verify(email);
   }, []);
 
   useEffect(()=>{
@@ -745,12 +795,33 @@ export default function LuMane(){
   function isSubscribed(){ return subStatus==="active"||subStatus==="trial"; }
   function requireSub(fn){ if(isSubscribed()){fn();return;} setShowPaywall(true);setSubStep(1); }
   function showToast(m){ setToast(m);setTimeout(()=>setToast(null),2500); }
-  function goQuiz(){ requireSub(()=>{setQuizStep(0);setAnswers({});setResult(null);setHairPhoto(null);setPage("quiz");}); }
+  // ── NUEVO: el quiz ahora es GRATIS (es el imán de leads) ──
+  function goQuiz(){ setQuizStep(0);setAnswers({});setResult(null);setHairPhoto(null);setPage("quiz"); }
   function goShop(filter){ requireSub(()=>{setShopFilter(filter||"all");setPage("shop");}); }
   function cancelSub(){
     setSubStatus("none");
     try { localStorage.removeItem('lumane_premium'); } catch(e) {}
     showToast("Suscripción cancelada");
+  }
+
+  // ── NUEVO: captura de lead antes de mostrar el análisis ──
+  function saveLead(email){
+    try { localStorage.setItem('lumane_lead', email); } catch(e) {}
+    fetch('/api/save-lead', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: email, source: 'quiz' }),
+    }).catch(()=>{});
+  }
+
+  function startAnalysis(){
+    const email = (leadStore.email || '').trim();
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+      showToast("📧 Escribe un correo válido para recibir tu análisis");
+      return;
+    }
+    saveLead(email.toLowerCase());
+    runAI(answers);
   }
 
   function doLogin(){
@@ -760,9 +831,15 @@ export default function LuMane(){
       if(!loginEmail.trim()||!loginPass.trim()){setLoginError("Completa todos los campos.");return;}
       if(user.email===loginEmail.trim()&&user.password===loginPass){
         sessionStorage.setItem('lumane_session','1');
-        setSubStatus('active');
         setShowLogin(false);
         setLoginEmail(""); setLoginPass("");
+        // Verificar contra el servidor si realmente tiene Premium
+        checkSubscriptionServer(user.email).then(isActive=>{
+          if(isActive===true){
+            setSubStatus('active');
+            try { localStorage.setItem('lumane_premium','active'); } catch(e) {}
+          }
+        });
       } else {
         setLoginError("Correo o contraseña incorrectos.");
       }
@@ -871,26 +948,18 @@ export default function LuMane(){
     else setQuizStep(QUESTIONS.length);
   }
 
+  // ── NUEVO: la IA ahora se ejecuta en el SERVIDOR (/api/analyze) ──
   async function runAI(ans){
     setLoading(true);setPage("result");
-    const esNino = ans.quien === 'nino' || ans.quien === 'ambos';
-    const prompt=`Eres experto/a en tricología y cuidado capilar. ${esNino ? 'Analiza el cabello de un NIÑO/A menor de 12 años — usa productos suaves, sin sulfatos agresivos, seguros para niños.' : 'Analiza el cabello de un adulto.'}
-Datos del usuario: Para quién:${ans.quien||'adulto'} Preocupación:${ans.concern||'general'} Objetivo:${ans.goal||'cuidado general'} Cuero cabelludo:${ans.scalp||'normal'} Tratamientos:${ans.damage||'ninguno'} Género:${ans.gender||'neutro'}.
-${hairPhoto ? 'IMPORTANTE: Analiza la FOTO del cabello para detectar el tipo exacto (1A-4C), porosidad, densidad y estado real.' : 'Sin foto — estima el tipo de cabello según las respuestas.'}
-Responde SOLO JSON sin texto adicional: {"hairType":"tipo detectado 1A-4C o estimado","condition":"seco|graso|normal","scalp":"normal|caspa|graso|sensible","title":"título motivador 5 palabras","summary":"descripción personalizada 2-3 oraciones según sus respuestas","score":{"hidratacion":7,"fuerza":6,"brillo":7,"salud_cuero":7},"products":[{"order":1,"step":"Limpieza","name":"","sq":"búsqueda en inglés para Amazon","why":"","howToApply":"","freq":"","tip":"","avoid":""},{"order":2,"step":"Acondicionado","name":"","sq":"","why":"","howToApply":"","freq":"","tip":"","avoid":""},{"order":3,"step":"Tratamiento","name":"","sq":"","why":"","howToApply":"","freq":"","tip":"","avoid":""},{"order":4,"step":"Definición o Estilo","name":"","sq":"","why":"","howToApply":"","freq":"","tip":"","avoid":""},{"order":5,"step":"Sellado o Protección","name":"","sq":"","why":"","howToApply":"","freq":"","tip":"","avoid":""}],"weeklyRoutine":["Días 1-2:","Días 3-4:","Días 5-7:"],"ingredients":{"buscar":["i1","i2","i3"],"evitar":["i1","i2"]},"lifestyle":["h1","h2","h3"]}`;
     try{
-      const msgs=hairPhoto
-        ?(()=>{
-          const parts=hairPhoto.split(",");
-          const mime=(parts[0].match(/:(.*?);/)||[])[1]||"image/jpeg";
-          const b64=parts[1];
-          return [{role:"user",content:[{type:"image",source:{type:"base64",media_type:mime,data:b64}},{type:"text",text:prompt+" Analiza también la imagen del cabello para mayor precisión."}]}];
-        })()
-        :[{role:"user",content:prompt}];
-      const r=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:2000,messages:msgs})});
+      const r=await fetch("/api/analyze",{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({ answers: ans, photo: hairPhoto }),
+      });
       const d=await r.json();
-      const txt=d.content.map(b=>b.text||"").join("");
-      setResult(JSON.parse(txt.replace(/```json|```/g,"").trim()));
+      if(d && d.result){ setResult(d.result); }
+      else{ setResult(fallback(ans)); }
     }catch{setResult(fallback(ans));}
     setLoading(false);
   }
@@ -919,12 +988,12 @@ Responde SOLO JSON sin texto adicional: {"hairType":"tipo detectado 1A-4C o esti
 
   const CountdownBanner=()=>(
     <div style={{background:"linear-gradient(135deg,#1A1A1A,#2B2B2B)",padding:"0.65rem 1.2rem",display:"flex",alignItems:"center",justifyContent:"center",gap:"0.8rem",flexWrap:"wrap",boxShadow:"0 4px 20px rgba(122,92,46,.4)",animation:"bannerGlow 3s ease-in-out infinite"}}>
-      <span style={{color:"#fff",fontSize:"0.8rem",fontWeight:600}}>🔥 <strong>47 personas</strong> viendo esto ahora · 7 días GRATIS · Desde <strong>{"$2.99/sem"}</strong></span>
+      <span style={{color:"#fff",fontSize:"0.8rem",fontWeight:600}}>✨ Descubre tu tipo de cabello <strong>GRATIS</strong> · Rutina completa desde <strong>{"$2.99/sem"}</strong></span>
       <div style={{background:"rgba(0,0,0,.2)",borderRadius:"0.45rem",padding:"0.2rem 0.65rem",border:"1px solid rgba(255,255,255,.25)"}}>
         <span style={{fontFamily:"monospace",fontSize:"0.95rem",fontWeight:700,color:"#E8D4A0"}}>{fmtCountdown(countdown)}</span>
       </div>
-      <button onClick={()=>setShowPaywall(true)} style={{background:"linear-gradient(135deg,#C8A46B,#B18C52)",color:"#fff",border:"none",padding:"0.28rem 0.95rem",borderRadius:"2rem",fontSize:"0.76rem",fontWeight:700,cursor:"pointer",fontFamily:"'Outfit',sans-serif",animation:"pulsBtn 1.5s ease-in-out infinite",boxShadow:"0 0 0 0 rgba(201,168,76,.5)"}}>
-        Activar →
+      <button onClick={goQuiz} style={{background:"linear-gradient(135deg,#C8A46B,#B18C52)",color:"#fff",border:"none",padding:"0.28rem 0.95rem",borderRadius:"2rem",fontSize:"0.76rem",fontWeight:700,cursor:"pointer",fontFamily:"'Outfit',sans-serif",animation:"pulsBtn 1.5s ease-in-out infinite",boxShadow:"0 0 0 0 rgba(201,168,76,.5)"}}>
+        Analizar gratis →
       </button>
     </div>
   );
@@ -941,7 +1010,7 @@ Responde SOLO JSON sin texto adicional: {"hairType":"tipo detectado 1A-4C o esti
               </div>
               <div style={{fontSize:"2rem",marginBottom:"0.3rem"}}>✦</div>
               <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"1.8rem",fontWeight:700,color:"#fff",marginBottom:"0.3rem"}}>LuMane Premium</h2>
-              <p style={{color:"rgba(255,255,255,.7)",fontSize:"0.82rem"}}>Analizador IA · Rutinas · Tienda completa</p>
+              <p style={{color:"rgba(255,255,255,.7)",fontSize:"0.82rem"}}>Rutina completa · Tienda · Análisis ilimitados</p>
             </div>
             <div style={{padding:"1.5rem"}}>
               <div style={{background:"rgba(201,168,76,.08)",border:"1.5px solid rgba(201,168,76,.25)",borderRadius:"1rem",padding:"0.9rem",marginBottom:"1.2rem",textAlign:"center"}}>
@@ -965,7 +1034,7 @@ Responde SOLO JSON sin texto adicional: {"hairType":"tipo detectado 1A-4C o esti
                 </button>
               ))}
               <div style={{display:"flex",flexDirection:"column",gap:"0.35rem",margin:"0.8rem 0 1.2rem"}}>
-                {["🤖 Analizador IA subtipo exacto 1A–4C","📸 Análisis con foto de tu cabello","📋 Rutina personalizada paso a paso","🛍️ Tienda + Amazon, Sephora, iHerb, Druni","💧 Guía agua calcárea Europa","🔄 Análisis ilimitados"].map((b,i)=>(
+                {["📋 Tu rutina personalizada completa de 5 pasos","🛍️ Tienda + Amazon, Sephora, iHerb, Druni","📸 Análisis con foto de tu cabello","💧 Guía agua calcárea Europa","🔄 Análisis ilimitados","🛡️ Garantía 30 días o te devolvemos el dinero"].map((b,i)=>(
                   <div key={i} style={{display:"flex",gap:"0.5rem",fontSize:"0.8rem",color:"#3A2810"}}>
                     <span style={{color:"#A07A30",fontWeight:700,flexShrink:0}}>✓</span>{b}
                   </div>
@@ -978,58 +1047,6 @@ Responde SOLO JSON sin texto adicional: {"hairType":"tipo detectado 1A-4C o esti
                 🇨🇴 Colombia: Nequi · PSE · Bancolombia &nbsp;|&nbsp; 🌍 Internacional: Stripe
               </p>
               <p style={{textAlign:"center",fontSize:"0.68rem",opacity:.4,lineHeight:1.4}}>Sin cargos durante la prueba. Después {PLANS[selectedPlan].price}{PLANS[selectedPlan].period}.</p>
-            </div>
-          </div>
-        )}
-        {subStep===2&&(
-          <div>
-            <div style={{background:"linear-gradient(135deg,#1A1A1A,#A07A30)",padding:"1.3rem 1.5rem",display:"flex",alignItems:"center",gap:"1rem"}}>
-              <button onClick={()=>setSubStep(1)} style={{background:"rgba(255,255,255,.15)",border:"none",color:"#fff",width:"28px",height:"28px",borderRadius:"50%",cursor:"pointer",fontSize:"0.8rem",flexShrink:0}}>←</button>
-              <div>
-                <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"1.3rem",fontWeight:700,color:"#fff"}}>Crea tu cuenta</h2>
-                <p style={{color:"rgba(255,255,255,.6)",fontSize:"0.74rem"}}>Paso 1 de 2 · Datos personales</p>
-              </div>
-              <button onClick={()=>{setShowPaywall(false);setSubStep(1);}} style={{marginLeft:"auto",background:"rgba(255,255,255,.15)",border:"none",color:"#fff",width:"28px",height:"28px",borderRadius:"50%",cursor:"pointer",fontSize:"0.8rem"}}>✕</button>
-            </div>
-            <div style={{padding:"1.5rem",overflowY:"auto",maxHeight:"70vh"}} onClick={e=>e.stopPropagation()}>
-              {regError&&<div style={{background:"rgba(200,50,50,.1)",border:"1px solid rgba(200,50,50,.3)",borderRadius:"0.6rem",padding:"0.7rem",fontSize:"0.78rem",color:"#AA3333",marginBottom:"1rem"}}>{regError}</div>}
-              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"0.8rem",marginBottom:"0.8rem"}}>
-                <div>
-                  <label style={{fontSize:"0.65rem",fontWeight:700,color:"#1A1A1A",letterSpacing:"0.08em",textTransform:"uppercase",display:"block",marginBottom:"0.4rem"}}>Nombre *</label>
-                  <input value={regData.nombre} onChange={e=>setRegData(p=>({...p,nombre:e.target.value}))} placeholder="Tu nombre"
-                    style={{width:"100%",padding:"10px 12px",borderRadius:10,border:"1.5px solid rgba(201,168,76,.25)",fontFamily:"'Outfit',sans-serif",fontSize:14,color:"#1A1A1A",outline:"none",background:"#FDFAF5",pointerEvents:"auto",position:"relative",zIndex:999}}/>
-                </div>
-                <div>
-                  <label style={{fontSize:"0.65rem",fontWeight:700,color:"#1A1A1A",letterSpacing:"0.08em",textTransform:"uppercase",display:"block",marginBottom:"0.4rem"}}>Apellido</label>
-                  <input value={regData.apellido} onChange={e=>setRegData(p=>({...p,apellido:e.target.value}))} placeholder="Tu apellido"
-                    style={{width:"100%",padding:"10px 12px",borderRadius:10,border:"1.5px solid rgba(201,168,76,.25)",fontFamily:"'Outfit',sans-serif",fontSize:14,color:"#1A1A1A",outline:"none",background:"#FDFAF5",pointerEvents:"auto",position:"relative",zIndex:999}}/>
-                </div>
-              </div>
-              <div style={{marginBottom:"0.8rem"}}>
-                <label style={{fontSize:"0.65rem",fontWeight:700,color:"#1A1A1A",letterSpacing:"0.08em",textTransform:"uppercase",display:"block",marginBottom:"0.4rem"}}>Fecha de nacimiento *</label>
-                <input type="date" value={regData.nacimiento} onChange={e=>setRegData(p=>({...p,nacimiento:e.target.value}))}
-                  style={{width:"100%",padding:"10px 12px",borderRadius:10,border:"1.5px solid rgba(201,168,76,.25)",fontFamily:"'Outfit',sans-serif",fontSize:14,color:"#1A1A1A",outline:"none",background:"#FDFAF5",pointerEvents:"auto",position:"relative",zIndex:999}}/>
-              </div>
-              <div style={{marginBottom:"0.8rem"}}>
-                <label style={{fontSize:"0.65rem",fontWeight:700,color:"#1A1A1A",letterSpacing:"0.08em",textTransform:"uppercase",display:"block",marginBottom:"0.4rem"}}>Correo electrónico *</label>
-                <input type="email" value={regData.email} onChange={e=>setRegData(p=>({...p,email:e.target.value}))} placeholder="tu@correo.com"
-                  style={{width:"100%",padding:"10px 12px",borderRadius:10,border:"1.5px solid rgba(201,168,76,.25)",fontFamily:"'Outfit',sans-serif",fontSize:14,color:"#1A1A1A",outline:"none",background:"#FDFAF5",pointerEvents:"auto",position:"relative",zIndex:999}}/>
-              </div>
-              <div style={{marginBottom:"0.8rem"}}>
-                <label style={{fontSize:"0.65rem",fontWeight:700,color:"#1A1A1A",letterSpacing:"0.08em",textTransform:"uppercase",display:"block",marginBottom:"0.4rem"}}>Contraseña * (mín. 6 caracteres)</label>
-                <input type="password" value={regData.password} onChange={e=>setRegData(p=>({...p,password:e.target.value}))} placeholder="••••••••"
-                  style={{width:"100%",padding:"10px 12px",borderRadius:10,border:"1.5px solid rgba(201,168,76,.25)",fontFamily:"'Outfit',sans-serif",fontSize:14,color:"#1A1A1A",outline:"none",background:"#FDFAF5",pointerEvents:"auto",position:"relative",zIndex:999}}/>
-              </div>
-              <div style={{marginBottom:"1.2rem"}}>
-                <label style={{fontSize:"0.65rem",fontWeight:700,color:"#1A1A1A",letterSpacing:"0.08em",textTransform:"uppercase",display:"block",marginBottom:"0.4rem"}}>Confirmar contraseña *</label>
-                <input type="password" value={regData.confirm} onChange={e=>setRegData(p=>({...p,confirm:e.target.value}))} placeholder="••••••••"
-                  style={{width:"100%",padding:"10px 12px",borderRadius:10,border:"1.5px solid rgba(201,168,76,.25)",fontFamily:"'Outfit',sans-serif",fontSize:14,color:"#1A1A1A",outline:"none",background:"#FDFAF5",pointerEvents:"auto",position:"relative",zIndex:999}}/>
-              </div>
-              <button onClick={doRegister} disabled={subLoading}
-                style={{width:"100%",background:subLoading?"rgba(122,92,46,.4)":"linear-gradient(135deg,#1A1A1A,#A07A30)",color:"#fff",border:"none",padding:"1rem",borderRadius:"3rem",fontSize:"1rem",fontWeight:700,cursor:subLoading?"not-allowed":"pointer",fontFamily:"'Outfit',sans-serif",marginBottom:"0.5rem"}}>
-                {subLoading?"Redirigiendo al pago…":"Continuar al pago →"}
-              </button>
-              <p style={{textAlign:"center",fontSize:"0.68rem",opacity:.4,lineHeight:1.4}}>Paso 2: pagarás de forma segura con Stripe o Wompi</p>
             </div>
           </div>
         )}
@@ -1109,7 +1126,7 @@ Responde SOLO JSON sin texto adicional: {"hairType":"tipo detectado 1A-4C o esti
         <div style={{position:"relative",zIndex:1,maxWidth:"580px"}} className="fade">
           <div style={{display:"inline-flex",alignItems:"center",gap:"0.5rem",background:"rgba(200,164,107,.1)",border:"1px solid rgba(200,164,107,.3)",color:"#A07A30",fontSize:"0.72rem",fontWeight:700,padding:"0.32rem 1rem",borderRadius:"2rem",marginBottom:"1.2rem"}}>
             <span style={{width:"7px",height:"7px",background:"#5A9A5A",borderRadius:"50%"}}/>
-            +2,847 cabellos analizados esta semana
+            ✨ Análisis de tu tipo de cabello GRATIS
           </div>
           <div style={{display:"flex",gap:"0.5rem",justifyContent:"center",marginBottom:"1rem",flexWrap:"wrap"}}>
             <div style={{display:"flex",alignItems:"center",gap:"0.4rem",background:"rgba(200,164,107,.12)",border:"1px solid rgba(201,168,76,.3)",borderRadius:"2rem",padding:"0.35rem 1rem"}}>
@@ -1136,12 +1153,12 @@ Responde SOLO JSON sin texto adicional: {"hairType":"tipo detectado 1A-4C o esti
           </div>
           <div style={{display:"flex",flexDirection:"column",alignItems:"center",gap:"0.7rem",marginBottom:"2.5rem"}}>
             <button onClick={goQuiz} style={{background:"linear-gradient(135deg,#1A1A1A,#A07A30)",color:"#fff",border:"none",padding:"1.05rem 2.6rem",borderRadius:"3rem",fontSize:"1rem",fontWeight:700,cursor:"pointer",fontFamily:"'Outfit',sans-serif",boxShadow:"0 10px 32px rgba(122,92,46,.35)"}}>
-              ✨ Descubrir mi tipo de cabello
+              ✨ Descubrir mi tipo de cabello GRATIS
             </button>
-            <span style={{fontSize:"0.73rem",opacity:.45}}>🎁 7 días gratis · desde {"$2.99/sem"} · cancela cuando quieras</span>
+            <span style={{fontSize:"0.73rem",opacity:.45}}>🎁 Análisis gratis · Rutina completa desde {"$2.99/sem"} con 7 días de prueba</span>
           </div>
           <div style={{display:"flex",gap:"2rem",justifyContent:"center",flexWrap:"wrap"}}>
-            {[{n:"12",l:"Tipos"},{n:"28+",l:"Productos"},{n:"7",l:"Días gratis"}].map(s=>(
+            {[{n:"12",l:"Tipos"},{n:"32+",l:"Productos"},{n:"7",l:"Días gratis"}].map(s=>(
               <div key={s.n}>
                 <div style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"2rem",fontWeight:700,color:"#C8A46B",lineHeight:1}}>{s.n}</div>
                 <div style={{fontSize:"0.62rem",textTransform:"uppercase",letterSpacing:"0.1em",opacity:.4}}>{s.l}</div>
@@ -1188,7 +1205,7 @@ Responde SOLO JSON sin texto adicional: {"hairType":"tipo detectado 1A-4C o esti
           <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"clamp(1.6rem,4vw,2.3rem)",fontWeight:700}}>En 3 pasos tienes tu rutina</h2>
         </div>
         <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(190px,1fr))",gap:"1rem",maxWidth:"680px",margin:"0 auto"}}>
-          {[{n:"1",emoji:"🔎",t:"Responde 6 preguntas",d:"La IA analiza tu tipo, textura y preocupaciones."},{n:"2",emoji:"📸",t:"Sube foto (opcional)",d:"La IA ve tu cabello real para mayor precisión."},{n:"3",emoji:"🛍️",t:"Compra los productos",d:"Links a Amazon, iHerb, Sephora y Druni."}].map(s=>(
+          {[{n:"1",emoji:"🔎",t:"Responde 6 preguntas",d:"La IA analiza tu tipo, textura y preocupaciones. Gratis."},{n:"2",emoji:"📸",t:"Sube foto (opcional)",d:"La IA ve tu cabello real para mayor precisión."},{n:"3",emoji:"🛍️",t:"Recibe tu rutina",d:"Paso a paso con productos en Amazon, iHerb, Sephora y Druni."}].map(s=>(
             <div key={s.n} style={{background:"#FDFAF5",borderRadius:"1.1rem",padding:"1.4rem",border:"1px solid rgba(200,164,107,.12)",textAlign:"center"}}>
               <div style={{width:"38px",height:"38px",borderRadius:"50%",background:"linear-gradient(135deg,#1A1A1A,#A07A30)",display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto 0.7rem",color:"#fff",fontWeight:700,fontSize:"0.95rem"}}>{s.n}</div>
               <div style={{fontSize:"1.4rem",marginBottom:"0.4rem"}}>{s.emoji}</div>
@@ -1248,30 +1265,9 @@ Responde SOLO JSON sin texto adicional: {"hairType":"tipo detectado 1A-4C o esti
         </div>
       </div>
 
-      <div style={{padding:"3rem 1.5rem",background:"#F7F2EA"}}>
-        <div style={{textAlign:"center",marginBottom:"1.5rem"}}>
-          <div style={{fontSize:"0.65rem",color:"#C8A46B",fontWeight:700,letterSpacing:"0.15em",textTransform:"uppercase",marginBottom:"0.4rem"}}>✦ Lo que dicen</div>
-          <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"clamp(1.5rem,4vw,2.1rem)",fontWeight:700}}>Cabellos transformados</h2>
-        </div>
-        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(230px,1fr))",gap:"0.9rem",maxWidth:"760px",margin:"0 auto"}}>
-          {[{n:"María, México 🇲🇽",t:"3C",q:"¡Por fin entiendo mi cabello! En 3 semanas ya veo la diferencia.",s:5},{n:"Valentina, Colombia 🇨🇴",t:"2B",q:"Llevaba años gastando en productos que no funcionaban. ¡Ahora mis ondas están perfectas!",s:5},{n:"Andrea, España 🇪🇸",t:"Cal",q:"El agua de Madrid me tenía el cabello horrible. Los productos anti-cal son una revolución.",s:5}].map((r,i)=>(
-            <div key={i} style={{background:"#FDFAF5",borderRadius:"1rem",padding:"1.2rem",border:"1px solid rgba(201,168,76,.11)"}}>
-              <div style={{display:"flex",gap:"0.18rem",marginBottom:"0.55rem"}}>
-                {[...Array(r.s)].map((_,j)=><span key={j} style={{color:"#FFB800",fontSize:"0.82rem"}}>★</span>)}
-              </div>
-              <p style={{fontSize:"0.8rem",lineHeight:1.6,opacity:.8,marginBottom:"0.6rem",fontStyle:"italic"}}>"{r.q}"</p>
-              <div style={{display:"flex",alignItems:"center",justifyContent:"space-between"}}>
-                <span style={{fontSize:"0.73rem",fontWeight:700}}>{r.n}</span>
-                <span style={{fontSize:"0.63rem",background:"rgba(201,168,76,.1)",color:"#C8A46B",padding:"0.13rem 0.5rem",borderRadius:"2rem",fontWeight:700}}>Tipo {r.t}</span>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
       <div style={{padding:"2rem 1.5rem",background:"#FDFAF5"}}>
         <div style={{maxWidth:"620px",margin:"0 auto",display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(180px,1fr))",gap:"0.8rem"}}>
-          {[{emoji:"🎁",title:"7 días gratis",desc:"Prueba todo LuMane sin pagar nada. Sin compromisos."},{emoji:"🔒",title:"Pago 100% seguro",desc:"Stripe (internacional) · Wompi (Colombia: Nequi, PSE, Bancolombia)."},{emoji:"⚡",title:"Resultado inmediato",desc:"Recibes tu rutina personalizada en menos de 30 segundos."},{emoji:"❌",title:"Sin permanencia",desc:"Cancela cuando quieras. Sin llamadas, sin formularios."}].map((f,i)=>(
+          {[{emoji:"🎁",title:"Análisis gratis",desc:"Descubre tu tipo de cabello sin pagar nada."},{emoji:"🔒",title:"Pago 100% seguro",desc:"Stripe (internacional) · Wompi (Colombia: Nequi, PSE, Bancolombia)."},{emoji:"🛡️",title:"Garantía 30 días",desc:"Si no notas la diferencia, te devolvemos el dinero."},{emoji:"❌",title:"Sin permanencia",desc:"Cancela cuando quieras. Sin llamadas, sin formularios."}].map((f,i)=>(
             <div key={i} style={{background:"#FDFAF5",borderRadius:"1rem",padding:"1.1rem",border:"1px solid rgba(201,168,76,.1)",textAlign:"center"}}>
               <div style={{fontSize:"1.6rem",marginBottom:"0.4rem"}}>{f.emoji}</div>
               <div style={{fontWeight:700,fontSize:"0.82rem",marginBottom:"0.2rem",color:"#1A1A1A"}}>{f.title}</div>
@@ -1291,7 +1287,7 @@ Responde SOLO JSON sin texto adicional: {"hairType":"tipo detectado 1A-4C o esti
           <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"clamp(1.8rem,5vw,2.8rem)",fontWeight:700,color:"#FDFAF5",lineHeight:1.1,marginBottom:"0.8rem"}}>
             Tu mejor cabello<br/><em style={{color:"#C9A84C",fontStyle:"italic"}}>empieza hoy.</em>
           </h2>
-          <p style={{color:"rgba(245,237,224,.6)",fontSize:"0.88rem",lineHeight:1.7,marginBottom:"1.5rem"}}>6 preguntas · Foto opcional · 7 días completamente gratis</p>
+          <p style={{color:"rgba(245,237,224,.6)",fontSize:"0.88rem",lineHeight:1.7,marginBottom:"1.5rem"}}>6 preguntas · Foto opcional · Análisis completamente gratis</p>
           <button onClick={goQuiz} style={{background:"linear-gradient(135deg,#A07A30,#C9A84C)",color:"#1A1A1A",border:"none",padding:"1rem 2.4rem",borderRadius:"3rem",fontSize:"0.97rem",fontWeight:700,cursor:"pointer",fontFamily:"'Outfit',sans-serif",boxShadow:"0 10px 35px rgba(201,168,76,.4)",marginBottom:"1.2rem"}}>
             Comenzar análisis gratuito ✨
           </button>
@@ -1318,11 +1314,11 @@ Responde SOLO JSON sin texto adicional: {"hairType":"tipo detectado 1A-4C o esti
               ))}
             </div>
             <div style={{fontSize:"2.5rem",marginBottom:"0.8rem"}}>📸</div>
-            <div style={{fontSize:"0.65rem",color:"#C8A46B",fontWeight:700,letterSpacing:"0.15em",textTransform:"uppercase",marginBottom:"0.5rem"}}>Paso final · Opcional</div>
+            <div style={{fontSize:"0.65rem",color:"#C8A46B",fontWeight:700,letterSpacing:"0.15em",textTransform:"uppercase",marginBottom:"0.5rem"}}>Paso final</div>
             <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"clamp(1.4rem,4vw,2rem)",fontWeight:700,marginBottom:"0.8rem",lineHeight:1.3,color:"#1A1A1A"}}>
               ¿Nos muestras tu cabello?<br/><em style={{fontStyle:"italic",color:"#C8A46B",fontSize:"85%"}}>La IA lo analizará para un resultado más exacto</em>
             </h2>
-            <p style={{fontSize:"0.85rem",opacity:.6,lineHeight:1.7,marginBottom:"1.5rem",maxWidth:"400px",margin:"0 auto 1.5rem"}}>Sube una foto y nuestra IA detectará el tipo exacto, la porosidad y lo que realmente necesita tu cabello.</p>
+            <p style={{fontSize:"0.85rem",opacity:.6,lineHeight:1.7,marginBottom:"1.5rem",maxWidth:"400px",margin:"0 auto 1.5rem"}}>Sube una foto (opcional) y nuestra IA detectará el tipo exacto, la porosidad y lo que realmente necesita tu cabello.</p>
             <div style={{marginBottom:"1.5rem"}}>
               {photoLoading?(
                 <div style={{padding:"2rem",border:"2px dashed rgba(201,168,76,.4)",borderRadius:"1.2rem",background:"rgba(201,168,76,.04)",textAlign:"center"}}>
@@ -1351,13 +1347,24 @@ Responde SOLO JSON sin texto adicional: {"hairType":"tipo detectado 1A-4C o esti
                 </div>
               )}
             </div>
+            <div style={{marginBottom:"1.5rem",textAlign:"left",maxWidth:"400px",margin:"0 auto 1.5rem"}}>
+              <label style={{fontSize:"0.65rem",fontWeight:700,color:"#1A1A1A",letterSpacing:"0.08em",textTransform:"uppercase",display:"block",marginBottom:"0.4rem"}}>📧 Tu correo para recibir el análisis *</label>
+              <input
+                type="email"
+                defaultValue={leadStore.email}
+                onChange={e=>{leadStore.email=e.target.value;}}
+                placeholder="tu@correo.com"
+                style={{width:"100%",padding:"14px 16px",borderRadius:12,border:"1.5px solid rgba(201,168,76,.35)",fontFamily:"'Outfit',sans-serif",fontSize:16,color:"#1A1A1A",outline:"none",background:"#FDFAF5",boxSizing:"border-box"}}
+              />
+              <div style={{fontSize:"0.68rem",color:"#999",marginTop:"0.35rem"}}>🔒 Sin spam. Solo tu resultado y consejos para tu tipo de cabello.</div>
+            </div>
             <div style={{display:"flex",flexDirection:"column",gap:"0.7rem"}}>
-              <button onClick={()=>runAI(answers)}
+              <button onClick={startAnalysis}
                 style={{background:hairPhoto?"linear-gradient(135deg,#2A7A3A,#5AAA5A)":"linear-gradient(135deg,#1A1A1A,#A07A30)",color:"#fff",border:"none",padding:"1rem",borderRadius:"3rem",fontSize:"1rem",fontWeight:700,cursor:"pointer",fontFamily:"'Outfit',sans-serif",boxShadow:hairPhoto?"0 8px 24px rgba(42,122,58,.4)":"0 8px 24px rgba(122,92,46,.3)"}}>
-                {hairPhoto?"📸 Analizar con mi foto →":"✨ Analizar sin foto"}
+                {hairPhoto?"📸 Analizar con mi foto GRATIS →":"✨ Analizar mi cabello GRATIS"}
               </button>
               {!hairPhoto&&(
-                <button onClick={()=>runAI(answers)} style={{background:"transparent",color:"#C8A46B",border:"1.5px solid rgba(201,168,76,.3)",padding:"0.75rem",borderRadius:"3rem",fontSize:"0.85rem",cursor:"pointer",fontFamily:"'Outfit',sans-serif",opacity:.7}}>
+                <button onClick={startAnalysis} style={{background:"transparent",color:"#C8A46B",border:"1.5px solid rgba(201,168,76,.3)",padding:"0.75rem",borderRadius:"3rem",fontSize:"0.85rem",cursor:"pointer",fontFamily:"'Outfit',sans-serif",opacity:.7}}>
                   Continuar sin foto →
                 </button>
               )}
@@ -1416,58 +1423,77 @@ Responde SOLO JSON sin texto adicional: {"hairType":"tipo detectado 1A-4C o esti
             </div>
             <p style={{maxWidth:"500px",margin:"0 auto",opacity:.7,lineHeight:1.75,fontSize:"0.9rem"}}>{result.summary}</p>
           </div>
-          <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"1.5rem",fontWeight:700,marginBottom:"1rem"}}>Tu rutina de 5 pasos</h2>
-          <div style={{display:"flex",flexDirection:"column",gap:"0.65rem",marginBottom:"1.8rem"}}>
-            {result.products&&result.products.map(function(p,i){
-              const isOpen=expanded===i;
-              return(
-                <div key={i} style={{background:"#FDFAF5",borderRadius:"1rem",border:"1.5px solid "+(isOpen?"rgba(122,92,46,.35)":"rgba(200,164,107,.12)"),overflow:"hidden"}}>
-                  <button onClick={()=>setExpanded(isOpen?null:i)} style={{width:"100%",display:"flex",alignItems:"center",gap:"0.9rem",padding:"0.95rem 1.2rem",background:"none",border:"none",cursor:"pointer",textAlign:"left",fontFamily:"'Outfit',sans-serif"}}>
-                    <div style={{width:"36px",height:"36px",borderRadius:"50%",background:"hsl("+(i*55+20)+",45%,88%)",display:"flex",alignItems:"center",justifyContent:"center",fontWeight:700,color:"#1A1A1A",fontSize:"0.8rem",flexShrink:0}}>{p.order}</div>
-                    <div style={{flex:1}}>
-                      <div style={{fontSize:"0.6rem",color:"#C8A46B",fontWeight:700,letterSpacing:"0.12em",textTransform:"uppercase",marginBottom:"0.1rem"}}>{p.step}</div>
-                      <div style={{fontWeight:600,fontSize:"0.88rem",color:"#1A1A1A"}}>{p.name}</div>
-                      <div style={{fontSize:"0.68rem",opacity:.45,marginTop:"0.06rem"}}>📅 {p.freq}</div>
-                    </div>
-                    <span style={{color:"#C8A46B",fontSize:"1rem",transition:"transform .22s",transform:isOpen?"rotate(180deg)":"none",flexShrink:0}}>⌄</span>
-                  </button>
-                  {isOpen&&(
-                    <div style={{padding:"0 1.2rem 1.2rem",borderTop:"1px solid rgba(201,168,76,.08)"}} className="fade">
-                      <div style={{padding:"0.8rem",background:"rgba(201,168,76,.05)",borderRadius:"0.65rem",margin:"0.8rem 0",fontSize:"0.8rem",lineHeight:1.6,color:"#1A1A1A"}}>
-                        <strong style={{fontSize:"0.6rem",color:"#C8A46B",letterSpacing:"0.1em",textTransform:"uppercase",display:"block",marginBottom:"0.25rem"}}>¿Por qué este producto?</strong>
-                        {p.why}
-                      </div>
-                      <div style={{background:"rgba(122,92,46,.04)",border:"1px solid rgba(122,92,46,.1)",borderRadius:"0.65rem",padding:"0.9rem",fontSize:"0.82rem",lineHeight:1.8,whiteSpace:"pre-line",color:"#1A1A1A",marginBottom:"0.8rem"}}>{p.howToApply}</div>
-                      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"0.6rem",marginBottom:"0.9rem"}}>
-                        <div style={{padding:"0.7rem",background:"rgba(90,154,90,.07)",borderRadius:"0.6rem",border:"1px solid rgba(90,154,90,.18)"}}>
-                          <div style={{fontSize:"0.58rem",fontWeight:700,color:"#A07A30",letterSpacing:"0.1em",textTransform:"uppercase",marginBottom:"0.2rem"}}>💡 Truco</div>
-                          <p style={{fontSize:"0.76rem",opacity:.85,lineHeight:1.45}}>{p.tip}</p>
+          {isSubscribed()?(
+            <div>
+              <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"1.5rem",fontWeight:700,marginBottom:"1rem"}}>Tu rutina de 5 pasos</h2>
+              <div style={{display:"flex",flexDirection:"column",gap:"0.65rem",marginBottom:"1.8rem"}}>
+                {result.products&&result.products.map(function(p,i){
+                  const isOpen=expanded===i;
+                  return(
+                    <div key={i} style={{background:"#FDFAF5",borderRadius:"1rem",border:"1.5px solid "+(isOpen?"rgba(122,92,46,.35)":"rgba(200,164,107,.12)"),overflow:"hidden"}}>
+                      <button onClick={()=>setExpanded(isOpen?null:i)} style={{width:"100%",display:"flex",alignItems:"center",gap:"0.9rem",padding:"0.95rem 1.2rem",background:"none",border:"none",cursor:"pointer",textAlign:"left",fontFamily:"'Outfit',sans-serif"}}>
+                        <div style={{width:"36px",height:"36px",borderRadius:"50%",background:"hsl("+(i*55+20)+",45%,88%)",display:"flex",alignItems:"center",justifyContent:"center",fontWeight:700,color:"#1A1A1A",fontSize:"0.8rem",flexShrink:0}}>{p.order}</div>
+                        <div style={{flex:1}}>
+                          <div style={{fontSize:"0.6rem",color:"#C8A46B",fontWeight:700,letterSpacing:"0.12em",textTransform:"uppercase",marginBottom:"0.1rem"}}>{p.step}</div>
+                          <div style={{fontWeight:600,fontSize:"0.88rem",color:"#1A1A1A"}}>{p.name}</div>
+                          <div style={{fontSize:"0.68rem",opacity:.45,marginTop:"0.06rem"}}>📅 {p.freq}</div>
                         </div>
-                        <div style={{padding:"0.7rem",background:"rgba(170,85,85,.06)",borderRadius:"0.6rem",border:"1px solid rgba(170,85,85,.16)"}}>
-                          <div style={{fontSize:"0.58rem",fontWeight:700,color:"#AA5555",letterSpacing:"0.1em",textTransform:"uppercase",marginBottom:"0.2rem"}}>⚠️ Evitar</div>
-                          <p style={{fontSize:"0.76rem",opacity:.85,lineHeight:1.45}}>{p.avoid}</p>
+                        <span style={{color:"#C8A46B",fontSize:"1rem",transition:"transform .22s",transform:isOpen?"rotate(180deg)":"none",flexShrink:0}}>⌄</span>
+                      </button>
+                      {isOpen&&(
+                        <div style={{padding:"0 1.2rem 1.2rem",borderTop:"1px solid rgba(201,168,76,.08)"}} className="fade">
+                          <div style={{padding:"0.8rem",background:"rgba(201,168,76,.05)",borderRadius:"0.65rem",margin:"0.8rem 0",fontSize:"0.8rem",lineHeight:1.6,color:"#1A1A1A"}}>
+                            <strong style={{fontSize:"0.6rem",color:"#C8A46B",letterSpacing:"0.1em",textTransform:"uppercase",display:"block",marginBottom:"0.25rem"}}>¿Por qué este producto?</strong>
+                            {p.why}
+                          </div>
+                          <div style={{background:"rgba(122,92,46,.04)",border:"1px solid rgba(122,92,46,.1)",borderRadius:"0.65rem",padding:"0.9rem",fontSize:"0.82rem",lineHeight:1.8,whiteSpace:"pre-line",color:"#1A1A1A",marginBottom:"0.8rem"}}>{p.howToApply}</div>
+                          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"0.6rem",marginBottom:"0.9rem"}}>
+                            <div style={{padding:"0.7rem",background:"rgba(90,154,90,.07)",borderRadius:"0.6rem",border:"1px solid rgba(90,154,90,.18)"}}>
+                              <div style={{fontSize:"0.58rem",fontWeight:700,color:"#A07A30",letterSpacing:"0.1em",textTransform:"uppercase",marginBottom:"0.2rem"}}>💡 Truco</div>
+                              <p style={{fontSize:"0.76rem",opacity:.85,lineHeight:1.45}}>{p.tip}</p>
+                            </div>
+                            <div style={{padding:"0.7rem",background:"rgba(170,85,85,.06)",borderRadius:"0.6rem",border:"1px solid rgba(170,85,85,.16)"}}>
+                              <div style={{fontSize:"0.58rem",fontWeight:700,color:"#AA5555",letterSpacing:"0.1em",textTransform:"uppercase",marginBottom:"0.2rem"}}>⚠️ Evitar</div>
+                              <p style={{fontSize:"0.76rem",opacity:.85,lineHeight:1.45}}>{p.avoid}</p>
+                            </div>
+                          </div>
+                          <div style={{fontSize:"0.58rem",fontWeight:700,letterSpacing:"0.1em",textTransform:"uppercase",opacity:.4,marginBottom:"0.5rem"}}>🛍️ Comprar en</div>
+                          <div style={{display:"flex",gap:"0.4rem",flexWrap:"wrap"}}>
+                            {activeStores.map(function([key,s]){
+                              return(
+                                <button key={key} className="sl" onClick={()=>openStore(p.sq||p.name,key)} style={{display:"flex",alignItems:"center",gap:"0.35rem",padding:"0.38rem 0.85rem",borderRadius:"2rem",border:"1.5px solid "+s.color+"40",background:s.color+"0E",fontSize:"0.75rem",fontWeight:600,cursor:"pointer",fontFamily:"'Outfit',sans-serif",color:"#1A1A1A"}}>
+                                  {s.emoji} {s.name}
+                                </button>
+                              );
+                            })}
+                          </div>
                         </div>
-                      </div>
-                      <div style={{fontSize:"0.58rem",fontWeight:700,letterSpacing:"0.1em",textTransform:"uppercase",opacity:.4,marginBottom:"0.5rem"}}>🛍️ Comprar en</div>
-                      <div style={{display:"flex",gap:"0.4rem",flexWrap:"wrap"}}>
-                        {activeStores.map(function([key,s]){
-                          return(
-                            <button key={key} className="sl" onClick={()=>openStore(p.sq||p.name,key)} style={{display:"flex",alignItems:"center",gap:"0.35rem",padding:"0.38rem 0.85rem",borderRadius:"2rem",border:"1.5px solid "+s.color+"40",background:s.color+"0E",fontSize:"0.75rem",fontWeight:600,cursor:"pointer",fontFamily:"'Outfit',sans-serif",color:"#1A1A1A"}}>
-                              {s.emoji} {s.name}
-                            </button>
-                          );
-                        })}
-                      </div>
+                      )}
                     </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-          <div style={{display:"flex",gap:"0.65rem",justifyContent:"center",flexWrap:"wrap"}}>
-            <button onClick={()=>goShop("all")} style={{background:"linear-gradient(135deg,#1A1A1A,#A07A30)",color:"#fff",border:"none",padding:"0.8rem 1.8rem",borderRadius:"3rem",fontSize:"0.88rem",fontWeight:700,cursor:"pointer",fontFamily:"'Outfit',sans-serif"}}>Ver tienda →</button>
-            <button onClick={goQuiz} style={{background:"transparent",color:"#C8A46B",border:"1.5px solid rgba(201,168,76,.4)",padding:"0.8rem 1.8rem",borderRadius:"3rem",fontSize:"0.88rem",cursor:"pointer",fontFamily:"'Outfit',sans-serif"}}>Repetir análisis</button>
-          </div>
+                  );
+                })}
+              </div>
+              <div style={{display:"flex",gap:"0.65rem",justifyContent:"center",flexWrap:"wrap"}}>
+                <button onClick={()=>goShop("all")} style={{background:"linear-gradient(135deg,#1A1A1A,#A07A30)",color:"#fff",border:"none",padding:"0.8rem 1.8rem",borderRadius:"3rem",fontSize:"0.88rem",fontWeight:700,cursor:"pointer",fontFamily:"'Outfit',sans-serif"}}>Ver tienda →</button>
+                <button onClick={goQuiz} style={{background:"transparent",color:"#C8A46B",border:"1.5px solid rgba(201,168,76,.4)",padding:"0.8rem 1.8rem",borderRadius:"3rem",fontSize:"0.88rem",cursor:"pointer",fontFamily:"'Outfit',sans-serif"}}>Repetir análisis</button>
+              </div>
+            </div>
+          ):(
+            <div style={{background:"linear-gradient(135deg,#2A1F0E,#1A1A1A)",borderRadius:"1.6rem",padding:"2.2rem 1.8rem",textAlign:"center",boxShadow:"0 20px 60px rgba(42,31,14,.3)"}}>
+              <div style={{fontSize:"2.2rem",marginBottom:"0.6rem"}}>🔒</div>
+              <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"clamp(1.5rem,4vw,2rem)",fontWeight:700,color:"#FDFAF5",marginBottom:"0.6rem",lineHeight:1.2}}>Tu rutina personalizada de 5 pasos <em style={{color:"#C9A84C",fontStyle:"italic"}}>ya está lista</em></h2>
+              <p style={{color:"rgba(245,237,224,.65)",fontSize:"0.88rem",lineHeight:1.7,maxWidth:"420px",margin:"0 auto 1.3rem"}}>La IA ya diseñó tu rutina exacta para tu tipo {result.hairType}: qué productos usar, cómo aplicarlos paso a paso, con qué frecuencia y qué evitar.</p>
+              <div style={{display:"flex",flexDirection:"column",gap:"0.4rem",maxWidth:"340px",margin:"0 auto 1.5rem",textAlign:"left"}}>
+                {["📋 Rutina completa de 5 pasos para tu tipo "+(result.hairType||""),"🛍️ Productos exactos en 3 rangos de precio","📅 Instrucciones de aplicación paso a paso","💡 Trucos profesionales y errores a evitar","🔄 Análisis ilimitados cuando tu cabello cambie"].map((b,i)=>(
+                  <div key={i} style={{display:"flex",gap:"0.5rem",fontSize:"0.83rem",color:"rgba(245,237,224,.85)"}}><span style={{color:"#C9A84C",fontWeight:700,flexShrink:0}}>✓</span>{b}</div>
+                ))}
+              </div>
+              <button onClick={()=>{setShowPaywall(true);setSubStep(1);}} style={{background:"linear-gradient(135deg,#A07A30,#C9A84C)",color:"#1A1A1A",border:"none",padding:"1rem 2.4rem",borderRadius:"3rem",fontSize:"0.97rem",fontWeight:700,cursor:"pointer",fontFamily:"'Outfit',sans-serif",boxShadow:"0 10px 35px rgba(201,168,76,.4)",marginBottom:"0.8rem"}}>
+                Desbloquear mi rutina — 7 días gratis →
+              </button>
+              <p style={{fontSize:"0.72rem",color:"rgba(245,237,224,.5)",lineHeight:1.5}}>🛡️ Garantía 30 días: si no notas la diferencia, te devolvemos el dinero.<br/>Cancela cuando quieras · desde {"$2.99/sem"}</p>
+            </div>
+          )}
         </div>
       )}
     </div>
@@ -1480,7 +1506,7 @@ Responde SOLO JSON sin texto adicional: {"hairType":"tipo detectado 1A-4C o esti
         <div style={{textAlign:"center",marginBottom:"1.8rem"}}>
           <div style={{fontSize:"0.65rem",color:"#C8A46B",fontWeight:700,letterSpacing:"0.15em",textTransform:"uppercase",marginBottom:"0.4rem"}}>✦ Catálogo completo</div>
           <h1 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"2.4rem",fontWeight:700,color:"#1A1A1A"}}>Tienda LuMane</h1>
-          <p style={{opacity:.45,marginTop:"0.35rem",fontSize:"0.84rem"}}>28+ productos · Tipos 1A al 4C · Para todas las razas y géneros</p>
+          <p style={{opacity:.45,marginTop:"0.35rem",fontSize:"0.84rem"}}>32+ productos · Tipos 1A al 4C · Para todas las razas y géneros</p>
         </div>
         <div style={{display:"flex",gap:"0.3rem",flexWrap:"wrap",marginBottom:"1.6rem"}}>
           {FILTER_CATS.map(f=>(
@@ -1532,7 +1558,7 @@ Responde SOLO JSON sin texto adicional: {"hairType":"tipo detectado 1A-4C o esti
           </div>
         ))}
         <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(185px,1fr))",gap:"0.55rem",margin:"1.3rem 0"}}>
-          {["🤖 Analizador IA 1A–4C","📸 Análisis con foto","📋 Rutina personalizada","🛍️ Tienda completa","💧 Guía anti-cal","🔄 Ilimitados"].map((f,i)=>(
+          {["📋 Rutina personalizada completa","🛍️ Tienda completa","📸 Análisis con foto","💧 Guía anti-cal","🔄 Análisis ilimitados","🛡️ Garantía 30 días"].map((f,i)=>(
             <div key={i} style={{display:"flex",alignItems:"center",gap:"0.45rem",color:"rgba(245,237,224,.75)",fontSize:"0.8rem"}}>
               <span style={{color:"#C9A84C",fontWeight:700,flexShrink:0}}>✓</span>{f}
             </div>
@@ -1548,6 +1574,7 @@ Responde SOLO JSON sin texto adicional: {"hairType":"tipo detectado 1A-4C o esti
           </div>
         )}
       </div>
+      <p style={{textAlign:"center",fontSize:"0.75rem",color:"#999",lineHeight:1.6,marginBottom:"1rem"}}>🛡️ <strong>Garantía LuMane:</strong> si en 30 días no notas la diferencia en tu cabello, te devolvemos el dinero. Sin preguntas.</p>
       {isSubscribed()&&(
         <div style={{background:"rgba(170,85,85,.05)",border:"1px solid rgba(170,85,85,.16)",borderRadius:"0.9rem",padding:"1.1rem 1.3rem",display:"flex",alignItems:"center",justifyContent:"space-between",flexWrap:"wrap",gap:"0.8rem",marginTop:"1rem"}}>
           <div>
@@ -1579,6 +1606,7 @@ Responde SOLO JSON sin texto adicional: {"hairType":"tipo detectado 1A-4C o esti
       {toast&&<div style={{position:"fixed",bottom:"6rem",left:"50%",transform:"translateX(-50%)",background:"#2A1F0E",color:"#FDFAF5",padding:"0.6rem 1.5rem",borderRadius:"2rem",fontSize:"0.84rem",zIndex:9999,boxShadow:"0 8px 28px rgba(0,0,0,.25)",whiteSpace:"nowrap"}}>{toast}</div>}
       {showStores&&<StorePanel/>}
       {showPaywall&&<PaywallModal/>}
+      {showLogin&&<LoginModal/>}
       <div style={{position:"sticky",top:0,zIndex:100,display:"flex",alignItems:"center",justifyContent:"space-between",padding:"0.85rem 1.2rem",background:"rgba(245,237,224,.96)",backdropFilter:"blur(14px)",borderBottom:"1px solid rgba(201,168,76,.11)"}}>
         <div onClick={()=>setPage("home")} style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"1.45rem",fontWeight:700,color:"#C8A46B",cursor:"pointer",letterSpacing:"0.08em"}}>✦ LuMane</div>
         <div style={{display:"flex",gap:"0.45rem",alignItems:"center"}}>
@@ -1599,15 +1627,23 @@ Responde SOLO JSON sin texto adicional: {"hairType":"tipo detectado 1A-4C o esti
         {page==="result"   &&<ResultPage/>}
         {page==="shop"     &&<ShopPage/>}
         {page==="pricing"  &&<PricingPage/>}
-        {page==="login"    &&<LoginPage onSuccess={()=>{setSubStatus('active');setPage('home');}} onRegister={()=>setPage('home')} />}
-        {page==="register" &&<RegisterPage selectedPlan={selectedPlan} onBack={()=>setPage('home')} onSuccess={()=>{setSubStatus('active');setPage('quiz');}} />}
+        {page==="login"    &&<LoginPage onSuccess={(em)=>{
+          setPage('home');
+          checkSubscriptionServer(em).then(isActive=>{
+            if(isActive===true){
+              setSubStatus('active');
+              try { localStorage.setItem('lumane_premium','active'); } catch(e) {}
+            }
+          });
+        }} onRegister={()=>setPage('home')} />}
+        {page==="register" &&<RegisterPage selectedPlan={selectedPlan} onBack={()=>setPage('home')} onSuccess={()=>{setPage('quiz');}} />}
         <ReviewsSection/>
         <footer style={{background:"#2A1F0E",color:"rgba(245,237,224,.6)",padding:"2.2rem 2rem",textAlign:"center"}}>
           <div style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"1.4rem",color:"#C9A84C",marginBottom:"0.45rem",letterSpacing:"0.1em"}}>✦ LuMane</div>
           <p style={{fontSize:"0.78rem",lineHeight:1.6,maxWidth:"360px",margin:"0 auto"}}>Cuidado capilar con inteligencia artificial para cada tipo y textura.</p>
           {!isSubscribed()&&(
-            <button onClick={()=>setShowPaywall(true)} style={{background:"linear-gradient(135deg,#1A1A1A,#A07A30)",color:"#fff",border:"none",padding:"0.5rem 1.3rem",borderRadius:"2rem",fontSize:"0.78rem",fontWeight:700,cursor:"pointer",fontFamily:"'Outfit',sans-serif",marginTop:"0.9rem"}}>
-              🎁 7 días gratis · desde {"$2.99/sem"}
+            <button onClick={goQuiz} style={{background:"linear-gradient(135deg,#1A1A1A,#A07A30)",color:"#fff",border:"none",padding:"0.5rem 1.3rem",borderRadius:"2rem",fontSize:"0.78rem",fontWeight:700,cursor:"pointer",fontFamily:"'Outfit',sans-serif",marginTop:"0.9rem"}}>
+              ✨ Analizar mi cabello GRATIS
             </button>
           )}
           <p style={{fontSize:"0.63rem",marginTop:"0.7rem",opacity:.25}}>Los enlaces pueden incluir comisiones de afiliado · LuMane © 2026</p>
