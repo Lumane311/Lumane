@@ -146,7 +146,17 @@ const SHOP = [
     prices:{eco:{price:6.49,name:"Loción Cuero Bebé",brand:"Mustela"},mid:{price:13.99,name:"Sérum Cuero Infantil",brand:"Burt's Bees"},lux:{price:22.00,name:"Tratamiento Cuero Kids",brand:"Weleda"}} },
 ];
 
-function ProductosRecomendados() {
+// ================================================================
+// TESTIMONIOS REALES - Lu: agrega aqui tus testimonios verdaderos.
+// Copia una linea de ejemplo, quitale las barras // y cambia los datos.
+// Si la lista queda vacia, la seccion NO se muestra en la pagina.
+// ================================================================
+const TESTIMONIOS = [
+  // { nombre:"Nombre A.", pais:"Colombia", tipo:"3B", estrellas:5, texto:"Escribe aqui el testimonio real de tu amiga." },
+  // { nombre:"Nombre B.", pais:"Espana", tipo:"2C", estrellas:5, texto:"Otro testimonio real." },
+];
+
+function ProductosRecomendados({locked, onUnlock}) {
   const prods = [
     { id:1, emoji:"🌿", nombre:"Aceite de Argán Puro",      marca:"OGX",          beneficio:"Brillo y nutrición intensa para todo tipo de cabello",    tag:"Más vendido", tagColor:"#5AAA46",
       amazon:"https://www.amazon.com/s?k=argan+oil+hair+OGX&tag=lumanehair-21",
@@ -203,12 +213,18 @@ function ProductosRecomendados() {
                 <div style={{fontSize:16,fontWeight:700,color:"#1a1a1a",margin:"3px 0"}}>{p.nombre}</div>
               </div>
               <p style={{fontSize:13,color:"#777",lineHeight:1.55,flexGrow:1,margin:0}}>{p.beneficio}</p>
-              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:6,marginTop:6}}>
-                <a href={p.amazon} target="_blank" rel="noopener noreferrer" style={{background:"#FF9900",color:"#fff",borderRadius:10,padding:"9px 4px",fontSize:12,fontWeight:700,textDecoration:"none",textAlign:"center",display:"block"}}>📦 Amazon</a>
-                <a href={p.iherb} target="_blank" rel="noopener noreferrer" style={{background:"#5AAA46",color:"#fff",borderRadius:10,padding:"9px 4px",fontSize:12,fontWeight:700,textDecoration:"none",textAlign:"center",display:"block"}}>🌿 iHerb</a>
-                <a href={p.sephora} target="_blank" rel="noopener noreferrer" style={{background:"#E75480",color:"#fff",borderRadius:10,padding:"9px 4px",fontSize:12,fontWeight:700,textDecoration:"none",textAlign:"center",display:"block"}}>🖤 Sephora</a>
-                <a href={p.druni} target="_blank" rel="noopener noreferrer" style={{background:"#1A1A1A",color:"#fff",borderRadius:10,padding:"9px 4px",fontSize:12,fontWeight:700,textDecoration:"none",textAlign:"center",display:"block"}}>💜 Druni</a>
-              </div>
+              {locked?(
+                <button onClick={onUnlock} style={{width:"100%",marginTop:6,background:"linear-gradient(135deg,#2A1F0E,#1A1A1A)",color:"#E8C77E",border:"1.5px solid rgba(201,168,76,.45)",borderRadius:12,padding:"11px 8px",fontSize:12.5,fontWeight:700,cursor:"pointer",fontFamily:"'Outfit',sans-serif"}}>
+                  🔒 Ver dónde comprarlo — Premium →
+                </button>
+              ):(
+                <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:6,marginTop:6}}>
+                  <a href={p.amazon} target="_blank" rel="noopener noreferrer" style={{background:"#FF9900",color:"#fff",borderRadius:10,padding:"9px 4px",fontSize:12,fontWeight:700,textDecoration:"none",textAlign:"center",display:"block"}}>📦 Amazon</a>
+                  <a href={p.iherb} target="_blank" rel="noopener noreferrer" style={{background:"#5AAA46",color:"#fff",borderRadius:10,padding:"9px 4px",fontSize:12,fontWeight:700,textDecoration:"none",textAlign:"center",display:"block"}}>🌿 iHerb</a>
+                  <a href={p.sephora} target="_blank" rel="noopener noreferrer" style={{background:"#E75480",color:"#fff",borderRadius:10,padding:"9px 4px",fontSize:12,fontWeight:700,textDecoration:"none",textAlign:"center",display:"block"}}>🖤 Sephora</a>
+                  <a href={p.druni} target="_blank" rel="noopener noreferrer" style={{background:"#1A1A1A",color:"#fff",borderRadius:10,padding:"9px 4px",fontSize:12,fontWeight:700,textDecoration:"none",textAlign:"center",display:"block"}}>💜 Druni</a>
+                </div>
+              )}
             </div>
           );
         })}
@@ -221,36 +237,14 @@ function ProductosRecomendados() {
 }
 
 function ReviewsSection() {
-  const [reviews, setReviews] = React.useState([
-    { id:1, nombre:"María G.", pais:"🇲🇽 México",    tipo:"3C", estrellas:5, texto:"¡Increíble! Por fin una app que entiende mi cabello rizado. La rutina que me dio cambió todo.", fecha:"Hace 2 días" },
-    { id:2, nombre:"Valentina R.", pais:"🇨🇴 Colombia", tipo:"2B", estrellas:5, texto:"Llevaba años gastando dinero en productos que no funcionaban. LuMane me dio exactamente lo que necesitaba.", fecha:"Hace 5 días" },
-    { id:3, nombre:"Andrea M.", pais:"🇪🇸 España",   tipo:"Cal", estrellas:5, texto:"El agua de Madrid me tenía el cabello horrible. Los productos anti-cal son una revolución total.", fecha:"Hace 1 semana" },
-    { id:4, nombre:"Carlos P.", pais:"🇦🇷 Argentina",  tipo:"1C", estrellas:4, texto:"Muy buena página, fácil de usar y los productos que recomienda son reales y accesibles.", fecha:"Hace 1 semana" },
-    { id:5, nombre:"Sofía L.", pais:"🇬🇹 Guatemala",  tipo:"4A", estrellas:5, texto:"Nunca pensé que habría una app que cubriera mi tipo de cabello afro. ¡Estoy emocionada!", fecha:"Hace 2 semanas" },
-  ]);
-  const [nombre, setNombre]     = React.useState("");
-  const [pais, setPais]         = React.useState("");
-  const [texto, setTexto]       = React.useState("");
-  const [estrellas, setEstrellas] = React.useState(5);
-  const [hover, setHover]       = React.useState(0);
-  const [enviado, setEnviado]   = React.useState(false);
-
-  const total = reviews.length;
-  const promedio = (reviews.reduce((s,r)=>s+r.estrellas,0)/total).toFixed(1);
-
-  function enviar() {
-    if(!nombre.trim() || !texto.trim()) return;
-    const nuevo = { id:Date.now(), nombre:nombre.trim(), pais:pais||"🌎", tipo:"", estrellas, texto:texto.trim(), fecha:"Ahora mismo" };
-    setReviews(prev=>[nuevo,...prev]);
-    setNombre(""); setPais(""); setTexto(""); setEstrellas(5); setEnviado(true);
-    setTimeout(()=>setEnviado(false), 3000);
-  }
-
+  if(!TESTIMONIOS.length) return null;
+  const total = TESTIMONIOS.length;
+  const promedio = (TESTIMONIOS.reduce((s,r)=>s+(r.estrellas||5),0)/total).toFixed(1);
   return (
     <section style={{background:"#F7F2EA",padding:"3rem 1.5rem",fontFamily:"'Outfit',sans-serif"}}>
       <div style={{maxWidth:760,margin:"0 auto"}}>
         <div style={{textAlign:"center",marginBottom:28}}>
-          <span style={{fontSize:11,fontWeight:700,letterSpacing:"0.18em",textTransform:"uppercase",color:"#C8A46B",display:"block",marginBottom:6}}>✦ Opiniones reales</span>
+          <span style={{fontSize:11,fontWeight:700,letterSpacing:"0.18em",textTransform:"uppercase",color:"#C8A46B",display:"block",marginBottom:6}}>✦ Testimonios reales</span>
           <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"clamp(22px,5vw,34px)",fontWeight:700,color:"#1A1A1A",margin:"0 0 8px 0"}}>Lo que dice nuestra comunidad</h2>
           <div style={{display:"flex",alignItems:"center",justifyContent:"center",gap:10,marginTop:8}}>
             <div style={{display:"flex",gap:3}}>
@@ -259,13 +253,12 @@ function ReviewsSection() {
               ))}
             </div>
             <span style={{fontFamily:"'Cormorant Garamond',serif",fontSize:22,fontWeight:700,color:"#C8A46B"}}>{promedio}</span>
-            <span style={{fontSize:13,color:"#999"}}>({total} opiniones)</span>
+            <span style={{fontSize:13,color:"#999"}}>({total} {total===1?"opinión":"opiniones"})</span>
           </div>
         </div>
-
-        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(280px,1fr))",gap:14,marginBottom:32}}>
-          {reviews.map(r=>(
-            <div key={r.id} style={{background:"#FDFAF5",borderRadius:16,padding:"18px 16px",border:"1.5px solid #f0e8ea",boxShadow:"0 2px 12px rgba(201,168,76,0.06)"}}>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(280px,1fr))",gap:14}}>
+          {TESTIMONIOS.map((r,idx)=>(
+            <div key={idx} style={{background:"#FDFAF5",borderRadius:16,padding:"18px 16px",border:"1.5px solid #f0e8ea",boxShadow:"0 2px 12px rgba(201,168,76,0.06)"}}>
               <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:8}}>
                 <div>
                   <div style={{fontWeight:700,fontSize:14,color:"#1A1A1A"}}>{r.nombre}</div>
@@ -273,63 +266,13 @@ function ReviewsSection() {
                 </div>
                 <div style={{display:"flex",gap:2}}>
                   {[1,2,3,4,5].map(s=>(
-                    <span key={s} style={{fontSize:13,color:s<=r.estrellas?"#FFB800":"#ddd"}}>★</span>
+                    <span key={s} style={{fontSize:13,color:s<=(r.estrellas||5)?"#FFB800":"#ddd"}}>★</span>
                   ))}
                 </div>
               </div>
               <p style={{fontSize:13,color:"#555",lineHeight:1.6,margin:0,fontStyle:"italic"}}>"{r.texto}"</p>
-              <div style={{fontSize:11,color:"#bbb",marginTop:10}}>{r.fecha}</div>
             </div>
           ))}
-        </div>
-
-        <div style={{background:"#FDFAF5",borderRadius:20,padding:"28px 24px",border:"1.5px solid rgba(201,168,76,.2)",boxShadow:"0 4px 20px rgba(201,168,76,.08)"}}>
-          <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:20,fontWeight:700,color:"#1A1A1A",marginBottom:4}}>¿Ya usaste LuMane?</h3>
-          <p style={{fontSize:13,color:"#999",marginBottom:20}}>Deja tu opinión y ayuda a otras personas a cuidar su cabello</p>
-
-          <div style={{marginBottom:16}}>
-            <div style={{fontSize:12,fontWeight:700,color:"#1A1A1A",letterSpacing:"0.08em",textTransform:"uppercase",marginBottom:8}}>Tu calificación</div>
-            <div style={{display:"flex",gap:6}}>
-              {[1,2,3,4,5].map(s=>(
-                <span key={s}
-                  onMouseEnter={()=>setHover(s)}
-                  onMouseLeave={()=>setHover(0)}
-                  onClick={()=>setEstrellas(s)}
-                  style={{fontSize:32,cursor:"pointer",color:s<=(hover||estrellas)?"#FFB800":"#ddd",transition:"color .15s"}}>★</span>
-              ))}
-            </div>
-          </div>
-
-          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12,marginBottom:12}}>
-            <div>
-              <label style={{fontSize:12,fontWeight:700,color:"#1A1A1A",letterSpacing:"0.08em",textTransform:"uppercase",display:"block",marginBottom:6}}>Tu nombre *</label>
-              <input value={nombre} onChange={e=>setNombre(e.target.value)} placeholder="Ej: María G."
-                style={{width:"100%",padding:"10px 12px",borderRadius:10,border:"1.5px solid rgba(201,168,76,.25)",fontFamily:"'Outfit',sans-serif",fontSize:14,color:"#1A1A1A",outline:"none",background:"#FDFAF5"}}/>
-            </div>
-            <div>
-              <label style={{fontSize:12,fontWeight:700,color:"#1A1A1A",letterSpacing:"0.08em",textTransform:"uppercase",display:"block",marginBottom:6}}>País</label>
-              <input value={pais} onChange={e=>setPais(e.target.value)} placeholder="Ej: 🇲🇽 México"
-                style={{width:"100%",padding:"10px 12px",borderRadius:10,border:"1.5px solid rgba(201,168,76,.25)",fontFamily:"'Outfit',sans-serif",fontSize:14,color:"#1A1A1A",outline:"none",background:"#FDFAF5"}}/>
-            </div>
-          </div>
-
-          <div style={{marginBottom:16}}>
-            <label style={{fontSize:12,fontWeight:700,color:"#1A1A1A",letterSpacing:"0.08em",textTransform:"uppercase",display:"block",marginBottom:6}}>Tu comentario *</label>
-            <textarea value={texto} onChange={e=>setTexto(e.target.value)} placeholder="¿Qué te pareció LuMane? ¿Cómo te ayudó con tu cabello?"
-              rows={3}
-              style={{width:"100%",padding:"10px 12px",borderRadius:10,border:"1.5px solid rgba(201,168,76,.25)",fontFamily:"'Outfit',sans-serif",fontSize:14,color:"#1A1A1A",outline:"none",background:"#FDFAF5",resize:"none"}}/>
-          </div>
-
-          {enviado?(
-            <div style={{background:"rgba(200,164,107,.1)",border:"1px solid rgba(200,164,107,.3)",borderRadius:10,padding:"12px",textAlign:"center",fontSize:14,color:"#A07A30",fontWeight:600}}>
-              🎉 ¡Gracias por tu opinión! Ya aparece arriba.
-            </div>
-          ):(
-            <button onClick={enviar}
-              style={{width:"100%",background:"linear-gradient(135deg,#1A1A1A,#A07A30)",color:"#fff",border:"none",padding:"12px",borderRadius:30,fontSize:15,fontWeight:700,cursor:"pointer",fontFamily:"'Outfit',sans-serif",boxShadow:"0 6px 20px rgba(122,92,46,.3)"}}>
-              ✨ Publicar mi opinión
-            </button>
-          )}
         </div>
       </div>
     </section>
@@ -1267,7 +1210,7 @@ export default function LuMane(){
 
       <div style={{padding:"2rem 1.5rem",background:"#FDFAF5"}}>
         <div style={{maxWidth:"620px",margin:"0 auto",display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(180px,1fr))",gap:"0.8rem"}}>
-          {[{emoji:"🎁",title:"Análisis gratis",desc:"Descubre tu tipo de cabello sin pagar nada."},{emoji:"🔒",title:"Pago 100% seguro",desc:"Stripe (internacional) · Wompi (Colombia: Nequi, PSE, Bancolombia)."},{emoji:"🛡️",title:"Garantía 30 días",desc:"Si no notas la diferencia, te devolvemos el dinero."},{emoji:"❌",title:"Sin permanencia",desc:"Cancela cuando quieras. Sin llamadas, sin formularios."}].map((f,i)=>(
+          {[{emoji:"🎁",title:"Análisis gratis",desc:"Descubre tu tipo de cabello sin pagar nada."},{emoji:"🔒",title:"Pago 100% seguro",desc:"Stripe (internacional) · Wompi (Colombia: Nequi, PSE, Bancolombia)."},{emoji:"🛡️",title:"Garantía 30 días",desc:"Si no notas la diferencia, te devolvemos el dinero."}].map((f,i)=>(
             <div key={i} style={{background:"#FDFAF5",borderRadius:"1rem",padding:"1.1rem",border:"1px solid rgba(201,168,76,.1)",textAlign:"center"}}>
               <div style={{fontSize:"1.6rem",marginBottom:"0.4rem"}}>{f.emoji}</div>
               <div style={{fontWeight:700,fontSize:"0.82rem",marginBottom:"0.2rem",color:"#1A1A1A"}}>{f.title}</div>
@@ -1278,7 +1221,7 @@ export default function LuMane(){
       </div>
 
       <div style={{background:"#FDFAF5",padding:"1rem 0"}}>
-        <ProductosRecomendados/>
+        <ProductosRecomendados locked={!isSubscribed()} onUnlock={()=>{setShowPaywall(true);setSubStep(1);}}/>
       </div>
 
       <div style={{background:"linear-gradient(135deg,#2A1F0E,#1A1A1A)",padding:"4rem 1.5rem",textAlign:"center",position:"relative",overflow:"hidden"}}>
@@ -1304,70 +1247,64 @@ export default function LuMane(){
 
   const QuizPage=()=>{
     const allAnswered=quizStep>=QUESTIONS.length;
+    const darkBg="linear-gradient(165deg,#141210 0%,#1A1A1A 55%,#241A0E 100%)";
+    const progressPct=Math.min(((quizStep)/(QUESTIONS.length+1))*100,100);
     if(allAnswered){
       return(
-        <div style={{minHeight:"85vh",display:"flex",alignItems:"center",justifyContent:"center",padding:"3rem 1.5rem",background:"#FDFAF5"}}>
+        <div style={{minHeight:"88vh",display:"flex",alignItems:"center",justifyContent:"center",padding:"3rem 1.5rem",background:darkBg}}>
           <div style={{maxWidth:"540px",width:"100%",textAlign:"center"}} className="fade">
-            <div style={{display:"flex",gap:"0.3rem",marginBottom:"2.5rem"}}>
-              {[...QUESTIONS,{}].map((_,i)=>(
-                <div key={i} style={{flex:1,height:"4px",borderRadius:"2px",background:"linear-gradient(90deg,#1A1A1A,#A07A30)"}}/>
-              ))}
+            <div style={{height:"5px",borderRadius:"3px",background:"rgba(200,164,107,.15)",marginBottom:"0.6rem",overflow:"hidden"}}>
+              <div style={{height:"100%",width:"92%",borderRadius:"3px",background:"linear-gradient(90deg,#A07A30,#E8C77E)",transition:"width .4s"}}/>
             </div>
-            <div style={{fontSize:"2.5rem",marginBottom:"0.8rem"}}>📸</div>
-            <div style={{fontSize:"0.65rem",color:"#C8A46B",fontWeight:700,letterSpacing:"0.15em",textTransform:"uppercase",marginBottom:"0.5rem"}}>Paso final</div>
-            <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"clamp(1.4rem,4vw,2rem)",fontWeight:700,marginBottom:"0.8rem",lineHeight:1.3,color:"#1A1A1A"}}>
-              ¿Nos muestras tu cabello?<br/><em style={{fontStyle:"italic",color:"#C8A46B",fontSize:"85%"}}>La IA lo analizará para un resultado más exacto</em>
+            <div style={{fontSize:"0.62rem",color:"#C9A84C",fontWeight:700,letterSpacing:"0.22em",textTransform:"uppercase",marginBottom:"2rem"}}>92% completado · Último paso</div>
+            <div style={{fontSize:"2.6rem",marginBottom:"0.6rem"}}>🎉</div>
+            <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"clamp(1.6rem,5vw,2.3rem)",fontWeight:700,marginBottom:"0.6rem",lineHeight:1.2,color:"#FDFAF5"}}>
+              ¡Tu análisis está casi listo!
             </h2>
-            <p style={{fontSize:"0.85rem",opacity:.6,lineHeight:1.7,marginBottom:"1.5rem",maxWidth:"400px",margin:"0 auto 1.5rem"}}>Sube una foto (opcional) y nuestra IA detectará el tipo exacto, la porosidad y lo que realmente necesita tu cabello.</p>
+            <p style={{fontSize:"0.88rem",color:"rgba(245,239,229,.55)",lineHeight:1.7,marginBottom:"1.8rem",maxWidth:"400px",margin:"0 auto 1.8rem"}}>Una foto (opcional) hace tu resultado mucho más exacto: la IA detecta tu tipo real, porosidad y estado.</p>
             <div style={{marginBottom:"1.5rem"}}>
               {photoLoading?(
-                <div style={{padding:"2rem",border:"2px dashed rgba(201,168,76,.4)",borderRadius:"1.2rem",background:"rgba(201,168,76,.04)",textAlign:"center"}}>
-                  <div style={{fontSize:"2rem"}} className="spin">✦</div>
-                  <div style={{fontSize:"0.85rem",color:"#C8A46B",fontWeight:600,marginTop:"0.5rem"}}>Cargando foto…</div>
+                <div style={{padding:"2rem",border:"2px dashed rgba(200,164,107,.35)",borderRadius:"1.2rem",background:"rgba(200,164,107,.05)",textAlign:"center"}}>
+                  <div style={{fontSize:"2rem",color:"#C9A84C"}} className="spin">✦</div>
+                  <div style={{fontSize:"0.85rem",color:"#C9A84C",fontWeight:600,marginTop:"0.5rem"}}>Cargando foto…</div>
                 </div>
               ):hairPhoto?(
                 <div style={{textAlign:"center"}}>
                   <div style={{position:"relative",display:"inline-block"}}>
-                    <img src={hairPhoto} alt="Tu cabello" style={{width:"220px",height:"220px",objectFit:"cover",borderRadius:"1.2rem",border:"3px solid #5A9A5A",boxShadow:"0 8px 28px rgba(200,164,107,.3)"}}/>
-                    <button onClick={()=>setHairPhoto(null)} style={{position:"absolute",top:"-8px",right:"-8px",width:"30px",height:"30px",borderRadius:"50%",background:"#A07A30",border:"2px solid #fff",color:"#fff",cursor:"pointer",fontSize:"0.9rem",fontWeight:700}}>✕</button>
+                    <img src={hairPhoto} alt="Tu cabello" style={{width:"200px",height:"200px",objectFit:"cover",borderRadius:"1.2rem",border:"3px solid #5AAA5A",boxShadow:"0 8px 28px rgba(0,0,0,.5)"}}/>
+                    <button onClick={()=>setHairPhoto(null)} style={{position:"absolute",top:"-8px",right:"-8px",width:"30px",height:"30px",borderRadius:"50%",background:"#A07A30",border:"2px solid #FDFAF5",color:"#fff",cursor:"pointer",fontSize:"0.9rem",fontWeight:700}}>✕</button>
                   </div>
-                  <div style={{marginTop:"0.8rem",fontSize:"0.9rem",color:"#A07A30",fontWeight:700}}>✅ ¡Foto lista! La IA analizará tu cabello</div>
+                  <div style={{marginTop:"0.8rem",fontSize:"0.88rem",color:"#7AC77A",fontWeight:700}}>✅ ¡Foto lista! La IA analizará tu cabello</div>
                 </div>
               ):(
                 <div style={{textAlign:"center"}}>
-                  <div style={{fontSize:"2.5rem",marginBottom:"0.8rem"}}>📷</div>
-                  <div style={{fontWeight:700,fontSize:"1rem",color:"#C8A46B",marginBottom:"0.8rem"}}>Selecciona tu foto:</div>
                   <input
                     ref={el => { if(el) { el.onchange = handlePhotoUpload; el.oninput = handlePhotoUpload; } }}
                     type="file"
                     accept="image/*"
-                    style={{display:"block",width:"100%",padding:"12px",borderRadius:"12px",border:"2px solid rgba(201,168,76,.4)",background:"#FDFAF5",fontFamily:"'Outfit',sans-serif",fontSize:"14px",color:"#1A1A1A",cursor:"pointer",marginBottom:"0.5rem"}}
+                    style={{display:"block",width:"100%",padding:"12px",borderRadius:"12px",border:"1.5px dashed rgba(200,164,107,.45)",background:"rgba(253,250,245,.04)",fontFamily:"'Outfit',sans-serif",fontSize:"14px",color:"#E8E2D8",cursor:"pointer",marginBottom:"0.4rem"}}
                   />
-                  <div style={{fontSize:"0.75rem",color:"#999"}}>JPG · PNG · HEIC</div>
+                  <div style={{fontSize:"0.72rem",color:"rgba(245,239,229,.4)"}}>📷 JPG · PNG · HEIC — o continúa sin foto</div>
                 </div>
               )}
             </div>
             <div style={{marginBottom:"1.5rem",textAlign:"left",maxWidth:"400px",margin:"0 auto 1.5rem"}}>
-              <label style={{fontSize:"0.65rem",fontWeight:700,color:"#1A1A1A",letterSpacing:"0.08em",textTransform:"uppercase",display:"block",marginBottom:"0.4rem"}}>📧 Tu correo para recibir el análisis *</label>
+              <label style={{fontSize:"0.65rem",fontWeight:700,color:"#C9A84C",letterSpacing:"0.12em",textTransform:"uppercase",display:"block",marginBottom:"0.45rem"}}>📧 ¿A qué correo te enviamos tu análisis? *</label>
               <input
                 type="email"
                 defaultValue={leadStore.email}
                 onChange={e=>{leadStore.email=e.target.value;}}
                 placeholder="tu@correo.com"
-                style={{width:"100%",padding:"14px 16px",borderRadius:12,border:"1.5px solid rgba(201,168,76,.35)",fontFamily:"'Outfit',sans-serif",fontSize:16,color:"#1A1A1A",outline:"none",background:"#FDFAF5",boxSizing:"border-box"}}
+                style={{width:"100%",padding:"15px 16px",borderRadius:12,border:"1.5px solid rgba(200,164,107,.4)",fontFamily:"'Outfit',sans-serif",fontSize:16,color:"#FDFAF5",outline:"none",background:"rgba(253,250,245,.06)",boxSizing:"border-box"}}
               />
-              <div style={{fontSize:"0.68rem",color:"#999",marginTop:"0.35rem"}}>🔒 Sin spam. Solo tu resultado y consejos para tu tipo de cabello.</div>
+              <div style={{fontSize:"0.68rem",color:"#7AC77A",marginTop:"0.4rem"}}>🔒 Sin spam. Solo tu resultado y consejos para tu tipo de cabello.</div>
             </div>
             <div style={{display:"flex",flexDirection:"column",gap:"0.7rem"}}>
               <button onClick={startAnalysis}
-                style={{background:hairPhoto?"linear-gradient(135deg,#2A7A3A,#5AAA5A)":"linear-gradient(135deg,#1A1A1A,#A07A30)",color:"#fff",border:"none",padding:"1rem",borderRadius:"3rem",fontSize:"1rem",fontWeight:700,cursor:"pointer",fontFamily:"'Outfit',sans-serif",boxShadow:hairPhoto?"0 8px 24px rgba(42,122,58,.4)":"0 8px 24px rgba(122,92,46,.3)"}}>
-                {hairPhoto?"📸 Analizar con mi foto GRATIS →":"✨ Analizar mi cabello GRATIS"}
+                style={{background:"linear-gradient(135deg,#A07A30,#E8C77E)",color:"#1A1A1A",border:"none",padding:"1.05rem",borderRadius:"3rem",fontSize:"1rem",fontWeight:700,cursor:"pointer",fontFamily:"'Outfit',sans-serif",boxShadow:"0 10px 35px rgba(201,168,76,.45)",animation:"pulsBtn 2s ease-in-out infinite"}}>
+                {hairPhoto?"📸 Ver mi análisis con foto GRATIS →":"✨ Ver mi análisis GRATIS →"}
               </button>
-              {!hairPhoto&&(
-                <button onClick={startAnalysis} style={{background:"transparent",color:"#C8A46B",border:"1.5px solid rgba(201,168,76,.3)",padding:"0.75rem",borderRadius:"3rem",fontSize:"0.85rem",cursor:"pointer",fontFamily:"'Outfit',sans-serif",opacity:.7}}>
-                  Continuar sin foto →
-                </button>
-              )}
+              <span style={{fontSize:"0.7rem",color:"rgba(245,239,229,.4)"}}>Resultado en menos de 30 segundos</span>
             </div>
           </div>
         </div>
@@ -1375,54 +1312,92 @@ export default function LuMane(){
     }
     const currentQ={...QUESTIONS[quizStep],opts:getQuizOpts(quizStep)};
     return(
-      <div style={{minHeight:"85vh",display:"flex",alignItems:"center",justifyContent:"center",padding:"3rem 1.5rem",background:"#FDFAF5"}}>
-        <div style={{maxWidth:"580px",width:"100%"}} className="fade">
-          <div style={{display:"flex",gap:"0.3rem",marginBottom:"2.5rem"}}>
-            {[...QUESTIONS,{}].map((_,i)=>(
-              <div key={i} style={{flex:1,height:"4px",borderRadius:"2px",background:i<=quizStep?"linear-gradient(90deg,#1A1A1A,#A07A30)":"rgba(201,168,76,.13)",transition:"background .3s"}}/>
-            ))}
+      <div style={{minHeight:"88vh",display:"flex",alignItems:"center",justifyContent:"center",padding:"3rem 1.5rem",background:darkBg}}>
+        <div style={{maxWidth:"560px",width:"100%"}} className="fade" key={quizStep}>
+          <div style={{height:"5px",borderRadius:"3px",background:"rgba(200,164,107,.15)",marginBottom:"0.6rem",overflow:"hidden"}}>
+            <div style={{height:"100%",width:progressPct+"%",borderRadius:"3px",background:"linear-gradient(90deg,#A07A30,#E8C77E)",transition:"width .4s"}}/>
           </div>
-          <div style={{textAlign:"center",marginBottom:"0.5rem",fontSize:"1.9rem"}}>{currentQ.icon}</div>
-          <div style={{textAlign:"center",fontSize:"0.65rem",color:"#C8A46B",fontWeight:700,letterSpacing:"0.15em",textTransform:"uppercase",marginBottom:"0.6rem"}}>Pregunta {quizStep+1} de {QUESTIONS.length}</div>
-          <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"clamp(1.4rem,4vw,1.9rem)",fontWeight:600,textAlign:"center",marginBottom:"1.8rem",lineHeight:1.3,color:"#1A1A1A"}}>{currentQ.q}</h2>
-          <div style={{display:"flex",flexDirection:"column",gap:"0.65rem"}}>
+          <div style={{textAlign:"center",fontSize:"0.62rem",color:"#C9A84C",fontWeight:700,letterSpacing:"0.22em",textTransform:"uppercase",marginBottom:"1.6rem"}}>Pregunta {quizStep+1} de {QUESTIONS.length} · Análisis gratis</div>
+          <div style={{textAlign:"center",marginBottom:"0.6rem",fontSize:"2.2rem"}}>{currentQ.icon}</div>
+          <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"clamp(1.5rem,5vw,2.2rem)",fontWeight:600,textAlign:"center",marginBottom:"2rem",lineHeight:1.25,color:"#FDFAF5"}}>{currentQ.q}</h2>
+          <div style={{display:"flex",flexDirection:"column",gap:"0.7rem"}}>
             {currentQ.opts.map(opt=>(
               <button key={opt.v} onClick={()=>handleAnswer(currentQ.id,opt.v)}
-                style={{display:"flex",alignItems:"center",gap:"1rem",padding:"0.95rem 1.3rem",background:"#FDFAF5",border:"1.5px solid rgba(201,168,76,.16)",borderRadius:"0.85rem",cursor:"pointer",fontFamily:"'Outfit',sans-serif",fontSize:"0.88rem",color:"#1A1A1A",textAlign:"left"}}
-                onMouseOver={e=>{e.currentTarget.style.borderColor="#A07A30";e.currentTarget.style.background="rgba(201,168,76,.05)";}}
-                onMouseOut={e=>{e.currentTarget.style.borderColor="rgba(201,168,76,.16)";e.currentTarget.style.background="#fff";}}>
-                <span style={{fontSize:"1.3rem",minWidth:"2rem",textAlign:"center"}}>{opt.i}</span>
-                <span style={{flex:1}}>{opt.l}</span>
-                <span style={{color:"#C8A46B",opacity:.35}}>→</span>
+                style={{display:"flex",alignItems:"center",gap:"1rem",padding:"1.05rem 1.3rem",background:"rgba(253,250,245,.045)",border:"1.5px solid rgba(200,164,107,.22)",borderRadius:"1rem",cursor:"pointer",fontFamily:"'Outfit',sans-serif",fontSize:"0.92rem",color:"#F5EFE5",textAlign:"left",transition:"all .18s"}}
+                onMouseOver={e=>{e.currentTarget.style.borderColor="#C9A84C";e.currentTarget.style.background="rgba(200,164,107,.13)";e.currentTarget.style.transform="translateX(4px)";}}
+                onMouseOut={e=>{e.currentTarget.style.borderColor="rgba(200,164,107,.22)";e.currentTarget.style.background="rgba(253,250,245,.045)";e.currentTarget.style.transform="none";}}>
+                <span style={{fontSize:"1.35rem",minWidth:"2rem",textAlign:"center"}}>{opt.i}</span>
+                <span style={{flex:1,lineHeight:1.4}}>{opt.l}</span>
+                <span style={{color:"#C9A84C",opacity:.55,fontSize:"1.1rem"}}>→</span>
               </button>
             ))}
           </div>
-          {quizStep>0&&<button onClick={()=>setQuizStep(s=>s-1)} style={{display:"block",margin:"1.2rem auto 0",background:"none",border:"none",color:"#C8A46B",fontSize:"0.8rem",cursor:"pointer",fontFamily:"'Outfit',sans-serif",opacity:.65}}>← Anterior</button>}
+          {quizStep>0&&<button onClick={()=>setQuizStep(s=>s-1)} style={{display:"block",margin:"1.4rem auto 0",background:"none",border:"none",color:"rgba(201,168,76,.7)",fontSize:"0.8rem",cursor:"pointer",fontFamily:"'Outfit',sans-serif"}}>← Anterior</button>}
         </div>
       </div>
     );
   };
 
   const ResultPage=()=>(
-    <div style={{padding:"2rem 1.5rem 4rem",background:"#FDFAF5"}}>
+    <div style={{padding:loading?"0":"2rem 1.5rem 4rem",background:loading?"linear-gradient(165deg,#141210,#241A0E)":"#FDFAF5"}}>
       {loading?(
-        <div style={{minHeight:"70vh",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:"1.5rem"}}>
-          <div style={{fontSize:"3rem"}} className="spin">✦</div>
-          <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"1.8rem",color:"#C8A46B"}}>Analizando tu cabello…</h2>
-          <p style={{opacity:.5,fontSize:"0.85rem"}}>La IA prepara tu rutina personalizada</p>
+        <div style={{minHeight:"85vh",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:"1.5rem",padding:"2rem"}}>
+          <div style={{fontSize:"3rem",color:"#C9A84C"}} className="spin">✦</div>
+          <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"1.8rem",color:"#C9A84C",textAlign:"center"}}>Analizando tu cabello…</h2>
+          <p style={{color:"rgba(245,239,229,.5)",fontSize:"0.85rem",textAlign:"center"}}>La IA está leyendo tus respuestas y preparando tu diagnóstico</p>
         </div>
       ):result&&(
         <div style={{maxWidth:"800px",margin:"0 auto"}} className="fade">
-          <div style={{background:"linear-gradient(135deg,rgba(122,92,46,.07),rgba(201,168,76,.1))",border:"1px solid rgba(201,168,76,.2)",borderRadius:"1.6rem",padding:"2rem",textAlign:"center",marginBottom:"1.8rem"}}>
-            <div style={{display:"inline-block",background:"rgba(200,164,107,.12)",border:"1px solid rgba(201,168,76,.3)",color:"#C8A46B",fontSize:"0.65rem",fontWeight:700,letterSpacing:"0.15em",textTransform:"uppercase",padding:"0.28rem 0.9rem",borderRadius:"2rem",marginBottom:"0.9rem"}}>✦ Tu análisis LuMane</div>
-            <h1 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"clamp(1.7rem,5vw,2.8rem)",fontWeight:700,color:"#1A1A1A",marginBottom:"0.7rem",lineHeight:1.1}}>{result.title}</h1>
-            <div style={{display:"flex",gap:"0.45rem",justifyContent:"center",flexWrap:"wrap",marginBottom:"1rem"}}>
-              {[{l:"Tipo",v:result.hairType},{l:"Condición",v:result.condition},{l:"Cuero",v:result.scalp}].map(t=>(
-                <span key={t.l} style={{background:"#FDFAF5",border:"1px solid rgba(201,168,76,.2)",padding:"0.22rem 0.8rem",borderRadius:"2rem",fontSize:"0.7rem",color:"#1A1A1A",fontWeight:500}}>{t.l}: <strong style={{color:"#C8A46B"}}>{t.v}</strong></span>
-              ))}
-            </div>
-            <p style={{maxWidth:"500px",margin:"0 auto",opacity:.7,lineHeight:1.75,fontSize:"0.9rem"}}>{result.summary}</p>
-          </div>
+          {(()=>{
+            const typeCode=(String(result.hairType||"").match(/[1-4][ABCabc]/)||[""])[0].toUpperCase();
+            const ht=HAIR_SYSTEM.find(h=>h.id===typeCode);
+            return(
+              <div style={{background:"linear-gradient(160deg,#241A0E 0%,#1A1A1A 60%,#141210 100%)",border:"1px solid rgba(201,168,76,.4)",borderRadius:"1.8rem",padding:"2.4rem 1.8rem",textAlign:"center",marginBottom:"1.4rem",position:"relative",boxShadow:"0 20px 60px rgba(42,31,14,.35)"}}>
+                <div style={{position:"absolute",inset:"10px",border:"1px solid rgba(201,168,76,.22)",borderRadius:"1.4rem",pointerEvents:"none"}}/>
+                <div style={{fontSize:"0.62rem",fontWeight:700,color:"#C9A84C",letterSpacing:"0.3em",textTransform:"uppercase",marginBottom:"1.2rem"}}>✦ &nbsp;Diagnóstico LuMane&nbsp; ✦</div>
+                <div style={{fontSize:"1.6rem",marginBottom:"0.2rem"}}>👑</div>
+                <div style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"clamp(3.2rem,14vw,5rem)",fontWeight:700,color:"#E8C77E",lineHeight:1,fontStyle:"italic",textShadow:"0 4px 30px rgba(201,168,76,.35)"}}>{typeCode||result.hairType}</div>
+                {ht&&<div style={{fontSize:"0.82rem",color:"rgba(245,239,229,.65)",marginTop:"0.5rem",fontStyle:"italic"}}>{ht.desc}</div>}
+                <div style={{width:"70px",height:"1px",background:"linear-gradient(90deg,transparent,#C9A84C,transparent)",margin:"1.2rem auto"}}/>
+                <h1 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"clamp(1.3rem,4.5vw,1.9rem)",fontWeight:700,color:"#FDFAF5",marginBottom:"0.7rem",lineHeight:1.25}}>{result.title}</h1>
+                <p style={{maxWidth:"460px",margin:"0 auto 1.2rem",color:"rgba(245,239,229,.7)",lineHeight:1.75,fontSize:"0.88rem"}}>{result.summary}</p>
+                <div style={{display:"flex",gap:"0.45rem",justifyContent:"center",flexWrap:"wrap"}}>
+                  {[{l:"Condición",v:result.condition},{l:"Cuero cabelludo",v:result.scalp}].map(t=>(
+                    <span key={t.l} style={{background:"rgba(201,168,76,.12)",border:"1px solid rgba(201,168,76,.35)",padding:"0.25rem 0.9rem",borderRadius:"2rem",fontSize:"0.7rem",color:"rgba(245,239,229,.8)"}}>{t.l}: <strong style={{color:"#E8C77E",textTransform:"capitalize"}}>{t.v}</strong></span>
+                  ))}
+                </div>
+              </div>
+            );
+          })()}
+          {result.score&&(()=>{
+            const entries=[["💧","Hidratación",result.score.hidratacion],["💪","Fuerza",result.score.fuerza],["✨","Brillo",result.score.brillo],["🔬","Cuero",result.score.salud_cuero]].filter(e=>typeof e[2]==="number");
+            if(!entries.length) return null;
+            const worst=entries.reduce((a,b)=>b[2]<a[2]?b:a);
+            const stateOf=v=>v>=8?{t:"Excelente",c:"#3A7A3A",bg:"rgba(90,170,90,.1)",bd:"rgba(90,170,90,.35)"}:v>=6?{t:"Bien",c:"#A07A30",bg:"rgba(201,168,76,.1)",bd:"rgba(201,168,76,.35)"}:{t:"Atención",c:"#A0702A",bg:"rgba(200,140,40,.1)",bd:"rgba(200,140,40,.4)"};
+            return(
+              <div style={{marginBottom:"1.8rem"}}>
+                <div style={{textAlign:"center",fontSize:"0.62rem",fontWeight:700,color:"#C8A46B",letterSpacing:"0.2em",textTransform:"uppercase",margin:"0.4rem 0 1rem"}}>Las 4 joyas de tu corona</div>
+                <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(140px,1fr))",gap:"0.8rem",marginBottom:"1rem"}}>
+                  {entries.map(([em,l,v])=>{
+                    const st=stateOf(v);
+                    return(
+                      <div key={l} style={{background:"#FDFAF5",border:"1.5px solid rgba(201,168,76,.2)",borderRadius:"1.2rem",padding:"1.1rem 0.8rem",textAlign:"center",boxShadow:"0 4px 18px rgba(201,168,76,.08)"}}>
+                        <div style={{width:"62px",height:"62px",borderRadius:"50%",border:"3px solid #C9A84C",background:"linear-gradient(135deg,#2A1F0E,#1A1A1A)",display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto 0.6rem",boxShadow:"0 4px 16px rgba(201,168,76,.3)"}}>
+                          <span style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"1.5rem",fontWeight:700,color:"#E8C77E"}}>{v}</span>
+                        </div>
+                        <div style={{fontSize:"0.78rem",fontWeight:600,color:"#1A1A1A",marginBottom:"0.35rem"}}>{em} {l}</div>
+                        <span style={{display:"inline-block",fontSize:"0.6rem",fontWeight:700,letterSpacing:"0.08em",textTransform:"uppercase",color:st.c,background:st.bg,border:"1px solid "+st.bd,borderRadius:"2rem",padding:"0.15rem 0.6rem"}}>{st.t}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+                <div style={{background:"linear-gradient(135deg,rgba(201,168,76,.08),rgba(212,132,154,.1))",border:"1px solid rgba(201,168,76,.25)",borderRadius:"1rem",padding:"1rem 1.3rem",display:"flex",alignItems:"center",gap:"0.9rem"}}>
+                  <div style={{fontSize:"1.6rem",flexShrink:0}}>💛</div>
+                  <div style={{fontSize:"0.85rem",color:"#3A2810",lineHeight:1.6}}>Lo que tu cabello más te está pidiendo hoy: <strong style={{color:"#A07A30"}}>{worst[1]} ({worst[2]}/10)</strong> — exactamente lo primero que tu rutina personalizada va a trabajar.</div>
+                </div>
+              </div>
+            );
+          })()}
           {isSubscribed()?(
             <div>
               <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"1.5rem",fontWeight:700,marginBottom:"1rem"}}>Tu rutina de 5 pasos</h2>
@@ -1488,7 +1463,7 @@ export default function LuMane(){
                   <div key={i} style={{display:"flex",gap:"0.5rem",fontSize:"0.83rem",color:"rgba(245,237,224,.85)"}}><span style={{color:"#C9A84C",fontWeight:700,flexShrink:0}}>✓</span>{b}</div>
                 ))}
               </div>
-              <button onClick={()=>{setShowPaywall(true);setSubStep(1);}} style={{background:"linear-gradient(135deg,#A07A30,#C9A84C)",color:"#1A1A1A",border:"none",padding:"1rem 2.4rem",borderRadius:"3rem",fontSize:"0.97rem",fontWeight:700,cursor:"pointer",fontFamily:"'Outfit',sans-serif",boxShadow:"0 10px 35px rgba(201,168,76,.4)",marginBottom:"0.8rem"}}>
+              <button onClick={()=>{setShowPaywall(true);setSubStep(1);}} style={{background:"linear-gradient(135deg,#A07A30,#E8C77E)",color:"#1A1A1A",border:"none",padding:"1rem 2.4rem",borderRadius:"3rem",fontSize:"0.97rem",fontWeight:700,cursor:"pointer",fontFamily:"'Outfit',sans-serif",boxShadow:"0 10px 35px rgba(201,168,76,.4)",marginBottom:"0.8rem",animation:"pulsBtn 2s ease-in-out infinite"}}>
                 Desbloquear mi rutina — 7 días gratis →
               </button>
               <p style={{fontSize:"0.72rem",color:"rgba(245,237,224,.5)",lineHeight:1.5}}>🛡️ Garantía 30 días: si no notas la diferencia, te devolvemos el dinero.<br/>Cancela cuando quieras · desde {"$2.99/sem"}</p>
@@ -1646,6 +1621,10 @@ export default function LuMane(){
               ✨ Analizar mi cabello GRATIS
             </button>
           )}
+          <div style={{display:"flex",gap:"1rem",justifyContent:"center",marginTop:"0.9rem"}}>
+            <a href="/privacidad" style={{color:"#C9A84C",fontSize:"0.7rem",textDecoration:"none",opacity:.7}}>Política de Privacidad</a>
+            <a href="/terminos" style={{color:"#C9A84C",fontSize:"0.7rem",textDecoration:"none",opacity:.7}}>Términos y Condiciones</a>
+          </div>
           <p style={{fontSize:"0.63rem",marginTop:"0.7rem",opacity:.25}}>Los enlaces pueden incluir comisiones de afiliado · LuMane © 2026</p>
         </footer>
       </div>
