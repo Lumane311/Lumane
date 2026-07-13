@@ -351,6 +351,8 @@ async function redirectToPayment(plan, gateway) {
     const u = JSON.parse(localStorage.getItem('lumane_user')||'{}');
     email = u.email || localStorage.getItem('lumane_lead') || '';
   } catch (e) {}
+  trackEvent("InitiateCheckout", { content_name: plan }, true);
+  try { localStorage.setItem('lumane_plan_pending', plan); } catch(e) {}
   const endpoint = gateway === 'wompi' ? '/api/wompi-checkout' : '/api/checkout';
   const res = await fetch(endpoint, {
     method: 'POST',
@@ -594,6 +596,13 @@ const cardOpen = {};
 // Global store para el email del lead (evita perder el foco al escribir)
 const leadStore = { email: "" };
 
+// ── ESPÍA: envía eventos al Píxel de Meta y a Google Analytics ──
+function trackEvent(name, params, standard){
+  try{ if(typeof window!=="undefined" && window.fbq){ window.fbq(standard?"track":"trackCustom", name, params||{}); } }catch(e){}
+  try{ if(typeof window!=="undefined" && window.gtag){ window.gtag("event", name, params||{}); } }catch(e){}
+}
+const PLAN_VALUES = { weekly:2.99, monthly:9.99, annual:59.99 };
+
 function ShopCard({p, activeStores, openStore}){
   const [open,setOpen]=useState(cardOpen[p.id]||false);
   function changeOpen(val){ cardOpen[p.id]=val; setOpen(val); }
@@ -708,6 +717,11 @@ export default function LuMane(){
 
     const params = new URLSearchParams(window.location.search);
     if (params.get('success') === 'true') {
+      try {
+        const pendingPlan = localStorage.getItem('lumane_plan_pending') || 'monthly';
+        trackEvent("Purchase", { value: PLAN_VALUES[pendingPlan] || 9.99, currency: "USD", content_name: pendingPlan }, true);
+        localStorage.removeItem('lumane_plan_pending');
+      } catch(e) {}
       // Activación optimista (el webhook puede tardar unos segundos)
       setSubStatus('active');
       try { localStorage.setItem('lumane_premium', 'active'); } catch(e) {}
@@ -739,7 +753,7 @@ export default function LuMane(){
   function requireSub(fn){ if(isSubscribed()){fn();return;} setShowPaywall(true);setSubStep(1); }
   function showToast(m){ setToast(m);setTimeout(()=>setToast(null),2500); }
   // ── NUEVO: el quiz ahora es GRATIS (es el imán de leads) ──
-  function goQuiz(){ setQuizStep(0);setAnswers({});setResult(null);setHairPhoto(null);setPage("quiz"); }
+  function goQuiz(){ trackEvent("QuizStart"); setQuizStep(0);setAnswers({});setResult(null);setHairPhoto(null);setPage("quiz"); }
   function goShop(filter){ requireSub(()=>{setShopFilter(filter||"all");setPage("shop");}); }
   function cancelSub(){
     setSubStatus("none");
@@ -763,6 +777,8 @@ export default function LuMane(){
       showToast("📧 Escribe un correo válido para recibir tu análisis");
       return;
     }
+    trackEvent("QuizComplete");
+    trackEvent("Lead", {}, true);
     saveLead(email.toLowerCase());
     runAI(answers);
   }
@@ -903,6 +919,7 @@ export default function LuMane(){
       const d=await r.json();
       if(d && d.result){ setResult(d.result); }
       else{ setResult(fallback(ans)); }
+      trackEvent("ViewContent", { content_name: "diagnostico" }, true);
     }catch{setResult(fallback(ans));}
     setLoading(false);
   }
