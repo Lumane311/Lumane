@@ -1088,6 +1088,7 @@ export default function LuMane(){
         <div style={{position:"absolute",width:"380px",height:"380px",borderRadius:"50%",background:"radial-gradient(circle,rgba(232,199,126,.32) 0%,transparent 70%)",top:"5%",right:"-10%",filter:"blur(10px)",zIndex:0}}/>
         <div style={{position:"absolute",width:"300px",height:"300px",borderRadius:"50%",background:"radial-gradient(circle,rgba(212,132,154,.2) 0%,transparent 70%)",bottom:"0%",left:"18%",filter:"blur(14px)",zIndex:0}}/>
         <div style={{position:"relative",zIndex:1,maxWidth:"580px"}} className="fade">
+          <img src="/logo-full.png" alt="LuMane" style={{width:"min(80vw,280px)",height:"auto",margin:"0 auto 1.4rem",display:"block",filter:"drop-shadow(0 6px 22px rgba(201,168,76,.25))"}}/>
           <div style={{display:"inline-flex",alignItems:"center",gap:"0.5rem",background:"linear-gradient(120deg,rgba(212,132,154,.16),rgba(232,199,126,.22))",border:"1px solid rgba(212,132,154,.4)",color:"#A0527A",fontSize:"0.72rem",fontWeight:700,padding:"0.32rem 1rem",borderRadius:"2rem",marginBottom:"1.2rem",boxShadow:"0 4px 18px rgba(212,132,154,.18)"}}>
             <span style={{width:"7px",height:"7px",background:"#5A9A5A",borderRadius:"50%"}}/>
             ✨ Análisis de tu tipo de cabello GRATIS
@@ -1536,7 +1537,7 @@ export default function LuMane(){
       <style>{CSS}</style>
       <div className="splash">
         <div style={{display:"flex",flexDirection:"column",alignItems:"center",gap:"0.6rem"}}>
-          <img src="/logo-full.png" alt="LuMane" style={{width:"min(78vw,320px)",height:"auto",filter:"drop-shadow(0 8px 30px rgba(201,168,76,.35))"}}/>
+          <img src="/logo-full.png" alt="LuMane" style={{width:"min(92vw,620px)",height:"auto",filter:"drop-shadow(0 8px 30px rgba(201,168,76,.35))"}}/>
           <div className="splash-tag" style={{color:"rgba(232,199,126,.75)"}}>Cuidado capilar con inteligencia artificial</div>
           <div style={{display:"flex",gap:"0.45rem",marginTop:"0.4rem"}}>
             {["1A","2B","3C","4A"].map(t=>(
@@ -1546,6 +1547,7 @@ export default function LuMane(){
           <div className="splash-dot"/>
         </div>
       </div>
+      <img src="/logo-icon.png" alt="" style={{position:"fixed",bottom:"5.2rem",right:"0.8rem",width:"52px",height:"auto",opacity:0.14,zIndex:5,pointerEvents:"none"}}/>
       {toast&&<div style={{position:"fixed",bottom:"6rem",left:"50%",transform:"translateX(-50%)",background:"#2A1F0E",color:"#FDFAF5",padding:"0.6rem 1.5rem",borderRadius:"2rem",fontSize:"0.84rem",zIndex:9999,boxShadow:"0 8px 28px rgba(0,0,0,.25)",whiteSpace:"nowrap"}}>{toast}</div>}
       {showStores&&<StorePanel/>}
       {showPaywall&&<PaywallModal/>}
