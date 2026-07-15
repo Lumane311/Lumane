@@ -948,12 +948,12 @@ export default function LuMane(){
   });
 
   const CountdownBanner=()=>(
-    <div style={{background:"linear-gradient(135deg,#1A1A1A,#2B2B2B)",padding:"0.65rem 1.2rem",display:"flex",alignItems:"center",justifyContent:"center",gap:"0.8rem",flexWrap:"wrap",boxShadow:"0 4px 20px rgba(122,92,46,.4)",animation:"bannerGlow 3s ease-in-out infinite"}}>
-      <span style={{color:"#fff",fontSize:"0.8rem",fontWeight:600}}>✨ Descubre tu tipo de cabello <strong>GRATIS</strong> · Rutina completa desde <strong>{"$2.99/sem"}</strong></span>
-      <div style={{background:"rgba(0,0,0,.2)",borderRadius:"0.45rem",padding:"0.2rem 0.65rem",border:"1px solid rgba(255,255,255,.25)"}}>
-        <span style={{fontFamily:"monospace",fontSize:"0.95rem",fontWeight:700,color:"#E8D4A0"}}>{fmtCountdown(countdown)}</span>
+    <div style={{background:"linear-gradient(135deg,#1A1A1A,#2B2B2B 55%,#5A3348)",padding:"1.05rem 1.3rem",display:"flex",alignItems:"center",justifyContent:"center",gap:"1rem",flexWrap:"wrap",boxShadow:"0 6px 26px rgba(122,92,46,.45)",animation:"bannerGlow 3s ease-in-out infinite"}}>
+      <span style={{color:"#fff",fontSize:"0.95rem",fontWeight:600}}>✨ Descubre tu tipo de cabello <strong>GRATIS</strong> · Rutina completa desde <strong>{"$2.99/sem"}</strong></span>
+      <div style={{background:"rgba(0,0,0,.25)",borderRadius:"0.55rem",padding:"0.3rem 0.85rem",border:"1px solid rgba(255,255,255,.3)"}}>
+        <span style={{fontFamily:"monospace",fontSize:"1.15rem",fontWeight:700,color:"#E8D4A0"}}>{fmtCountdown(countdown)}</span>
       </div>
-      <button onClick={goQuiz} style={{background:"linear-gradient(135deg,#C8A46B,#B18C52)",color:"#fff",border:"none",padding:"0.28rem 0.95rem",borderRadius:"2rem",fontSize:"0.76rem",fontWeight:700,cursor:"pointer",fontFamily:"'Outfit',sans-serif",animation:"pulsBtn 1.5s ease-in-out infinite",boxShadow:"0 0 0 0 rgba(201,168,76,.5)"}}>
+      <button onClick={goQuiz} style={{background:"linear-gradient(135deg,#C8A46B,#E8C77E 50%,#D4849A)",color:"#1A1A1A",border:"none",padding:"0.55rem 1.5rem",borderRadius:"2rem",fontSize:"0.95rem",fontWeight:700,cursor:"pointer",fontFamily:"'Outfit',sans-serif",animation:"pulsBtn 1.5s ease-in-out infinite",boxShadow:"0 4px 16px rgba(201,168,76,.5)"}}>
         Analizar gratis →
       </button>
     </div>
@@ -1088,7 +1088,6 @@ export default function LuMane(){
         <div style={{position:"absolute",width:"380px",height:"380px",borderRadius:"50%",background:"radial-gradient(circle,rgba(232,199,126,.32) 0%,transparent 70%)",top:"5%",right:"-10%",filter:"blur(10px)",zIndex:0}}/>
         <div style={{position:"absolute",width:"300px",height:"300px",borderRadius:"50%",background:"radial-gradient(circle,rgba(212,132,154,.2) 0%,transparent 70%)",bottom:"0%",left:"18%",filter:"blur(14px)",zIndex:0}}/>
         <div style={{position:"relative",zIndex:1,maxWidth:"580px"}} className="fade">
-          <img src="/logo-full.png" alt="LuMane" style={{width:"min(80vw,280px)",height:"auto",margin:"0 auto 1.4rem",display:"block",filter:"drop-shadow(0 6px 22px rgba(201,168,76,.25))"}}/>
           <div style={{display:"inline-flex",alignItems:"center",gap:"0.5rem",background:"linear-gradient(120deg,rgba(212,132,154,.16),rgba(232,199,126,.22))",border:"1px solid rgba(212,132,154,.4)",color:"#A0527A",fontSize:"0.72rem",fontWeight:700,padding:"0.32rem 1rem",borderRadius:"2rem",marginBottom:"1.2rem",boxShadow:"0 4px 18px rgba(212,132,154,.18)"}}>
             <span style={{width:"7px",height:"7px",background:"#5A9A5A",borderRadius:"50%"}}/>
             ✨ Análisis de tu tipo de cabello GRATIS
