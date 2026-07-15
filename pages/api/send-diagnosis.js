@@ -48,6 +48,13 @@ export default async function handler(req, res) {
   const html = `
   <div style="background:#F7F2EA;padding:32px 12px;font-family:Georgia,'Times New Roman',serif;">
     <div style="max-width:520px;margin:0 auto;background:#FDFAF5;border-radius:18px;overflow:hidden;box-shadow:0 8px 30px rgba(0,0,0,.08);">
+
+      <div style="padding:26px 26px 6px;">
+        <p style="font-size:14px;color:#1A1A1A;line-height:1.75;margin:0 0 10px;">Hola 👋 Soy <strong>Fernanda Hernández</strong>, fundadora de LuMane.</p>
+        <p style="font-size:14px;color:#3A2810;line-height:1.75;margin:0 0 10px;">Acabo de recibir el análisis con inteligencia artificial que hicimos de tu cabello, y quise reenviártelo yo misma junto con algo que la IA descubrió y que <strong>puede cambiar por completo tu rutina</strong>.</p>
+        <p style="font-size:14px;color:#3A2810;line-height:1.75;margin:0;">Baja y mira tu diagnóstico completo 👇</p>
+      </div>
+
       <div style="background:linear-gradient(160deg,#241A0E 0%,#1A1A1A 60%,#141210 100%);padding:34px 24px;text-align:center;">
         <div style="font-size:11px;letter-spacing:3px;color:#C9A84C;text-transform:uppercase;margin-bottom:14px;">✦ Diagnóstico LuMane ✦</div>
         <div style="font-size:26px;margin-bottom:4px;">👑</div>
@@ -74,6 +81,10 @@ export default async function handler(req, res) {
         <p style="font-size:11px;color:#999;margin-top:14px;">🛡️ Garantía 30 días · Cancela cuando quieras</p>
       </div>
 
+      <div style="padding:0 26px 22px;text-align:center;">
+        <p style="font-size:12px;color:#999;line-height:1.7;margin:0;">Cualquier duda, respóndeme directo a este correo — lo leo yo misma. 💛<br/><strong style="color:#3A2810;">Fernanda Hernández</strong><br/>Fundadora, LuMane</p>
+      </div>
+
       <div style="background:#2A1F0E;padding:20px;text-align:center;">
         <div style="font-size:15px;color:#C9A84C;letter-spacing:2px;margin-bottom:6px;">✦ LuMane</div>
         <p style="font-size:11px;color:rgba(245,237,224,.5);margin:0;">Cuidado capilar con inteligencia artificial<br/>
@@ -93,7 +104,7 @@ export default async function handler(req, res) {
         from: 'LuMane <diagnostico@lumane.online>',
         reply_to: 'lumane.online@outlook.com',
         to: [email],
-        subject: `✦ Tu diagnóstico LuMane: ${hairType || 'tu resultado'} está listo`,
+        subject: `Fernanda, LuMane: te reenvío tu diagnóstico (${hairType || 'listo'}) ✦`,
         html,
       }),
     });
