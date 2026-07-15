@@ -43,8 +43,8 @@ export default function Privacidad(){
         <h2 style={S.h2}>Quién trata tus datos</h2>
         <p style={S.p}>
           El sitio lumane.online es operado por <span style={S.b}>LuMane</span> (responsable:
-          Luisa Calderón Hernández), con base en Barcelona, España. Para cualquier tema relacionado
-          con tus datos puedes escribir a <a href="mailto:hola@lumane.online" style={S.mail}>hola@lumane.online</a>.
+          Fernanda Hernández), con base en Barcelona, España. Para cualquier tema relacionado
+          con tus datos puedes escribir a <a href="mailto:lumane.online@outlook.com" style={S.mail}>lumane.online@outlook.com</a>.
         </p>
 
         <div style={S.kicker}>02 · Datos que recopilamos</div>
@@ -120,7 +120,7 @@ export default function Privacidad(){
         </ul>
         <p style={S.p}>
           Para ejercer cualquiera de estos derechos, escribe a{" "}
-          <a href="mailto:hola@lumane.online" style={S.mail}>hola@lumane.online</a> y te
+          <a href="mailto:lumane.online@outlook.com" style={S.mail}>lumane.online@outlook.com</a> y te
           responderemos lo antes posible.
         </p>
 
@@ -142,7 +142,7 @@ export default function Privacidad(){
         </p>
 
         <div style={S.footer}>
-          ¿Dudas? Escríbenos a <a href="mailto:hola@lumane.online" style={S.mail}>hola@lumane.online</a>
+          ¿Dudas? Escríbenos a <a href="mailto:lumane.online@outlook.com" style={S.mail}>lumane.online@outlook.com</a>
           <br/>✦ Hecho con 💛 en Barcelona · lumane.online · <a href="/terminos" style={S.mail}>Términos y Condiciones</a>
         </div>
       </div>
