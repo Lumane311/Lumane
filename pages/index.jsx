@@ -286,11 +286,11 @@ const CSS = `
 html{-webkit-tap-highlight-color:transparent;scroll-behavior:smooth;}
 body{font-family:'Outfit',sans-serif;background:#FDFAF5;color:#1A1A1A;overflow-x:hidden;}
 .page-content{padding-bottom:5rem;}
-.splash{position:fixed;inset:0;background:linear-gradient(160deg,#F5ECD8 0%,#E8D5B0 50%,#C8A46B 100%);display:flex;align-items:center;justify-content:center;z-index:9999;animation:splashOut 1.2s 3.5s ease-in-out forwards;}
+.splash{position:fixed;inset:0;background:radial-gradient(ellipse at center,#241A0E 0%,#141210 55%,#0A0908 100%);display:flex;align-items:center;justify-content:center;z-index:9999;animation:splashOut 1.2s 3.5s ease-in-out forwards;}
 @keyframes splashOut{0%{opacity:1}100%{opacity:0;pointer-events:none;}}
 .splash-logo{font-family:'Cormorant Garamond',serif;font-size:3.8rem;font-weight:700;color:#2B2B2B;letter-spacing:0.15em;animation:fadeUp 0.6s ease both;}
-.splash-tag{color:rgba(43,43,43,.7);font-size:0.78rem;letter-spacing:0.2em;text-transform:uppercase;animation:fadeUp 0.6s 0.3s ease both;margin-top:0.4rem;text-align:center;}
-.splash-dot{width:8px;height:8px;border-radius:50%;background:rgba(43,43,43,.5);margin-top:2rem;animation:pulseDot 1s 0.5s ease infinite;}
+.splash-tag{font-size:0.78rem;letter-spacing:0.2em;text-transform:uppercase;animation:fadeUp 0.6s 0.3s ease both;margin-top:0.4rem;text-align:center;}
+.splash-dot{width:8px;height:8px;border-radius:50%;background:rgba(232,199,126,.6);margin-top:2rem;animation:pulseDot 1s 0.5s ease infinite;}
 @keyframes pulseDot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(1.6)}}
 @keyframes pulsBtn{0%,100%{box-shadow:0 0 0 0 rgba(201,168,76,.6);transform:scale(1)}50%{box-shadow:0 0 0 8px rgba(201,168,76,0);transform:scale(1.05)}}
 @keyframes bannerShake{0%,100%{transform:translateX(0)}10%,30%,50%,70%{transform:translateX(-3px)}20%,40%,60%,80%{transform:translateX(3px)}}
@@ -1535,13 +1535,12 @@ export default function LuMane(){
       </Head>
       <style>{CSS}</style>
       <div className="splash">
-        <div style={{display:"flex",flexDirection:"column",alignItems:"center",gap:"1rem"}}>
-          <div style={{width:"80px",height:"80px",borderRadius:"50%",background:"rgba(255,255,255,.15)",border:"2px solid rgba(255,255,255,.35)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:"2.4rem"}}>✦</div>
-          <div className="splash-logo">LuMane</div>
-          <div className="splash-tag">Cuidado capilar con inteligencia artificial</div>
+        <div style={{display:"flex",flexDirection:"column",alignItems:"center",gap:"0.6rem"}}>
+          <img src="/logo-full.png" alt="LuMane" style={{width:"min(78vw,320px)",height:"auto",filter:"drop-shadow(0 8px 30px rgba(201,168,76,.35))"}}/>
+          <div className="splash-tag" style={{color:"rgba(232,199,126,.75)"}}>Cuidado capilar con inteligencia artificial</div>
           <div style={{display:"flex",gap:"0.45rem",marginTop:"0.4rem"}}>
             {["1A","2B","3C","4A"].map(t=>(
-              <span key={t} style={{background:"rgba(255,255,255,.18)",color:"#fff",fontSize:"0.62rem",fontWeight:700,padding:"0.18rem 0.55rem",borderRadius:"2rem",letterSpacing:"0.08em"}}>{t}</span>
+              <span key={t} style={{background:"rgba(232,199,126,.14)",border:"1px solid rgba(232,199,126,.35)",color:"#E8C77E",fontSize:"0.62rem",fontWeight:700,padding:"0.18rem 0.55rem",borderRadius:"2rem",letterSpacing:"0.08em"}}>{t}</span>
             ))}
           </div>
           <div className="splash-dot"/>
@@ -1552,7 +1551,7 @@ export default function LuMane(){
       {showPaywall&&<PaywallModal/>}
       {showLogin&&<LoginModal/>}
       <div style={{position:"sticky",top:0,zIndex:100,display:"flex",alignItems:"center",justifyContent:"space-between",padding:"0.85rem 1.2rem",background:"rgba(245,237,224,.96)",backdropFilter:"blur(14px)",borderBottom:"1px solid rgba(201,168,76,.11)"}}>
-        <div onClick={()=>setPage("home")} style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"1.45rem",fontWeight:700,color:"#C8A46B",cursor:"pointer",letterSpacing:"0.08em"}}>✦ LuMane</div>
+        <img onClick={()=>setPage("home")} src="/logo-full.png" alt="LuMane" style={{height:"34px",width:"auto",cursor:"pointer"}}/>
         <div style={{display:"flex",gap:"0.45rem",alignItems:"center"}}>
           {isSubscribed()?(
             <div style={{background:"rgba(90,154,90,.12)",border:"1px solid rgba(200,164,107,.3)",color:"#A07A30",padding:"0.32rem 0.85rem",borderRadius:"2rem",fontSize:"0.73rem",fontWeight:700}}>
