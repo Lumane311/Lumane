@@ -52,7 +52,7 @@ Sé BREVE: cada campo de texto máximo 1-2 frases cortas. Responde SOLO JSON sin
         'anthropic-version': '2023-06-01',
       },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-6',
+        model: 'claude-haiku-4-5',
         max_tokens: 4000,
         messages,
       }),
