@@ -1213,7 +1213,7 @@ export default function LuMane(){
     </div>
   );
 
-  const QuizPage=()=>{
+  const QuizPage=React.useCallback(()=>{
     const allAnswered=quizStep>=QUESTIONS.length;
     const darkBg="linear-gradient(165deg,#141210 0%,#1A1A1A 55%,#241A0E 100%)";
     const progressPct=Math.min(((quizStep)/(QUESTIONS.length+1))*100,100);
@@ -1304,7 +1304,7 @@ export default function LuMane(){
         </div>
       </div>
     );
-  };
+  }, [quizStep, hairPhoto, photoLoading, answers]);
 
   const ResultPage=()=>(
     <div style={{padding:loading?"0":"2rem 1.5rem 4rem",background:loading?"linear-gradient(165deg,#141210,#241A0E)":"#FDFAF5"}}>
