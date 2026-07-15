@@ -65,7 +65,7 @@ export default function Terminos(){
         <h2 style={S.h2}>Garantía de 30 días</h2>
         <p style={S.p}>
           Si en tus primeros 30 días de suscripción no notas la diferencia, escríbenos a{" "}
-          <a href="mailto:hola@lumane.online" style={S.mail}>hola@lumane.online</a> desde el correo de
+          <a href="mailto:lumane.online@outlook.com" style={S.mail}>lumane.online@outlook.com</a> desde el correo de
           tu cuenta y te devolvemos el dinero de ese pago. Sin preguntas incómodas. La garantía aplica
           una vez por persona.
         </p>
@@ -119,12 +119,12 @@ export default function Terminos(){
         <p style={S.p}>
           Podemos actualizar estos términos; publicaremos la versión vigente en esta página con su
           fecha. Para cualquier duda, escríbenos a{" "}
-          <a href="mailto:hola@lumane.online" style={S.mail}>hola@lumane.online</a>. Estos términos se
+          <a href="mailto:lumane.online@outlook.com" style={S.mail}>lumane.online@outlook.com</a>. Estos términos se
           rigen por la legislación española.
         </p>
 
         <div style={S.footer}>
-          ¿Dudas? Escríbenos a <a href="mailto:hola@lumane.online" style={S.mail}>hola@lumane.online</a>
+          ¿Dudas? Escríbenos a <a href="mailto:lumane.online@outlook.com" style={S.mail}>lumane.online@outlook.com</a>
           <br/>✦ Hecho con 💛 en Barcelona · lumane.online · <a href="/privacidad" style={S.mail}>Política de Privacidad</a>
         </div>
       </div>
