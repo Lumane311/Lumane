@@ -53,7 +53,7 @@ Sé BREVE: cada campo de texto máximo 1-2 frases cortas. Responde SOLO JSON sin
       },
       body: JSON.stringify({
         model: 'claude-sonnet-4-6',
-        max_tokens: 1500,
+        max_tokens: 4000,
         messages,
       }),
     });
