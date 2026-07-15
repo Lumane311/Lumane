@@ -1084,8 +1084,11 @@ export default function LuMane(){
     <div>
       <div style={{position:"relative",minHeight:"88vh",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:"3rem 1.5rem 2rem",textAlign:"center",overflow:"hidden"}}>
         <div style={{position:"absolute",inset:0,background:"radial-gradient(ellipse 80% 70% at 50% 40%,rgba(122,92,46,.07) 0%,transparent 60%),#FDFAF5",zIndex:0}}/>
+        <div style={{position:"absolute",width:"420px",height:"420px",borderRadius:"50%",background:"radial-gradient(circle,rgba(212,132,154,.28) 0%,transparent 70%)",top:"-8%",left:"-12%",filter:"blur(10px)",zIndex:0}}/>
+        <div style={{position:"absolute",width:"380px",height:"380px",borderRadius:"50%",background:"radial-gradient(circle,rgba(232,199,126,.32) 0%,transparent 70%)",top:"5%",right:"-10%",filter:"blur(10px)",zIndex:0}}/>
+        <div style={{position:"absolute",width:"300px",height:"300px",borderRadius:"50%",background:"radial-gradient(circle,rgba(212,132,154,.2) 0%,transparent 70%)",bottom:"0%",left:"18%",filter:"blur(14px)",zIndex:0}}/>
         <div style={{position:"relative",zIndex:1,maxWidth:"580px"}} className="fade">
-          <div style={{display:"inline-flex",alignItems:"center",gap:"0.5rem",background:"rgba(200,164,107,.1)",border:"1px solid rgba(200,164,107,.3)",color:"#A07A30",fontSize:"0.72rem",fontWeight:700,padding:"0.32rem 1rem",borderRadius:"2rem",marginBottom:"1.2rem"}}>
+          <div style={{display:"inline-flex",alignItems:"center",gap:"0.5rem",background:"linear-gradient(120deg,rgba(212,132,154,.16),rgba(232,199,126,.22))",border:"1px solid rgba(212,132,154,.4)",color:"#A0527A",fontSize:"0.72rem",fontWeight:700,padding:"0.32rem 1rem",borderRadius:"2rem",marginBottom:"1.2rem",boxShadow:"0 4px 18px rgba(212,132,154,.18)"}}>
             <span style={{width:"7px",height:"7px",background:"#5A9A5A",borderRadius:"50%"}}/>
             ✨ Análisis de tu tipo de cabello GRATIS
           </div>
@@ -1101,7 +1104,7 @@ export default function LuMane(){
             </div>
           </div>
           <h1 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"clamp(2.8rem,7vw,5rem)",lineHeight:1.02,fontWeight:700,color:"#1A1A1A",marginBottom:"1.2rem"}}>
-            Tu cabello<br/><em style={{color:"#C8A46B",fontStyle:"italic"}}>es tu corona.</em><br/>
+            Tu cabello<br/><em style={{fontStyle:"italic",background:"linear-gradient(100deg,#C8A46B,#D4849A 60%,#C8A46B)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",backgroundClip:"text"}}>es tu corona.</em><br/>
             <span style={{fontSize:"62%",fontWeight:300,fontStyle:"italic",color:"#1A1A1A",opacity:.75}}>Y merece lo mejor.</span>
           </h1>
           <div style={{background:"linear-gradient(135deg,rgba(201,168,76,.07),rgba(212,132,154,.11))",border:"1px solid rgba(201,168,76,.2)",borderRadius:"1.3rem",padding:"1.4rem 1.6rem",marginBottom:"2rem",maxWidth:"480px",margin:"0 auto 2rem"}}>
@@ -1113,7 +1116,7 @@ export default function LuMane(){
             </p>
           </div>
           <div style={{display:"flex",flexDirection:"column",alignItems:"center",gap:"0.7rem",marginBottom:"2.5rem"}}>
-            <button onClick={goQuiz} style={{background:"linear-gradient(135deg,#1A1A1A,#A07A30)",color:"#fff",border:"none",padding:"1.05rem 2.6rem",borderRadius:"3rem",fontSize:"1rem",fontWeight:700,cursor:"pointer",fontFamily:"'Outfit',sans-serif",boxShadow:"0 10px 32px rgba(122,92,46,.35)"}}>
+            <button onClick={goQuiz} style={{background:"linear-gradient(135deg,#1A1A1A,#A07A30 55%,#C4708F)",color:"#fff",border:"none",padding:"1.05rem 2.6rem",borderRadius:"3rem",fontSize:"1rem",fontWeight:700,cursor:"pointer",fontFamily:"'Outfit',sans-serif",boxShadow:"0 10px 32px rgba(122,92,46,.35)",animation:"bannerGlow 2.6s ease-in-out infinite"}}>
               ✨ Descubrir mi tipo de cabello GRATIS
             </button>
             <span style={{fontSize:"0.73rem",opacity:.45}}>🎁 Análisis gratis · Rutina completa desde {"$2.99/sem"} con 7 días de prueba</span>
@@ -1137,27 +1140,25 @@ export default function LuMane(){
         </div>
       </div>
 
-      <div style={{padding:"2.5rem 1.5rem",background:"#FDFAF5"}}>
-        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(240px,1fr))",gap:"1rem",maxWidth:"700px",margin:"0 auto"}}>
-          <div className="lift" onClick={()=>{goShop("all");}} style={{background:"linear-gradient(135deg,rgba(201,168,76,.1),rgba(212,132,154,.15))",border:"1.5px solid rgba(201,168,76,.3)",borderRadius:"1.3rem",padding:"1.5rem",cursor:"pointer",textAlign:"center"}}>
-            <div style={{fontSize:"2.5rem",marginBottom:"0.5rem"}}>👩</div>
-            <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"1.3rem",fontWeight:700,color:"#C8A46B",marginBottom:"0.4rem"}}>Cuidado Femenino</h3>
-            <p style={{fontSize:"0.8rem",opacity:.65,lineHeight:1.5,marginBottom:"0.8rem"}}>Rutinas para todos los tipos — del lacio 1A al afro 4C.</p>
-            <div style={{fontSize:"0.78rem",color:"#C8A46B",fontWeight:700}}>Ver rutinas femeninas →</div>
-          </div>
-          <div className="lift" onClick={()=>{goShop("hombre");}} style={{background:"linear-gradient(135deg,rgba(42,90,138,.1),rgba(74,106,154,.15))",border:"1.5px solid rgba(42,90,138,.3)",borderRadius:"1.3rem",padding:"1.5rem",cursor:"pointer",textAlign:"center"}}>
-            <div style={{fontSize:"2.5rem",marginBottom:"0.5rem"}}>👨</div>
-            <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"1.3rem",fontWeight:700,color:"#2A5A8A",marginBottom:"0.4rem"}}>Cuidado Masculino</h3>
-            <p style={{fontSize:"0.8rem",opacity:.65,lineHeight:1.5,marginBottom:"0.8rem"}}>Shampoo, anticaída y estilizado específico para hombre.</p>
-            <div style={{fontSize:"0.78rem",color:"#2A5A8A",fontWeight:700}}>Ver productos masculinos →</div>
-          </div>
-          <div className="lift" onClick={()=>{goQuiz();}} style={{background:"linear-gradient(135deg,rgba(90,154,90,.1),rgba(120,184,120,.15))",border:"1.5px solid rgba(90,154,90,.3)",borderRadius:"1.3rem",padding:"1.5rem",cursor:"pointer",textAlign:"center"}}>
-            <div style={{fontSize:"2.5rem",marginBottom:"0.5rem"}}>👶</div>
-            <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"1.3rem",fontWeight:700,color:"#3A7A3A",marginBottom:"0.4rem"}}>Cuidado Infantil</h3>
-            <p style={{fontSize:"0.8rem",opacity:.65,lineHeight:1.5,marginBottom:"0.8rem"}}>Analizamos el cabello de tu hijo/a con IA y te damos la rutina perfecta para los más pequeños.</p>
-            <div style={{fontSize:"0.78rem",color:"#3A7A3A",fontWeight:700}}>Analizar cabello de mi hijo/a →</div>
+      <div style={{padding:"1rem 1.5rem 3rem",background:"#FDFAF5",textAlign:"center"}}>
+        <div style={{fontSize:"0.62rem",color:"#C8A46B",fontWeight:700,letterSpacing:"0.2em",textTransform:"uppercase",marginBottom:"1rem"}}>✦ Así se ve tu diagnóstico</div>
+        <div style={{maxWidth:"340px",margin:"0 auto",position:"relative"}} className="lift">
+          <div style={{position:"absolute",inset:"-14px",borderRadius:"2rem",background:"linear-gradient(135deg,rgba(232,199,126,.35),rgba(212,132,154,.35))",filter:"blur(18px)",zIndex:0,animation:"bannerGlow 3s ease-in-out infinite"}}/>
+          <div style={{position:"relative",zIndex:1,background:"linear-gradient(160deg,#241A0E 0%,#1A1A1A 60%,#141210 100%)",border:"1px solid rgba(201,168,76,.4)",borderRadius:"1.6rem",padding:"1.8rem 1.4rem",boxShadow:"0 20px 50px rgba(42,31,14,.3)"}}>
+            <div style={{fontSize:"1.4rem",marginBottom:"0.2rem"}}>👑</div>
+            <div style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"2.6rem",fontWeight:700,color:"#E8C77E",lineHeight:1,fontStyle:"italic"}}>3B</div>
+            <div style={{fontSize:"0.72rem",color:"rgba(245,239,229,.6)",marginTop:"0.3rem",fontStyle:"italic"}}>Rizos medianos y densos</div>
+            <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:"0.4rem",marginTop:"1.1rem"}}>
+              {[["💧",8],["💪",6],["✨",7],["🔬",7]].map(([e,v],i)=>(
+                <div key={i} style={{background:"rgba(255,255,255,.05)",border:"1px solid rgba(201,168,76,.25)",borderRadius:"0.7rem",padding:"0.5rem 0.2rem"}}>
+                  <div style={{fontSize:"0.9rem"}}>{e}</div>
+                  <div style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"1.1rem",fontWeight:700,color:"#E8C77E"}}>{v}</div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
+        <p style={{fontSize:"0.78rem",opacity:.5,marginTop:"1rem",maxWidth:"320px",margin:"1rem auto 0"}}>Así de bonito y claro recibes tu propio diagnóstico — 100% personalizado con IA, gratis.</p>
       </div>
 
       <div style={{padding:"3rem 1.5rem",background:"#F7F2EA"}}>
@@ -1172,67 +1173,6 @@ export default function LuMane(){
               <div style={{fontSize:"1.4rem",marginBottom:"0.4rem"}}>{s.emoji}</div>
               <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"0.98rem",fontWeight:700,marginBottom:"0.3rem"}}>{s.t}</h3>
               <p style={{fontSize:"0.78rem",opacity:.6,lineHeight:1.5}}>{s.d}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div style={{padding:"3rem 1.5rem",background:"linear-gradient(135deg,#2A1F0E,#1A1A1A,#2A5A8A)",textAlign:"center"}}>
-        <div style={{maxWidth:"640px",margin:"0 auto"}}>
-          <div style={{fontSize:"2.2rem",marginBottom:"0.8rem"}}>🌍</div>
-          <div style={{fontSize:"0.68rem",color:"rgba(255,255,255,.6)",fontWeight:700,letterSpacing:"0.18em",textTransform:"uppercase",marginBottom:"0.6rem"}}>✦ Para toda nuestra comunidad</div>
-          <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"clamp(1.5rem,4vw,2.2rem)",fontWeight:700,color:"#FDFAF5",marginBottom:"1.2rem",lineHeight:1.4}}>
-            Desde <em style={{color:"#C9A84C",fontStyle:"italic"}}>Centroamérica y el Caribe 🌴</em>, pasando por toda <em style={{color:"#C9A84C",fontStyle:"italic"}}>Sudamérica 🌎</em> y <em style={{color:"#C9A84C",fontStyle:"italic"}}>Norteamérica 🇺🇸</em>, hasta llegar a <em style={{color:"#90D4FF",fontStyle:"italic"}}>Europa 🇪🇺</em> — LuMane tiene la rutina perfecta para tu cabello.
-          </h2>
-          <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(140px,1fr))",gap:"0.7rem",marginBottom:"1.5rem",maxWidth:"580px",margin:"0 auto 1.5rem"}}>
-            {[
-              {flag:"🌎",pais:"Latinoamérica",tip:"México · Colombia · Argentina · Perú · Guatemala y más"},
-              {flag:"🇺🇸",pais:"Estados Unidos",tip:"Agua con cloro y minerales"},
-              {flag:"🇪🇺",pais:"Europa",tip:"Agua calcárea en España, Bélgica, Francia y más"},
-            ].map((p,i)=>(
-              <div key={i} style={{background:"rgba(255,255,255,.1)",border:"1px solid rgba(255,255,255,.15)",borderRadius:"0.9rem",padding:"0.8rem 0.6rem",textAlign:"center"}}>
-                <div style={{fontSize:"1.6rem",marginBottom:"0.3rem"}}>{p.flag}</div>
-                <div style={{fontSize:"0.78rem",fontWeight:700,color:"#fff",marginBottom:"0.15rem"}}>{p.pais}</div>
-                <div style={{fontSize:"0.65rem",color:"rgba(255,255,255,.55)",lineHeight:1.3}}>{p.tip}</div>
-              </div>
-            ))}
-          </div>
-          <button onClick={()=>{goShop("cal");}} style={{background:"linear-gradient(135deg,#C9A84C,#A07A30)",color:"#fff",border:"none",padding:"0.85rem 2rem",borderRadius:"3rem",fontSize:"0.88rem",fontWeight:700,cursor:"pointer",fontFamily:"'Outfit',sans-serif",boxShadow:"0 8px 25px rgba(201,168,76,.4)"}}>
-            Ver soluciones para mi región →
-          </button>
-        </div>
-      </div>
-
-      <div style={{padding:"3rem 1.5rem",background:"#FDFAF5"}}>
-        <div style={{textAlign:"center",marginBottom:"1.5rem"}}>
-          <div style={{fontSize:"0.65rem",color:"#C8A46B",fontWeight:700,letterSpacing:"0.15em",textTransform:"uppercase",marginBottom:"0.4rem"}}>✦ Para todos</div>
-          <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"clamp(1.5rem,4vw,2.2rem)",fontWeight:700}}>Del 1A al 4C — te cubrimos</h2>
-        </div>
-        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(150px,1fr))",gap:"0.75rem",maxWidth:"720px",margin:"0 auto 1.2rem"}}>
-          {[{id:"lacio",emoji:"〰️",title:"Lacio",color:"#B8924A",sub:"1A · 1B · 1C"},{id:"ondulado",emoji:"〜",title:"Ondulado",color:"#5A9C90",sub:"2A · 2B · 2C"},{id:"rizado",emoji:"🌀",title:"Rizado",color:"#8A60B8",sub:"3A · 3B · 3C"},{id:"afro",emoji:"✦",title:"Afro/Coily",color:"#B86830",sub:"4A · 4B · 4C"}].map(g=>(
-            <div key={g.id} className="lift" onClick={()=>{goShop(g.id);}} style={{padding:"1.1rem",borderRadius:"1rem",background:g.color+"10",border:"1.5px solid "+g.color+"30",cursor:"pointer",textAlign:"center"}}>
-              <div style={{fontSize:"1.6rem",marginBottom:"0.35rem"}}>{g.emoji}</div>
-              <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"0.95rem",fontWeight:700,color:g.color,marginBottom:"0.15rem"}}>{g.title}</h3>
-              <div style={{fontSize:"0.65rem",fontWeight:700,color:g.color,opacity:.65}}>{g.sub}</div>
-            </div>
-          ))}
-        </div>
-        <div style={{display:"flex",gap:"0.45rem",flexWrap:"wrap",justifyContent:"center"}}>
-          {[{id:"caspa",emoji:"❄️",l:"Caspa"},{id:"caida",emoji:"🍂",l:"Caída"},{id:"cuero",emoji:"🔬",l:"Cuero"},{id:"regenerar",emoji:"🌱",l:"Regenerar"},{id:"cal",emoji:"💧",l:"Anti-Cal"},{id:"hombre",emoji:"💪",l:"Hombre"},{id:"ninos",emoji:"👶",l:"Niños"}].map(c=>(
-            <button key={c.id} onClick={()=>{goShop(c.id);}} style={{display:"flex",alignItems:"center",gap:"0.35rem",padding:"0.38rem 0.85rem",borderRadius:"2rem",border:"1.5px solid rgba(201,168,76,.2)",background:"#FDFAF5",fontSize:"0.76rem",cursor:"pointer",fontFamily:"'Outfit',sans-serif",color:"#1A1A1A"}}>
-              {c.emoji} {c.l}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      <div style={{padding:"2rem 1.5rem",background:"#FDFAF5"}}>
-        <div style={{maxWidth:"620px",margin:"0 auto",display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(180px,1fr))",gap:"0.8rem"}}>
-          {[{emoji:"🎁",title:"Análisis gratis",desc:"Descubre tu tipo de cabello sin pagar nada."},{emoji:"🔒",title:"Pago 100% seguro",desc:"Stripe (internacional) · Wompi (Colombia: Nequi, PSE, Bancolombia)."},{emoji:"🛡️",title:"Garantía 30 días",desc:"Si no notas la diferencia, te devolvemos el dinero."}].map((f,i)=>(
-            <div key={i} style={{background:"#FDFAF5",borderRadius:"1rem",padding:"1.1rem",border:"1px solid rgba(201,168,76,.1)",textAlign:"center"}}>
-              <div style={{fontSize:"1.6rem",marginBottom:"0.4rem"}}>{f.emoji}</div>
-              <div style={{fontWeight:700,fontSize:"0.82rem",marginBottom:"0.2rem",color:"#1A1A1A"}}>{f.title}</div>
-              <div style={{fontSize:"0.72rem",opacity:.55,lineHeight:1.4}}>{f.desc}</div>
             </div>
           ))}
         </div>
