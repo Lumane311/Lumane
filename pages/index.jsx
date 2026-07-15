@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Head from "next/head";
 
 const STORES = {
   amazon:        { name:"Amazon",          emoji:"📦", color:"#FF9900", active:true,  tag:"lumanehair-21", buildUrl:(q,t)=>`https://www.amazon.com/s?k=${encodeURIComponent(q)}&tag=${t}` },
@@ -1581,6 +1582,17 @@ export default function LuMane(){
 
   return(
     <div style={{minHeight:"100vh",background:"#FDFAF5"}}>
+      <Head>
+        <title>LuMane — Descubre tu tipo de cabello GRATIS con IA</title>
+        <meta name="description" content="Un quiz de 2 minutos. Un diagnóstico con inteligencia artificial. La rutina exacta para tu cabello: liso, ondulado, rizado o afro (1A al 4C). Análisis gratis." />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta property="og:title" content="LuMane — Tu cabello es tu corona" />
+        <meta property="og:description" content="Descubre tu tipo de cabello GRATIS con IA y recibe tu rutina personalizada paso a paso." />
+        <meta property="og:url" content="https://lumane.online" />
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="LuMane" />
+        <link rel="canonical" href="https://lumane.online" />
+      </Head>
       <style>{CSS}</style>
       <div className="splash">
         <div style={{display:"flex",flexDirection:"column",alignItems:"center",gap:"1rem"}}>
