@@ -918,7 +918,17 @@ export default function LuMane(){
         body:JSON.stringify({ answers: ans, photo: hairPhoto }),
       });
       const d=await r.json();
-      if(d && d.result){ setResult(d.result); }
+      if(d && d.result){
+        setResult(d.result);
+        const em = (leadStore.email || '').trim();
+        if(em){
+          fetch('/api/send-diagnosis', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: em, result: d.result }),
+          }).catch(()=>{});
+        }
+      }
       else{ setResult(fallback(ans)); }
       trackEvent("ViewContent", { content_name: "diagnostico" }, true);
     }catch{setResult(fallback(ans));}
